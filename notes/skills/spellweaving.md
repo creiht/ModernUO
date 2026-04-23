@@ -35,6 +35,60 @@ Spellweaving provides abilities that reduce spellcasting recast delays and enhan
 
 ---
 
+---
+
+## Weapons
+
+None
+---
+
+## Items
+
+None
+---
+
+## NPCs
+
+None
+---
+
+## Spells
+
+- `ArcanistSpell` (`Projects/UOContent/Spells/Spellweaving/ArcanistSpell.cs:18`) — CastSkill
+- `ArcanistSpell` (`Projects/UOContent/Spells/Spellweaving/ArcanistSpell.cs:19`) — DamageSkill
+---
+
+## Crafting
+
+None
+---
+
+## Weapon Abilities
+
+None
+---
+
+## Harvest Systems
+
+None
+---
+
+## Professions
+
+None
+---
+
+## Quests
+
+None
+---
+
+## Code Locations
+
+- `5 files` — total code references in UOContent
+
+---
+
 ## Expansion Notes
 
 Spellweaving requires the ML (Mondain's Legacy) expansion.

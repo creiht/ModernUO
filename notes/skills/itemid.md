@@ -32,6 +32,61 @@
 
 ---
 
+---
+
+## Weapons
+
+None
+---
+
+## Items
+
+None
+---
+
+## NPCs
+
+- `Merchant` (`Projects/UOContent/Mobiles/Townfolk/Merchant.cs:13`) — 55.0-78.0
+- `MerchantGuildmaster` (`Projects/UOContent/Mobiles/Vendors/NPC/Guildmasters/MerchantGuildmaster.cs:11`) — 85.0-100.0
+- `MinerGuildmaster` (`Projects/UOContent/Mobiles/Vendors/NPC/Guildmasters/MinerGuildmaster.cs:11`) — 60.0-83.0
+---
+
+## Spells
+
+None
+---
+
+## Crafting
+
+None
+---
+
+## Weapon Abilities
+
+None
+---
+
+## Harvest Systems
+
+None
+---
+
+## Professions
+
+None
+---
+
+## Quests
+
+- `Ilshenar` (`Projects/UOContent/Engines/ML Quests/Definitions/Ilshenar.cs:176`)
+---
+
+## Code Locations
+
+- `10 files` — total code references in UOContent
+
+---
+
 ## Expansion Notes
 
 ItemID is available from character creation in the base game. No expansion is required.

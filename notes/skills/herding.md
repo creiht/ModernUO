@@ -33,6 +33,60 @@
 
 ---
 
+---
+
+## Weapons
+
+None
+---
+
+## Items
+
+None
+---
+
+## NPCs
+
+- `RangerGuildmaster` (`Projects/UOContent/Mobiles/Vendors/NPC/Guildmasters/RangerGuildmaster.cs:20`) — 36.0-68.0
+- `Rancher` (`Projects/UOContent/Mobiles/Vendors/NPC/Rancher.cs:16`) — 64.0-100.0
+---
+
+## Spells
+
+None
+---
+
+## Crafting
+
+None
+---
+
+## Weapon Abilities
+
+None
+---
+
+## Harvest Systems
+
+None
+---
+
+## Professions
+
+None
+---
+
+## Quests
+
+None
+---
+
+## Code Locations
+
+- `5 files` — total code references in UOContent
+
+---
+
 ## Expansion Notes
 
 Herding is available from character creation in the base game. No expansion is required.

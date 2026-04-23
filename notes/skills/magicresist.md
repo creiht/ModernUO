@@ -34,6 +34,71 @@ MagicResist is the only magical skill with non-zero gain rates across all three 
 
 ---
 
+---
+
+## Weapons
+
+None
+---
+
+## Items
+
+- **Skill Bonus:** `ShroudOfDeceit` (`Projects/UOContent/Items/Champion Artifacts/Unique/ShroudOfDeceit.cs:17`)
+- **Tool/Check:** `FireHorn` (`Projects/UOContent/Items/Skill Items/Misc/FireHorn.cs:175`)
+---
+
+## NPCs
+
+None
+---
+
+## Spells
+
+- `HonorableExecution` (`Projects/UOContent/Spells/Bushido/HonorableExecution.cs:69`) — skill mod
+- `EvilOmen` (`Projects/UOContent/Spells/Necromancy/EvilOmen.cs:57`) — skill mod
+- `Protection` (`Projects/UOContent/Spells/Second/Protection.cs:141`) — skill mod
+---
+
+## Crafting
+
+None
+---
+
+## Weapon Abilities
+
+- `ForceOfNature` (`Projects/UOContent/Items/Weapons/Abilities/ForceOfNature.cs:76`) — skill reference
+---
+
+## Harvest Systems
+
+None
+---
+
+## Professions
+
+None
+---
+
+## Quests
+
+- `Heritage` (`Projects/UOContent/Engines/ML Quests/Definitions/Heritage.cs:281`)
+- `MistakenIdentity` (`Projects/UOContent/Engines/ML Quests/Definitions/MistakenIdentity.cs:289`)
+- `NewHavenSkillTraining` (`Projects/UOContent/Engines/ML Quests/Definitions/NewHavenSkillTraining.cs:218`) — objective threshold: 500
+- `NewHavenSkillTraining` (`Projects/UOContent/Engines/ML Quests/Definitions/NewHavenSkillTraining.cs:663`)
+- `NewHavenSkillTraining` (`Projects/UOContent/Engines/ML Quests/Definitions/NewHavenSkillTraining.cs:712`)
+- `NewHavenSkillTraining` (`Projects/UOContent/Engines/ML Quests/Definitions/NewHavenSkillTraining.cs:1089`)
+- `NewHavenSkillTraining` (`Projects/UOContent/Engines/ML Quests/Definitions/NewHavenSkillTraining.cs:1127`)
+- `NewHavenSkillTraining` (`Projects/UOContent/Engines/ML Quests/Definitions/NewHavenSkillTraining.cs:1175`)
+- `NewHavenSkillTraining` (`Projects/UOContent/Engines/ML Quests/Definitions/NewHavenSkillTraining.cs:1214`)
+- `NewHavenSkillTraining` (`Projects/UOContent/Engines/ML Quests/Definitions/NewHavenSkillTraining.cs:1252`)
+---
+
+## Code Locations
+
+- `427 files` — total code references in UOContent
+
+---
+
 ## Expansion Notes
 
 MagicResist is available from character creation in the base game. No expansion is required.

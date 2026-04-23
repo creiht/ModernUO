@@ -36,6 +36,67 @@ The Inscription skill check uses a lower difficulty range (0-50) compared to mos
 
 ---
 
+---
+
+## Weapons
+
+None
+---
+
+## Items
+
+None
+---
+
+## NPCs
+
+- `MageGuildmaster` (`Projects/UOContent/Mobiles/Vendors/NPC/Guildmasters/MageGuildmaster.cs:13`) — 65.0-88.0
+---
+
+## Spells
+
+None
+---
+
+## Crafting
+
+- `DefInscription` (`Projects/UOContent/Engines/Craft/DefInscription.cs:36`) — MainSkill, 10 items
+---
+
+## Weapon Abilities
+
+None
+---
+
+## Harvest Systems
+
+None
+---
+
+## Professions
+
+None
+---
+
+## Quests
+
+- `MistakenIdentity` (`Projects/UOContent/Engines/ML Quests/Definitions/MistakenIdentity.cs:288`)
+- `NewHavenSkillTraining` (`Projects/UOContent/Engines/ML Quests/Definitions/NewHavenSkillTraining.cs:265`) — objective threshold: 500
+- `NewHavenSkillTraining` (`Projects/UOContent/Engines/ML Quests/Definitions/NewHavenSkillTraining.cs:710`)
+- `NewHavenSkillTraining` (`Projects/UOContent/Engines/ML Quests/Definitions/NewHavenSkillTraining.cs:1087`)
+- `NewHavenSkillTraining` (`Projects/UOContent/Engines/ML Quests/Definitions/NewHavenSkillTraining.cs:1125`)
+- `NewHavenSkillTraining` (`Projects/UOContent/Engines/ML Quests/Definitions/NewHavenSkillTraining.cs:1173`)
+- `NewHavenSkillTraining` (`Projects/UOContent/Engines/ML Quests/Definitions/NewHavenSkillTraining.cs:1212`)
+- `NewHavenSkillTraining` (`Projects/UOContent/Engines/ML Quests/Definitions/NewHavenSkillTraining.cs:1250`)
+---
+
+## Code Locations
+
+- `Projects/UOContent/Skills/Inscribe.cs` — skill handler implementation
+- `16 files` — total code references in UOContent
+
+---
+
 ## Expansion Notes
 
 Inscription is available from character creation in the base game. No expansion is required.

@@ -32,6 +32,60 @@
 
 ---
 
+---
+
+## Weapons
+
+None
+---
+
+## Items
+
+- **Tool/Check:** `BaseWeapon` (`Projects/UOContent/Items/Weapons/BaseWeapon.cs:2548`)
+- **Tool/Check:** `BaseWeapon` (`Projects/UOContent/Items/Weapons/BaseWeapon.cs:2621`)
+---
+
+## NPCs
+
+- `Farmer` (`Projects/UOContent/Mobiles/Vendors/NPC/Farmer.cs:15`) — 36.0-68.0
+---
+
+## Spells
+
+None
+---
+
+## Crafting
+
+None
+---
+
+## Weapon Abilities
+
+- `WeaponAbility` (`Projects/UOContent/Items/Weapons/Abilities/WeaponAbility.cs:188`) — skill reference
+---
+
+## Harvest Systems
+
+- `definition` (`Projects/UOContent/Engines/Harvest/Lumberjacking.cs:49`)
+---
+
+## Professions
+
+None
+---
+
+## Quests
+
+None
+---
+
+## Code Locations
+
+- `12 files` — total code references in UOContent
+
+---
+
 ## Expansion Notes
 
 Lumberjacking is available from character creation in the base game. No expansion is required.

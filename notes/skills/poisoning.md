@@ -34,6 +34,66 @@
 
 ---
 
+---
+
+## Weapons
+
+None
+---
+
+## Items
+
+None
+---
+
+## NPCs
+
+- `MinotaurCaptain` (`Projects/UOContent/Mobiles/Monsters/ML/Humanoid/Melee/MinotaurCaptain.cs:33`) — 0
+- `LadyLissith` (`Projects/UOContent/Mobiles/Monsters/ML/Twisted Weald/LadyLissith.cs:37`) — 96.6-112.9
+- `LadySabrix` (`Projects/UOContent/Mobiles/Monsters/ML/Twisted Weald/LadySabrix.cs:37`) — 97.8-116.7
+
+*... and 37 more NPCs with this skill*
+---
+
+## Spells
+
+None
+---
+
+## Crafting
+
+None
+---
+
+## Weapon Abilities
+
+- `SerpentArrow` (`Projects/UOContent/Items/Weapons/Abilities/SerpentArrow.cs:10`) — secondary skill requirement
+- `WeaponAbility` (`Projects/UOContent/Items/Weapons/Abilities/WeaponAbility.cs:190`) — skill reference
+- `WeaponAbility` (`Projects/UOContent/Items/Weapons/Abilities/WeaponAbility.cs:288`) — skill reference
+---
+
+## Harvest Systems
+
+None
+---
+
+## Professions
+
+None
+---
+
+## Quests
+
+None
+---
+
+## Code Locations
+
+- `Projects/UOContent/Skills/Poisoning.cs` — skill handler implementation
+- `54 files` — total code references in UOContent
+
+---
+
 ## Expansion Notes
 
 Poisoning is available from character creation in the base game. No expansion is required.

@@ -36,6 +36,65 @@ Bushido provides abilities such as Hono (Fire), Kitsui (Speed), and Chi (Spirit)
 
 ---
 
+---
+
+## Weapons
+
+None
+---
+
+## Items
+
+None
+---
+
+## NPCs
+
+- `Samurai` (`Projects/UOContent/Mobiles/Townfolk/Samurai.cs:17`) — 64.0-85.0
+---
+
+## Spells
+
+- `SamuraiSpell` (`Projects/UOContent/Spells/Bushido/SamuraiSpell.cs:16`) — CastSkill
+- `SamuraiSpell` (`Projects/UOContent/Spells/Bushido/SamuraiSpell.cs:17`) — DamageSkill
+---
+
+## Crafting
+
+None
+---
+
+## Weapon Abilities
+
+- `NerveStrike` (`Projects/UOContent/Items/Weapons/Abilities/NerveStrike.cs:13`) — secondary skill requirement
+- `RidingSwipe` (`Projects/UOContent/Items/Weapons/Abilities/RidingSwipe.cs:17`) — secondary skill requirement
+- `WeaponAbility` (`Projects/UOContent/Items/Weapons/Abilities/WeaponAbility.cs:153`) — skill reference
+- `WeaponAbility` (`Projects/UOContent/Items/Weapons/Abilities/WeaponAbility.cs:191`) — skill reference
+- `WeaponAbility` (`Projects/UOContent/Items/Weapons/Abilities/WeaponAbility.cs:286`) — skill reference
+---
+
+## Harvest Systems
+
+None
+---
+
+## Professions
+
+None
+---
+
+## Quests
+
+- `NewHavenSkillTraining` (`Projects/UOContent/Engines/ML Quests/Definitions/NewHavenSkillTraining.cs:524`) — objective threshold: 500
+- `NewHavenSkillTraining` (`Projects/UOContent/Engines/ML Quests/Definitions/NewHavenSkillTraining.cs:1635`)
+---
+
+## Code Locations
+
+- `15 files` — total code references in UOContent
+
+---
+
 ## Expansion Notes
 
 Bushido requires the SE (Samurai Empire) expansion.

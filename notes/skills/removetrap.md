@@ -32,6 +32,63 @@
 
 ---
 
+---
+
+## Weapons
+
+None
+---
+
+## Items
+
+None
+---
+
+## NPCs
+
+- `GolemCrafter` (`Projects/UOContent/Mobiles/Vendors/NPC/GolemCrafter.cs:15`) — 75.0-98.0
+- `ThiefGuildmaster` (`Projects/UOContent/Mobiles/Vendors/NPC/Guildmasters/ThiefGuildmaster.cs:21`) — 85.0-100.0
+- `TinkerGuildmaster` (`Projects/UOContent/Mobiles/Vendors/NPC/Guildmasters/TinkerGuildmaster.cs:17`) — 85.0-100.0
+- `Tinker` (`Projects/UOContent/Mobiles/Vendors/NPC/Tinker.cs:15`) — 75.0-98.0
+---
+
+## Spells
+
+None
+---
+
+## Crafting
+
+None
+---
+
+## Weapon Abilities
+
+None
+---
+
+## Harvest Systems
+
+None
+---
+
+## Professions
+
+None
+---
+
+## Quests
+
+None
+---
+
+## Code Locations
+
+- `Projects/UOContent/Skills/RemoveTrap.cs` — skill handler implementation
+- `8 files` — total code references in UOContent
+
+---
+
 ## Expansion Notes
 
 RemoveTrap is available from character creation in the base game. No expansion is required.

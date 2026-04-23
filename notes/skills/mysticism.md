@@ -35,6 +35,59 @@ Mysticism provides abilities such as Arch Cure, Arch Protection, and Magic Trap 
 
 ---
 
+---
+
+## Weapons
+
+None
+---
+
+## Items
+
+None
+---
+
+## NPCs
+
+None
+---
+
+## Spells
+
+- `MysticSpell` (`Projects/UOContent/Spells/Mysticism/MysticSpell.cs:34`) — CastSkill
+---
+
+## Crafting
+
+None
+---
+
+## Weapon Abilities
+
+None
+---
+
+## Harvest Systems
+
+None
+---
+
+## Professions
+
+None
+---
+
+## Quests
+
+None
+---
+
+## Code Locations
+
+- `6 files` — total code references in UOContent
+
+---
+
 ## Expansion Notes
 
 Mysticism requires the SA (Samurai Adventure) expansion.

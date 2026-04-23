@@ -34,6 +34,60 @@
 
 ---
 
+---
+
+## Weapons
+
+None
+---
+
+## Items
+
+None
+---
+
+## NPCs
+
+- `HireBeggar` (`Projects/UOContent/Mobiles/Hireables/HireBeggar.cs:26`) — 66-97
+---
+
+## Spells
+
+None
+---
+
+## Crafting
+
+None
+---
+
+## Weapon Abilities
+
+None
+---
+
+## Harvest Systems
+
+None
+---
+
+## Professions
+
+None
+---
+
+## Quests
+
+None
+---
+
+## Code Locations
+
+- `Projects/UOContent/Skills/Begging.cs` — skill handler implementation
+- `5 files` — total code references in UOContent
+
+---
+
 ## Expansion Notes
 
 Begging is available from character creation in the base game. No expansion is required.

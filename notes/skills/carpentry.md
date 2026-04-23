@@ -35,6 +35,60 @@ Carpentry is one of two crafting skills with a StatTotal of 25, tied with Cartog
 
 ---
 
+---
+
+## Weapons
+
+None
+---
+
+## Items
+
+None
+---
+
+## NPCs
+
+None
+---
+
+## Spells
+
+None
+---
+
+## Crafting
+
+- `DefCarpentry` (`Projects/UOContent/Engines/Craft/DefCarpentry.cs:17`) — MainSkill, 172 items
+- `DefMasonry` (`Projects/UOContent/Engines/Craft/DefMasonry.cs:18`) — MainSkill, 13 items
+---
+
+## Weapon Abilities
+
+None
+---
+
+## Harvest Systems
+
+None
+---
+
+## Professions
+
+None
+---
+
+## Quests
+
+None
+---
+
+## Code Locations
+
+- `12 files` — total code references in UOContent
+
+---
+
 ## Expansion Notes
 
 Carpentry is available from character creation in the base game. No expansion is required.

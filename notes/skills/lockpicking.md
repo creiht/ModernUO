@@ -32,6 +32,64 @@
 
 ---
 
+---
+
+## Weapons
+
+None
+---
+
+## Items
+
+None
+---
+
+## NPCs
+
+- `HireSailor` (`Projects/UOContent/Mobiles/Hireables/HireSailor.cs:33`) — 65-87
+- `HireThief` (`Projects/UOContent/Mobiles/Hireables/HireThief.cs:33`) — 65-87
+- `GolemCrafter` (`Projects/UOContent/Mobiles/Vendors/NPC/GolemCrafter.cs:14`) — 60.0-83.0
+- `ThiefGuildmaster` (`Projects/UOContent/Mobiles/Vendors/NPC/Guildmasters/ThiefGuildmaster.cs:15`) — 85.0-100.0
+- `TinkerGuildmaster` (`Projects/UOContent/Mobiles/Vendors/NPC/Guildmasters/TinkerGuildmaster.cs:15`) — 65.0-88.0
+- `Tinker` (`Projects/UOContent/Mobiles/Vendors/NPC/Tinker.cs:14`) — 60.0-83.0
+---
+
+## Spells
+
+None
+---
+
+## Crafting
+
+None
+---
+
+## Weapon Abilities
+
+None
+---
+
+## Harvest Systems
+
+None
+---
+
+## Professions
+
+None
+---
+
+## Quests
+
+None
+---
+
+## Code Locations
+
+- `10 files` — total code references in UOContent
+
+---
+
 ## Expansion Notes
 
 Lockpicking is available from character creation in the base game. No expansion is required.

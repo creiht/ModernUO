@@ -36,6 +36,90 @@ Fencing is the most Dexterity-reliant melee weapon skill, making it ideal for De
 
 ---
 
+---
+
+## Weapons
+
+- `Dagger` (`Projects/UOContent/Items/Weapons/Knives/Dagger.cs:33`)
+- `AssassinSpike` (`Projects/UOContent/Items/Weapons/ML Weapons/AssassinSpike.cs:31`)
+- `Leafblade` (`Projects/UOContent/Items/Weapons/ML Weapons/Leafblade.cs:31`)
+- `WarCleaver` (`Projects/UOContent/Items/Weapons/ML Weapons/WarCleaver.cs:36`)
+- `Kama` (`Projects/UOContent/Items/Weapons/SE Weapons/Kama.cs:33`)
+- `Lajatang` (`Projects/UOContent/Items/Weapons/SE Weapons/Lajatang.cs:33`)
+- `Sai` (`Projects/UOContent/Items/Weapons/SE Weapons/Sai.cs:34`)
+- `Tekagi` (`Projects/UOContent/Items/Weapons/SE Weapons/Tekagi.cs:33`)
+- `BaseSpear` (`Projects/UOContent/Items/Weapons/SpearsAndForks/BaseSpear.cs:17`)
+- `BloodBlade` (`Projects/UOContent/Items/Weapons/Swords/BloodBlade.cs:25`)
+- `Kryss` (`Projects/UOContent/Items/Weapons/Swords/Kryss.cs:36`)
+- `Lance` (`Projects/UOContent/Items/Weapons/Swords/Lance.cs:36`)
+---
+
+## Items
+
+None
+---
+
+## NPCs
+
+- `HireRanger` (`Projects/UOContent/Mobiles/Hireables/HireRanger.cs:31`) — 15-37
+- `HireRangerArcher` (`Projects/UOContent/Mobiles/Hireables/HireRangerArcher.cs:31`) — 15-37
+- `HireSailor` (`Projects/UOContent/Mobiles/Hireables/HireSailor.cs:31`) — 65.0-87.5
+- `HireThief` (`Projects/UOContent/Mobiles/Hireables/HireThief.cs:31`) — 65.0-87.5
+- `ChaosDragoonElite` (`Projects/UOContent/Mobiles/Monsters/LBR/Jukas/ChaosDragoonElite.cs:39`) — 85.1-100
+- `EliteNinja` (`Projects/UOContent/Mobiles/Monsters/SE/EliteNinja.cs:41`) — 95.0-120.0
+- `Ninja` (`Projects/UOContent/Mobiles/Townfolk/Ninja.cs:15`) — 64.0-80.0
+- `Blacksmith` (`Projects/UOContent/Mobiles/Vendors/NPC/Blacksmith.cs:19`) — 60.0-83.0
+- `RangerGuildmaster` (`Projects/UOContent/Mobiles/Vendors/NPC/Guildmasters/RangerGuildmaster.cs:19`) — 36.0-68.0
+- `ThiefGuildmaster` (`Projects/UOContent/Mobiles/Vendors/NPC/Guildmasters/ThiefGuildmaster.cs:19`) — 75.0-98.0
+- `WarriorGuildmaster` (`Projects/UOContent/Mobiles/Vendors/NPC/Guildmasters/WarriorGuildmaster.cs:17`) — 60.0-83.0
+- `IronWorker` (`Projects/UOContent/Mobiles/Vendors/NPC/IronWorker.cs:17`) — 60.0-83.0
+- `KeeperOfChivalry` (`Projects/UOContent/Mobiles/Vendors/NPC/KeeperOfChivalry.cs:15`) — 75.0-85.0
+- `Weaponsmith` (`Projects/UOContent/Mobiles/Vendors/NPC/Weaponsmith.cs:19`) — 45.0-68.0
+
+*... and 11 more NPCs with this skill*
+---
+
+## Spells
+
+None
+---
+
+## Crafting
+
+None
+---
+
+## Weapon Abilities
+
+- `WeaponAbility` (`Projects/UOContent/Items/Weapons/Abilities/WeaponAbility.cs:185`) — skill reference
+---
+
+## Harvest Systems
+
+None
+---
+
+## Professions
+
+None
+---
+
+## Quests
+
+- `NewHavenSkillTraining` (`Projects/UOContent/Engines/ML Quests/Definitions/NewHavenSkillTraining.cs:122`) — objective threshold: 500
+- `NewHavenSkillTraining` (`Projects/UOContent/Engines/ML Quests/Definitions/NewHavenSkillTraining.cs:879`)
+- `NewHavenSkillTraining` (`Projects/UOContent/Engines/ML Quests/Definitions/NewHavenSkillTraining.cs:1458`)
+- `NewHavenSkillTraining` (`Projects/UOContent/Engines/ML Quests/Definitions/NewHavenSkillTraining.cs:1511`)
+- `NewHavenSkillTraining` (`Projects/UOContent/Engines/ML Quests/Definitions/NewHavenSkillTraining.cs:1545`)
+- `NewHavenSkillTraining` (`Projects/UOContent/Engines/ML Quests/Definitions/NewHavenSkillTraining.cs:1589`)
+---
+
+## Code Locations
+
+- `50 files` — total code references in UOContent
+
+---
+
 ## Expansion Notes
 
 Fencing is available from character creation in the base game. No expansion is required.

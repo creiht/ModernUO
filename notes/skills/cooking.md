@@ -35,6 +35,63 @@ Cooking is the most Intelligence-reliant crafting skill and provides the highest
 
 ---
 
+---
+
+## Weapons
+
+None
+---
+
+## Items
+
+None
+---
+
+## NPCs
+
+- `Baker` (`Projects/UOContent/Mobiles/Vendors/NPC/Baker.cs:14`) — 75.0-98.0
+- `Cook` (`Projects/UOContent/Mobiles/Vendors/NPC/Cook.cs:15`) — 90.0-100.0
+- `Farmer` (`Projects/UOContent/Mobiles/Vendors/NPC/Farmer.cs:17`) — 36.0-68.0
+- `Furtrader` (`Projects/UOContent/Mobiles/Vendors/NPC/Furtrader.cs:17`) — 45.0-68.0
+- `Herbalist` (`Projects/UOContent/Mobiles/Vendors/NPC/Herbalist.cs:15`) — 80.0-100.0
+---
+
+## Spells
+
+None
+---
+
+## Crafting
+
+- `DefCooking` (`Projects/UOContent/Engines/Craft/DefCooking.cs:17`) — MainSkill, 46 items
+---
+
+## Weapon Abilities
+
+None
+---
+
+## Harvest Systems
+
+None
+---
+
+## Professions
+
+None
+---
+
+## Quests
+
+None
+---
+
+## Code Locations
+
+- `12 files` — total code references in UOContent
+
+---
+
 ## Expansion Notes
 
 Cooking is available from character creation in the base game. No expansion is required.

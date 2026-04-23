@@ -34,6 +34,72 @@ Tactics is one of the "pure" combat skills that functions independently of stat 
 
 ---
 
+---
+
+## Weapons
+
+None
+---
+
+## Items
+
+- **Tool/Check:** `BaseWeapon` (`Projects/UOContent/Items/Weapons/BaseWeapon.cs:2540`)
+- **Tool/Check:** `BaseWeapon` (`Projects/UOContent/Items/Weapons/BaseWeapon.cs:2613`)
+---
+
+## NPCs
+
+None
+---
+
+## Spells
+
+None
+---
+
+## Crafting
+
+None
+---
+
+## Weapon Abilities
+
+None
+---
+
+## Harvest Systems
+
+None
+---
+
+## Professions
+
+- **[AOS]** Tactics: 50
+- **[AOS]** Tactics: 20
+- **[AOS]** Tactics: 50
+- **[None]** Tactics: 50
+---
+
+## Quests
+
+- `Heritage` (`Projects/UOContent/Engines/ML Quests/Definitions/Heritage.cs:282`)
+- `NewHavenSkillTraining` (`Projects/UOContent/Engines/ML Quests/Definitions/NewHavenSkillTraining.cs:146`) — objective threshold: 500
+- `NewHavenSkillTraining` (`Projects/UOContent/Engines/ML Quests/Definitions/NewHavenSkillTraining.cs:664`)
+- `NewHavenSkillTraining` (`Projects/UOContent/Engines/ML Quests/Definitions/NewHavenSkillTraining.cs:751`)
+- `NewHavenSkillTraining` (`Projects/UOContent/Engines/ML Quests/Definitions/NewHavenSkillTraining.cs:813`)
+- `NewHavenSkillTraining` (`Projects/UOContent/Engines/ML Quests/Definitions/NewHavenSkillTraining.cs:878`)
+- `NewHavenSkillTraining` (`Projects/UOContent/Engines/ML Quests/Definitions/NewHavenSkillTraining.cs:939`)
+- `NewHavenSkillTraining` (`Projects/UOContent/Engines/ML Quests/Definitions/NewHavenSkillTraining.cs:983`)
+- `NewHavenSkillTraining` (`Projects/UOContent/Engines/ML Quests/Definitions/NewHavenSkillTraining.cs:1025`)
+- `NewHavenSkillTraining` (`Projects/UOContent/Engines/ML Quests/Definitions/NewHavenSkillTraining.cs:1295`)
+---
+
+## Code Locations
+
+- `429 files` — total code references in UOContent
+
+---
+
 ## Expansion Notes
 
 Tactics is available from character creation in the base game. No expansion is required.

@@ -34,6 +34,65 @@ Tinkering is closely tied to the tools system and the crafting system. It allows
 
 ---
 
+---
+
+## Weapons
+
+None
+---
+
+## Items
+
+- **Tool/Check:** `LockableContainer` (`Projects/UOContent/Items/Containers/LockableContainer.cs:22`)
+---
+
+## NPCs
+
+- `GolemCrafter` (`Projects/UOContent/Mobiles/Vendors/NPC/GolemCrafter.cs:16`) — 64.0-100.0
+- `TinkerGuildmaster` (`Projects/UOContent/Mobiles/Vendors/NPC/Guildmasters/TinkerGuildmaster.cs:16`) — 90.0-100.0
+- `Tinker` (`Projects/UOContent/Mobiles/Vendors/NPC/Tinker.cs:16`) — 64.0-100.0
+---
+
+## Spells
+
+None
+---
+
+## Crafting
+
+- `DefTinkering` (`Projects/UOContent/Engines/Craft/DefTinkering.cs:34`) — MainSkill, 89 items
+---
+
+## Weapon Abilities
+
+None
+---
+
+## Harvest Systems
+
+None
+---
+
+## Professions
+
+- **[AOS]** Tinkering: 45
+- **[None]** Tinkering: 45
+---
+
+## Quests
+
+- `NewHavenSkillTraining` (`Projects/UOContent/Engines/ML Quests/Definitions/NewHavenSkillTraining.cs:336`) — objective threshold: 500
+- `NewHavenSkillTraining` (`Projects/UOContent/Engines/ML Quests/Definitions/NewHavenSkillTraining.cs:1297`)
+- `NewHavenSkillTraining` (`Projects/UOContent/Engines/ML Quests/Definitions/NewHavenSkillTraining.cs:1795`)
+- `NewHavenSkillTraining` (`Projects/UOContent/Engines/ML Quests/Definitions/NewHavenSkillTraining.cs:1839`)
+---
+
+## Code Locations
+
+- `15 files` — total code references in UOContent
+
+---
+
 ## Expansion Notes
 
 Tinkering is available from character creation in the base game. No expansion is required.

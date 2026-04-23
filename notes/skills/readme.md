@@ -84,10 +84,6 @@ Support skills for detection, navigation, crafting assistance, and quality of li
 - [Tracking](tracking.md) — Follow tracks in the world
 - [Veterinary](veterinary.md) — Heal and treat animals
 
-### Not Implemented
-
-- [Monster Slaying](monsterslaying.md) — Not implemented in ModernUO (documented for reference)
-
 ## Key Concepts
 
 - **Skill Cap**: Maximum total skill points (default 7000, adjustable)

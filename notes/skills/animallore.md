@@ -64,6 +64,64 @@ Animal Lore reveals pack instinct information for creatures that fight in groups
 
 ---
 
+---
+
+## Weapons
+
+None
+---
+
+## Items
+
+None
+---
+
+## NPCs
+
+- `AnimalTrainer` (`Projects/UOContent/Mobiles/Vendors/NPC/AnimalTrainer.cs:20`) — 64.0-100.0
+- `Furtrader` (`Projects/UOContent/Mobiles/Vendors/NPC/Furtrader.cs:16`) — 85.0-100.0
+- `RangerGuildmaster` (`Projects/UOContent/Mobiles/Vendors/NPC/Guildmasters/RangerGuildmaster.cs:11`) — 64.0-100.0
+- `Rancher` (`Projects/UOContent/Mobiles/Vendors/NPC/Rancher.cs:14`) — 55.0-78.0
+- `Veterinarian` (`Projects/UOContent/Mobiles/Vendors/NPC/Veterinarian.cs:14`) — 85.0-100.0
+---
+
+## Spells
+
+None
+---
+
+## Crafting
+
+None
+---
+
+## Weapon Abilities
+
+None
+---
+
+## Harvest Systems
+
+None
+---
+
+## Professions
+
+None
+---
+
+## Quests
+
+None
+---
+
+## Code Locations
+
+- `Projects/UOContent/Skills/AnimalLore.cs` — skill handler implementation
+- `14 files` — total code references in UOContent
+
+---
+
 ## Expansion Notes
 
 Animal Lore is available from character creation in the base game. No expansion is required.

@@ -40,6 +40,75 @@
 
 ---
 
+---
+
+## Weapons
+
+None
+---
+
+## Items
+
+None
+---
+
+## NPCs
+
+- `EvilHealer` (`Projects/UOContent/Mobiles/Healers/EvilHealer.cs:16`) — 80.0-100.0
+- `EvilWanderingHealer` (`Projects/UOContent/Mobiles/Healers/EvilWanderingHealer.cs:19`) — 80.0-100.0
+- `FortuneTeller` (`Projects/UOContent/Mobiles/Healers/FortuneTeller.cs:17`) — 65.0-88.0
+- `Healer` (`Projects/UOContent/Mobiles/Healers/Healer.cs:19`) — 80.0-100.0
+- `WanderingHealer` (`Projects/UOContent/Mobiles/Healers/WanderingHealer.cs:18`) — 80.0-100.0
+- `LichLord` (`Projects/UOContent/Mobiles/Monsters/Humanoid/Magic/LichLord.cs:34`) — 90.0-110.0
+- `MasterJonath` (`Projects/UOContent/Mobiles/Monsters/ML/Bedlam/MasterJonath.cs:37`) — 99.6-106.9
+- `MasterMikael` (`Projects/UOContent/Mobiles/Monsters/ML/Bedlam/MasterMikael.cs:37`) — 96.1-105.3
+- `MasterTheophilus` (`Projects/UOContent/Mobiles/Monsters/ML/Bedlam/MasterTheophilus.cs:39`) — 125.6-133.8
+- `LadyOfTheSnow` (`Projects/UOContent/Mobiles/Monsters/SE/LadyOfTheSnow.cs:42`) — 90.0-110.0
+- `HealerGuildmaster` (`Projects/UOContent/Mobiles/Vendors/NPC/Guildmasters/HealerGuildmaster.cs:16`) — 65.0-88.0
+
+*... and 7 more NPCs with this skill*
+---
+
+## Spells
+
+- `NecromancerSpell` (`Projects/UOContent/Spells/Necromancy/NecromancerSpell.cs:15`) — DamageSkill
+---
+
+## Crafting
+
+None
+---
+
+## Weapon Abilities
+
+None
+---
+
+## Harvest Systems
+
+None
+---
+
+## Professions
+
+None
+---
+
+## Quests
+
+- `MistakenIdentity` (`Projects/UOContent/Engines/ML Quests/Definitions/MistakenIdentity.cs:290`)
+- `NewHavenSkillTraining` (`Projects/UOContent/Engines/ML Quests/Definitions/NewHavenSkillTraining.cs:591`) — objective threshold: 500
+- `NewHavenSkillTraining` (`Projects/UOContent/Engines/ML Quests/Definitions/NewHavenSkillTraining.cs:1689`)
+- `NewHavenSkillTraining` (`Projects/UOContent/Engines/ML Quests/Definitions/NewHavenSkillTraining.cs:1751`)
+---
+
+## Code Locations
+
+- `Projects/UOContent/Skills/SpiritSpeak.cs` — skill handler implementation
+- `30 files` — total code references in UOContent
+
+---
+
 ## Expansion Notes
 
 SpiritSpeak is available from character creation in the base game. No expansion is required.

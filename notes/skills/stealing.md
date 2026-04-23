@@ -32,6 +32,62 @@
 
 ---
 
+---
+
+## Weapons
+
+None
+---
+
+## Items
+
+- **Tool/Check:** `PickpocketDips` (`Projects/UOContent/Items/Addons/PickpocketDips.cs:61`)
+---
+
+## NPCs
+
+- `HireSailor` (`Projects/UOContent/Mobiles/Hireables/HireSailor.cs:26`) — 66.0-97.5
+- `HireThief` (`Projects/UOContent/Mobiles/Hireables/HireThief.cs:26`) — 66.0-97.5
+- `ThiefGuildmaster` (`Projects/UOContent/Mobiles/Vendors/NPC/Guildmasters/ThiefGuildmaster.cs:18`) — 90.0-100.0
+---
+
+## Spells
+
+- `AnimalForm` (`Projects/UOContent/Spells/Ninjitsu/AnimalForm.cs:237`) — skill mod
+---
+
+## Crafting
+
+None
+---
+
+## Weapon Abilities
+
+None
+---
+
+## Harvest Systems
+
+None
+---
+
+## Professions
+
+None
+---
+
+## Quests
+
+None
+---
+
+## Code Locations
+
+- `Projects/UOContent/Skills/Stealing.cs` — skill handler implementation
+- `15 files` — total code references in UOContent
+
+---
+
 ## Expansion Notes
 
 Stealing is available from character creation in the base game. No expansion is required.

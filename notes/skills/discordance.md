@@ -32,6 +32,61 @@
 
 ---
 
+---
+
+## Weapons
+
+None
+---
+
+## Items
+
+None
+---
+
+## NPCs
+
+- `Bard` (`Projects/UOContent/Mobiles/Vendors/NPC/Bard.cs:14`) — 64.0-100.0
+- `BardGuildmaster` (`Projects/UOContent/Mobiles/Vendors/NPC/Guildmasters/BardGuildmaster.cs:12`) — 80.0-100.0
+---
+
+## Spells
+
+None
+---
+
+## Crafting
+
+None
+---
+
+## Weapon Abilities
+
+None
+---
+
+## Harvest Systems
+
+None
+---
+
+## Professions
+
+None
+---
+
+## Quests
+
+None
+---
+
+## Code Locations
+
+- `Projects/UOContent/Skills/Discordance.cs` — skill handler implementation
+- `10 files` — total code references in UOContent
+
+---
+
 ## Expansion Notes
 
 Discordance is available from character creation in the base game. No expansion is required.

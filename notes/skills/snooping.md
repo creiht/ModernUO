@@ -32,6 +32,62 @@
 
 ---
 
+---
+
+## Weapons
+
+None
+---
+
+## Items
+
+None
+---
+
+## NPCs
+
+- `HireSailor` (`Projects/UOContent/Mobiles/Hireables/HireSailor.cs:35`) — 65-87
+- `HireThief` (`Projects/UOContent/Mobiles/Hireables/HireThief.cs:35`) — 65-87
+- `ThiefGuildmaster` (`Projects/UOContent/Mobiles/Vendors/NPC/Guildmasters/ThiefGuildmaster.cs:16`) — 90.0-100.0
+---
+
+## Spells
+
+None
+---
+
+## Crafting
+
+None
+---
+
+## Weapon Abilities
+
+None
+---
+
+## Harvest Systems
+
+None
+---
+
+## Professions
+
+None
+---
+
+## Quests
+
+None
+---
+
+## Code Locations
+
+- `Projects/UOContent/Skills/Snooping.cs` — skill handler implementation
+- `8 files` — total code references in UOContent
+
+---
+
 ## Expansion Notes
 
 Snooping is available from character creation in the base game. No expansion is required.

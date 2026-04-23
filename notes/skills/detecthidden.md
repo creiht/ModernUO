@@ -47,6 +47,62 @@ if ss >= ts: revealed
 
 ---
 
+---
+
+## Weapons
+
+None
+---
+
+## Items
+
+None
+---
+
+## NPCs
+
+- `ThiefGuildmaster` (`Projects/UOContent/Mobiles/Vendors/NPC/Guildmasters/ThiefGuildmaster.cs:13`) — 75.0-98.0
+- `Ranger` (`Projects/UOContent/Mobiles/Vendors/NPC/Ranger.cs:16`) — 65.0-88.0
+- `Thief` (`Projects/UOContent/Mobiles/Vendors/NPC/Thief.cs:16`) — 65.0-88.0
+---
+
+## Spells
+
+None
+---
+
+## Crafting
+
+None
+---
+
+## Weapon Abilities
+
+None
+---
+
+## Harvest Systems
+
+None
+---
+
+## Professions
+
+None
+---
+
+## Quests
+
+None
+---
+
+## Code Locations
+
+- `Projects/UOContent/Skills/DetectHidden.cs` — skill handler implementation
+- `16 files` — total code references in UOContent
+
+---
+
 ## Expansion Notes
 
 DetectHidden is available from character creation in the base game. No expansion is required.

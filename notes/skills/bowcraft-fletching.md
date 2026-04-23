@@ -35,6 +35,59 @@ The skill's dual stat scaling (Str + Dex) reflects the physical demands of bow c
 
 ---
 
+---
+
+## Weapons
+
+None
+---
+
+## Items
+
+None
+---
+
+## NPCs
+
+None
+---
+
+## Spells
+
+None
+---
+
+## Crafting
+
+- `DefBowFletching` (`Projects/UOContent/Engines/Craft/DefBowFletching.cs:17`) — MainSkill, 32 items
+---
+
+## Weapon Abilities
+
+None
+---
+
+## Harvest Systems
+
+None
+---
+
+## Professions
+
+None
+---
+
+## Quests
+
+- `NewHavenSkillTraining` (`Projects/UOContent/Engines/ML Quests/Definitions/NewHavenSkillTraining.cs:811`)
+---
+
+## Code Locations
+
+- `8 files` — total code references in UOContent
+
+---
+
 ## Expansion Notes
 
 Bowcraft/Fletching is available from character creation in the base game. No expansion is required.

@@ -35,6 +35,59 @@ Imbuing is one of the "pure" expansion skills with zero stat scales and zero gai
 
 ---
 
+---
+
+## Weapons
+
+None
+---
+
+## Items
+
+None
+---
+
+## NPCs
+
+None
+---
+
+## Spells
+
+None
+---
+
+## Crafting
+
+None
+---
+
+## Weapon Abilities
+
+None
+---
+
+## Harvest Systems
+
+None
+---
+
+## Professions
+
+None
+---
+
+## Quests
+
+None
+---
+
+## Code Locations
+
+- `5 files` — total code references in UOContent
+
+---
+
 ## Expansion Notes
 
 Imbuing requires the SA (Samurai Adventure) expansion.

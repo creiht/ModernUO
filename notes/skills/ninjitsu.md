@@ -36,6 +36,69 @@ Ninjitsu provides abilities such as Hide Again, Speed, and Swashbuckler that enh
 
 ---
 
+---
+
+## Weapons
+
+None
+---
+
+## Items
+
+None
+---
+
+## NPCs
+
+- `EliteNinja` (`Projects/UOContent/Mobiles/Monsters/SE/EliteNinja.cs:44`) — 95.0-120.0
+- `Ninja` (`Projects/UOContent/Mobiles/Townfolk/Ninja.cs:17`) — 60.0-80.0
+---
+
+## Spells
+
+- `NinjaSpell` (`Projects/UOContent/Spells/Ninjitsu/NinjaSpell.cs:14`) — CastSkill
+- `NinjaSpell` (`Projects/UOContent/Spells/Ninjitsu/NinjaSpell.cs:15`) — DamageSkill
+---
+
+## Crafting
+
+None
+---
+
+## Weapon Abilities
+
+- `DualWield` (`Projects/UOContent/Items/Weapons/Abilities/DualWield.cs:16`) — secondary skill requirement
+- `TalonStrike` (`Projects/UOContent/Items/Weapons/Abilities/TalonStrike.cs:17`) — secondary skill requirement
+- `WeaponAbility` (`Projects/UOContent/Items/Weapons/Abilities/WeaponAbility.cs:153`) — skill reference
+- `WeaponAbility` (`Projects/UOContent/Items/Weapons/Abilities/WeaponAbility.cs:192`) — skill reference
+- `WeaponAbility` (`Projects/UOContent/Items/Weapons/Abilities/WeaponAbility.cs:287`) — skill reference
+---
+
+## Harvest Systems
+
+None
+---
+
+## Professions
+
+None
+---
+
+## Quests
+
+- `NewHavenSkillTraining` (`Projects/UOContent/Engines/ML Quests/Definitions/NewHavenSkillTraining.cs:431`) — objective threshold: 500
+- `NewHavenSkillTraining` (`Projects/UOContent/Engines/ML Quests/Definitions/NewHavenSkillTraining.cs:1460`)
+- `NewHavenSkillTraining` (`Projects/UOContent/Engines/ML Quests/Definitions/NewHavenSkillTraining.cs:1513`)
+- `NewHavenSkillTraining` (`Projects/UOContent/Engines/ML Quests/Definitions/NewHavenSkillTraining.cs:1547`)
+- `NewHavenSkillTraining` (`Projects/UOContent/Engines/ML Quests/Definitions/NewHavenSkillTraining.cs:1592`)
+---
+
+## Code Locations
+
+- `18 files` — total code references in UOContent
+
+---
+
 ## Expansion Notes
 
 Ninjitsu requires the SE (Samurai Empire) expansion.

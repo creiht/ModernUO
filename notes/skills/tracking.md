@@ -32,6 +32,67 @@
 
 ---
 
+---
+
+## Weapons
+
+None
+---
+
+## Items
+
+None
+---
+
+## NPCs
+
+- `Furtrader` (`Projects/UOContent/Mobiles/Vendors/NPC/Furtrader.cs:18`) — 36.0-68.0
+- `RangerGuildmaster` (`Projects/UOContent/Mobiles/Vendors/NPC/Guildmasters/RangerGuildmaster.cs:17`) — 90.0-100.0
+- `Ranger` (`Projects/UOContent/Mobiles/Vendors/NPC/Ranger.cs:19`) — 65.0-88.0
+- `Thief` (`Projects/UOContent/Mobiles/Vendors/NPC/Thief.cs:19`) — 65.0-88.0
+---
+
+## Spells
+
+None
+---
+
+## Crafting
+
+None
+---
+
+## Weapon Abilities
+
+None
+---
+
+## Harvest Systems
+
+None
+---
+
+## Professions
+
+None
+---
+
+## Quests
+
+- `NewHavenSkillTraining` (`Projects/UOContent/Engines/ML Quests/Definitions/NewHavenSkillTraining.cs:501`) — objective threshold: 500
+- `NewHavenSkillTraining` (`Projects/UOContent/Engines/ML Quests/Definitions/NewHavenSkillTraining.cs:1457`)
+- `NewHavenSkillTraining` (`Projects/UOContent/Engines/ML Quests/Definitions/NewHavenSkillTraining.cs:1510`)
+- `NewHavenSkillTraining` (`Projects/UOContent/Engines/ML Quests/Definitions/NewHavenSkillTraining.cs:1544`)
+- `NewHavenSkillTraining` (`Projects/UOContent/Engines/ML Quests/Definitions/NewHavenSkillTraining.cs:1588`)
+---
+
+## Code Locations
+
+- `Projects/UOContent/Skills/Tracking/Tracking.cs` — skill handler implementation
+- `8 files` — total code references in UOContent
+
+---
+
 ## Expansion Notes
 
 Tracking is available from character creation in the base game. No expansion is required.

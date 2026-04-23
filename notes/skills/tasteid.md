@@ -31,6 +31,66 @@
 
 ---
 
+---
+
+## Weapons
+
+None
+---
+
+## Items
+
+None
+---
+
+## NPCs
+
+- `Alchemist` (`Projects/UOContent/Mobiles/Vendors/NPC/Alchemist.cs:16`) — 65.0-88.0
+- `Baker` (`Projects/UOContent/Mobiles/Vendors/NPC/Baker.cs:15`) — 36.0-68.0
+- `Cook` (`Projects/UOContent/Mobiles/Vendors/NPC/Cook.cs:16`) — 75.0-98.0
+- `Farmer` (`Projects/UOContent/Mobiles/Vendors/NPC/Farmer.cs:16`) — 36.0-68.0
+- `Glassblower` (`Projects/UOContent/Mobiles/Vendors/NPC/Glassblower.cs:17`) — 85.0-100.0
+- `HairStylist` (`Projects/UOContent/Mobiles/Vendors/NPC/HairStylist.cs:16`) — 85.0-100.0
+- `Herbalist` (`Projects/UOContent/Mobiles/Vendors/NPC/Herbalist.cs:16`) — 80.0-100.0
+---
+
+## Spells
+
+None
+---
+
+## Crafting
+
+None
+---
+
+## Weapon Abilities
+
+None
+---
+
+## Harvest Systems
+
+None
+---
+
+## Professions
+
+None
+---
+
+## Quests
+
+None
+---
+
+## Code Locations
+
+- `Projects/UOContent/Skills/TasteID.cs` — skill handler implementation
+- `12 files` — total code references in UOContent
+
+---
+
 ## Expansion Notes
 
 TasteID is available from character creation in the base game. No expansion is required.

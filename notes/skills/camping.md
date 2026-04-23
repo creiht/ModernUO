@@ -32,6 +32,64 @@
 
 ---
 
+---
+
+## Weapons
+
+None
+---
+
+## Items
+
+- **Tool/Check:** `Kindling` (`Projects/UOContent/Items/Skill Items/Camping/Kindling.cs:38`)
+---
+
+## NPCs
+
+- `EvilWanderingHealer` (`Projects/UOContent/Mobiles/Healers/EvilWanderingHealer.cs:17`) — 80.0-100.0
+- `WanderingHealer` (`Projects/UOContent/Mobiles/Healers/WanderingHealer.cs:16`) — 80.0-100.0
+- `Furtrader` (`Projects/UOContent/Mobiles/Vendors/NPC/Furtrader.cs:14`) — 55.0-78.0
+- `RangerGuildmaster` (`Projects/UOContent/Mobiles/Vendors/NPC/Guildmasters/RangerGuildmaster.cs:12`) — 75.0-98.0
+- `Ranger` (`Projects/UOContent/Mobiles/Vendors/NPC/Ranger.cs:15`) — 55.0-78.0
+- `Thief` (`Projects/UOContent/Mobiles/Vendors/NPC/Thief.cs:15`) — 55.0-78.0
+---
+
+## Spells
+
+None
+---
+
+## Crafting
+
+None
+---
+
+## Weapon Abilities
+
+None
+---
+
+## Harvest Systems
+
+None
+---
+
+## Professions
+
+None
+---
+
+## Quests
+
+None
+---
+
+## Code Locations
+
+- `10 files` — total code references in UOContent
+
+---
+
 ## Expansion Notes
 
 Camping is available from character creation in the base game. No expansion is required.

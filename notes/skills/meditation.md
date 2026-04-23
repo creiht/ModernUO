@@ -54,6 +54,75 @@ Higher skill increases the chance of success. Lower mana deficit (closer to full
 
 ---
 
+---
+
+## Weapons
+
+None
+---
+
+## Items
+
+None
+---
+
+## NPCs
+
+- `HireMage` (`Projects/UOContent/Mobiles/Hireables/HireMage.cs:28`) — 100-125
+- `EvilMageLord` (`Projects/UOContent/Mobiles/Monsters/Humanoid/Magic/EvilMageLord.cs:43`) — 27.5-50.0
+- `MasterTheophilus` (`Projects/UOContent/Mobiles/Monsters/ML/Bedlam/MasterTheophilus.cs:40`) — 128.8-132.9
+- `MinotaurCaptain` (`Projects/UOContent/Mobiles/Monsters/ML/Humanoid/Melee/MinotaurCaptain.cs:30`) — 0
+
+*... and 36 more NPCs with this skill*
+---
+
+## Spells
+
+None
+---
+
+## Crafting
+
+None
+---
+
+## Weapon Abilities
+
+None
+---
+
+## Harvest Systems
+
+None
+---
+
+## Professions
+
+- **[AOS]** Meditation: 50
+- **[None]** Meditation: 50
+---
+
+## Quests
+
+- `Heartwood` (`Projects/UOContent/Engines/ML Quests/Definitions/Heartwood.cs:2022`)
+- `Heartwood` (`Projects/UOContent/Engines/ML Quests/Definitions/Heartwood.cs:2066`)
+- `Heartwood` (`Projects/UOContent/Engines/ML Quests/Definitions/Heartwood.cs:2111`)
+- `Heartwood` (`Projects/UOContent/Engines/ML Quests/Definitions/Heartwood.cs:2154`)
+- `Heartwood` (`Projects/UOContent/Engines/ML Quests/Definitions/Heartwood.cs:2199`)
+- `Heartwood` (`Projects/UOContent/Engines/ML Quests/Definitions/Heartwood.cs:2247`)
+- `Heartwood` (`Projects/UOContent/Engines/ML Quests/Definitions/Heartwood.cs:2288`)
+- `Heartwood` (`Projects/UOContent/Engines/ML Quests/Definitions/Heartwood.cs:2337`)
+- `Heartwood` (`Projects/UOContent/Engines/ML Quests/Definitions/Heartwood.cs:2378`)
+- `Heartwood` (`Projects/UOContent/Engines/ML Quests/Definitions/Heartwood.cs:2476`)
+---
+
+## Code Locations
+
+- `Projects/UOContent/Skills/Meditation.cs` — skill handler implementation
+- `108 files` — total code references in UOContent
+
+---
+
 ## Expansion Notes
 
 Meditation is available from character creation in the base game. No expansion is required.

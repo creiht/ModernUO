@@ -32,6 +32,63 @@
 
 ---
 
+---
+
+## Weapons
+
+None
+---
+
+## Items
+
+None
+---
+
+## NPCs
+
+- `AnimalTrainer` (`Projects/UOContent/Mobiles/Vendors/NPC/AnimalTrainer.cs:22`) — 65.0-88.0
+- `Rancher` (`Projects/UOContent/Mobiles/Vendors/NPC/Rancher.cs:17`) — 60.0-83.0
+- `Ranger` (`Projects/UOContent/Mobiles/Vendors/NPC/Ranger.cs:20`) — 60.0-83.0
+- `Thief` (`Projects/UOContent/Mobiles/Vendors/NPC/Thief.cs:20`) — 60.0-83.0
+- `Veterinarian` (`Projects/UOContent/Mobiles/Vendors/NPC/Veterinarian.cs:15`) — 90.0-100.0
+---
+
+## Spells
+
+None
+---
+
+## Crafting
+
+None
+---
+
+## Weapon Abilities
+
+None
+---
+
+## Harvest Systems
+
+None
+---
+
+## Professions
+
+None
+---
+
+## Quests
+
+None
+---
+
+## Code Locations
+
+- `11 files` — total code references in UOContent
+
+---
+
 ## Expansion Notes
 
 Veterinary is available from character creation in the base game. No expansion is required.

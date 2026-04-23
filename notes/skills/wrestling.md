@@ -35,6 +35,71 @@ Wrestling is the foundation of unarmed combat and is available from character cr
 
 ---
 
+---
+
+## Weapons
+
+- `Fists` (`Projects/UOContent/Items/Weapons/Fists.cs:36`)
+---
+
+## Items
+
+None
+---
+
+## NPCs
+
+None
+---
+
+## Spells
+
+None
+---
+
+## Crafting
+
+None
+---
+
+## Weapon Abilities
+
+- `Disarm` (`Projects/UOContent/Items/Weapons/Abilities/Disarm.cs:18`) — tactics exemption
+- `ParalyzingBlow` (`Projects/UOContent/Items/Weapons/Abilities/ParalyzingBlow.cs:22`) — skill reference
+---
+
+## Harvest Systems
+
+None
+---
+
+## Professions
+
+- **[AOS]** Wrestling: 0
+- **[AOS]** Wrestling: 0
+- **[AOS]** Wrestling: 0
+- **[None]** Wrestling: 0
+---
+
+## Quests
+
+- `Heritage` (`Projects/UOContent/Engines/ML Quests/Definitions/Heritage.cs:283`)
+- `NewHavenSkillTraining` (`Projects/UOContent/Engines/ML Quests/Definitions/NewHavenSkillTraining.cs:51`) — objective threshold: 500
+- `NewHavenSkillTraining` (`Projects/UOContent/Engines/ML Quests/Definitions/NewHavenSkillTraining.cs:713`)
+- `NewHavenSkillTraining` (`Projects/UOContent/Engines/ML Quests/Definitions/NewHavenSkillTraining.cs:1090`)
+- `NewHavenSkillTraining` (`Projects/UOContent/Engines/ML Quests/Definitions/NewHavenSkillTraining.cs:1128`)
+- `NewHavenSkillTraining` (`Projects/UOContent/Engines/ML Quests/Definitions/NewHavenSkillTraining.cs:1176`)
+- `NewHavenSkillTraining` (`Projects/UOContent/Engines/ML Quests/Definitions/NewHavenSkillTraining.cs:1215`)
+- `NewHavenSkillTraining` (`Projects/UOContent/Engines/ML Quests/Definitions/NewHavenSkillTraining.cs:1253`)
+- `NewHavenSkillTraining` (`Projects/UOContent/Engines/ML Quests/Definitions/NewHavenSkillTraining.cs:1590`)
+---
+
+## Code Locations
+
+- `400 files` — total code references in UOContent
+
+---
+
 ## Expansion Notes
 
 Wrestling is available from character creation in the base game. No expansion is required.

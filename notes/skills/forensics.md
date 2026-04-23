@@ -32,6 +32,64 @@
 
 ---
 
+---
+
+## Weapons
+
+None
+---
+
+## Items
+
+None
+---
+
+## NPCs
+
+- `EvilHealer` (`Projects/UOContent/Mobiles/Healers/EvilHealer.cs:15`) — 80.0-100.0
+- `EvilWanderingHealer` (`Projects/UOContent/Mobiles/Healers/EvilWanderingHealer.cs:18`) — 80.0-100.0
+- `FortuneTeller` (`Projects/UOContent/Mobiles/Healers/FortuneTeller.cs:16`) — 75.0-98.0
+- `Healer` (`Projects/UOContent/Mobiles/Healers/Healer.cs:18`) — 80.0-100.0
+- `WanderingHealer` (`Projects/UOContent/Mobiles/Healers/WanderingHealer.cs:17`) — 80.0-100.0
+- `HealerGuildmaster` (`Projects/UOContent/Mobiles/Vendors/NPC/Guildmasters/HealerGuildmaster.cs:14`) — 75.0-98.0
+---
+
+## Spells
+
+None
+---
+
+## Crafting
+
+None
+---
+
+## Weapon Abilities
+
+None
+---
+
+## Harvest Systems
+
+None
+---
+
+## Professions
+
+None
+---
+
+## Quests
+
+None
+---
+
+## Code Locations
+
+- `11 files` — total code references in UOContent
+
+---
+
 ## Expansion Notes
 
 Forensics is available from character creation in the base game. No expansion is required.

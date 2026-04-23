@@ -90,6 +90,61 @@ Animal Lore can gain skill simultaneously during taming attempts, allowing effic
 
 ---
 
+---
+
+## Weapons
+
+None
+---
+
+## Items
+
+None
+---
+
+## NPCs
+
+- `AnimalTrainer` (`Projects/UOContent/Mobiles/Vendors/NPC/AnimalTrainer.cs:21`) — 90.0-100.0
+- `Rancher` (`Projects/UOContent/Mobiles/Vendors/NPC/Rancher.cs:15`) — 55.0-78.0
+---
+
+## Spells
+
+None
+---
+
+## Crafting
+
+None
+---
+
+## Weapon Abilities
+
+None
+---
+
+## Harvest Systems
+
+None
+---
+
+## Professions
+
+None
+---
+
+## Quests
+
+None
+---
+
+## Code Locations
+
+- `Projects/UOContent/Skills/AnimalTaming.cs` — skill handler implementation
+- `10 files` — total code references in UOContent
+
+---
+
 ## Expansion Notes
 
 Animal Taming is available from character creation in the base game. The skill has received various improvements in subsequent expansions.

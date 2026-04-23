@@ -37,6 +37,69 @@
 
 ---
 
+---
+
+## Weapons
+
+None
+---
+
+## Items
+
+None
+---
+
+## NPCs
+
+- `HireSailor` (`Projects/UOContent/Mobiles/Hireables/HireSailor.cs:34`) — 65-87
+- `HireThief` (`Projects/UOContent/Mobiles/Hireables/HireThief.cs:34`) — 65-87
+- `RangerGuildmaster` (`Projects/UOContent/Mobiles/Vendors/NPC/Guildmasters/RangerGuildmaster.cs:13`) — 75.0-98.0
+- `ThiefGuildmaster` (`Projects/UOContent/Mobiles/Vendors/NPC/Guildmasters/ThiefGuildmaster.cs:14`) — 65.0-88.0
+- `Ranger` (`Projects/UOContent/Mobiles/Vendors/NPC/Ranger.cs:17`) — 45.0-68.0
+- `Thief` (`Projects/UOContent/Mobiles/Vendors/NPC/Thief.cs:17`) — 45.0-68.0
+---
+
+## Spells
+
+None
+---
+
+## Crafting
+
+None
+---
+
+## Weapon Abilities
+
+None
+---
+
+## Harvest Systems
+
+None
+---
+
+## Professions
+
+None
+---
+
+## Quests
+
+- `NewHavenSkillTraining` (`Projects/UOContent/Engines/ML Quests/Definitions/NewHavenSkillTraining.cs:454`) — objective threshold: 500
+- `NewHavenSkillTraining` (`Projects/UOContent/Engines/ML Quests/Definitions/NewHavenSkillTraining.cs:1455`)
+- `NewHavenSkillTraining` (`Projects/UOContent/Engines/ML Quests/Definitions/NewHavenSkillTraining.cs:1508`)
+- `NewHavenSkillTraining` (`Projects/UOContent/Engines/ML Quests/Definitions/NewHavenSkillTraining.cs:1542`)
+- `NewHavenSkillTraining` (`Projects/UOContent/Engines/ML Quests/Definitions/NewHavenSkillTraining.cs:1586`)
+---
+
+## Code Locations
+
+- `Projects/UOContent/Skills/Hiding.cs` — skill handler implementation
+- `12 files` — total code references in UOContent
+
+---
+
 ## Expansion Notes
 
 Hiding is available from character creation in the base game. No expansion is required.

@@ -35,6 +35,59 @@ Cartography requires balanced Dexterity and Intelligence investment and is one o
 
 ---
 
+---
+
+## Weapons
+
+None
+---
+
+## Items
+
+- **Tool/Check:** `TreasureMap` (`Projects/UOContent/Items/Maps/TreasureMap.cs:413`)
+---
+
+## NPCs
+
+None
+---
+
+## Spells
+
+None
+---
+
+## Crafting
+
+- `DefCartography` (`Projects/UOContent/Engines/Craft/DefCartography.cs:17`) — MainSkill, 4 items
+---
+
+## Weapon Abilities
+
+None
+---
+
+## Harvest Systems
+
+None
+---
+
+## Professions
+
+None
+---
+
+## Quests
+
+None
+---
+
+## Code Locations
+
+- `7 files` — total code references in UOContent
+
+---
+
 ## Expansion Notes
 
 Cartography is available from character creation in the base game. No expansion is required.

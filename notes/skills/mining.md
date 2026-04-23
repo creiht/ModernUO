@@ -32,6 +32,66 @@
 
 ---
 
+---
+
+## Weapons
+
+None
+---
+
+## Items
+
+None
+---
+
+## NPCs
+
+- `HarborMaster` (`Projects/UOContent/Mobiles/Townfolk/HarborMaster.cs:13`) — 36-68
+- `MinerGuildmaster` (`Projects/UOContent/Mobiles/Vendors/NPC/Guildmasters/MinerGuildmaster.cs:12`) — 90.0-100.0
+- `Miner` (`Projects/UOContent/Mobiles/Vendors/NPC/Miner.cs:15`) — 65.0-88.0
+---
+
+## Spells
+
+None
+---
+
+## Crafting
+
+None
+---
+
+## Weapon Abilities
+
+None
+---
+
+## Harvest Systems
+
+- `definition` (`Projects/UOContent/Engines/Harvest/Mining.cs:92`)
+- `definition` (`Projects/UOContent/Engines/Harvest/Mining.cs:231`)
+---
+
+## Professions
+
+- **[AOS]** Mining: 5
+- **[None]** Mining: 5
+---
+
+## Quests
+
+- `NewHavenSkillTraining` (`Projects/UOContent/Engines/ML Quests/Definitions/NewHavenSkillTraining.cs:615`) — objective threshold: 500
+- `NewHavenSkillTraining` (`Projects/UOContent/Engines/ML Quests/Definitions/NewHavenSkillTraining.cs:1298`)
+- `NewHavenSkillTraining` (`Projects/UOContent/Engines/ML Quests/Definitions/NewHavenSkillTraining.cs:1797`)
+- `NewHavenSkillTraining` (`Projects/UOContent/Engines/ML Quests/Definitions/NewHavenSkillTraining.cs:1841`)
+---
+
+## Code Locations
+
+- `11 files` — total code references in UOContent
+
+---
+
 ## Expansion Notes
 
 Mining is available from character creation in the base game. No expansion is required.

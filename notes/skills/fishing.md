@@ -32,6 +32,59 @@
 
 ---
 
+---
+
+## Weapons
+
+None
+---
+
+## Items
+
+None
+---
+
+## NPCs
+
+- `FisherGuildmaster` (`Projects/UOContent/Mobiles/Vendors/NPC/Guildmasters/FisherGuildmaster.cs:11`) — 80.0-100.0
+---
+
+## Spells
+
+None
+---
+
+## Crafting
+
+None
+---
+
+## Weapon Abilities
+
+None
+---
+
+## Harvest Systems
+
+- `definition` (`Projects/UOContent/Engines/Harvest/Fishing.cs:78`)
+---
+
+## Professions
+
+None
+---
+
+## Quests
+
+None
+---
+
+## Code Locations
+
+- `7 files` — total code references in UOContent
+
+---
+
 ## Expansion Notes
 
 Fishing is available from character creation in the base game. No expansion is required.

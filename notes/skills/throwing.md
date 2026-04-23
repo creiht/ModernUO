@@ -41,6 +41,59 @@ After hitting or missing, thrown weapons return to the thrower after 0.3 seconds
 
 ---
 
+---
+
+## Weapons
+
+- `BaseThrown` (`Projects/UOContent/Items/Weapons/Throwing/BaseThrown.cs:38`)
+---
+
+## Items
+
+None
+---
+
+## NPCs
+
+None
+---
+
+## Spells
+
+None
+---
+
+## Crafting
+
+None
+---
+
+## Weapon Abilities
+
+None
+---
+
+## Harvest Systems
+
+None
+---
+
+## Professions
+
+None
+---
+
+## Quests
+
+None
+---
+
+## Code Locations
+
+- `6 files` — total code references in UOContent
+
+---
+
 ## Expansion Notes
 
 Throwing requires the SA (Samurai Adventure) expansion and is restricted to Gargoyle characters.

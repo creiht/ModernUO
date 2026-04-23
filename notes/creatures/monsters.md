@@ -533,6 +533,5 @@ Summoned creatures are created by necromancy and magery spells. SummonedDaemon i
 - [Creature AI Types](../reference/creature-ai-types.md) — AI type behavior descriptions
 - [Combat](../systems/combat.md) — Combat mechanics
 - [Poisons](../systems/poisons.md) — Poison types and resistance
-- [Monster Slaying](../skills/monsterslaying.md) — Monster Slaying skill
 - [Weapons](../items/weapons.md) — Weapon damage types
 - [Armor](../items/armor.md) — Armor vs creature damage

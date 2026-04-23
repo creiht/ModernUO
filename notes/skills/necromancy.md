@@ -36,6 +36,67 @@ Necromancy provides abilities such as Corpse Skin, Blood Oath, and Pain Spike th
 
 ---
 
+---
+
+## Weapons
+
+None
+---
+
+## Items
+
+None
+---
+
+## NPCs
+
+- `LichLord` (`Projects/UOContent/Mobiles/Monsters/Humanoid/Magic/LichLord.cs:33`) — 90-110.0
+- `MasterJonath` (`Projects/UOContent/Mobiles/Monsters/ML/Bedlam/MasterJonath.cs:36`) — 100.0-106.6
+- `MasterMikael` (`Projects/UOContent/Mobiles/Monsters/ML/Bedlam/MasterMikael.cs:36`) — 103.8-108.0
+- `MasterTheophilus` (`Projects/UOContent/Mobiles/Monsters/ML/Bedlam/MasterTheophilus.cs:38`) — 125.6-133.8
+- `LadyOfTheSnow` (`Projects/UOContent/Mobiles/Monsters/SE/LadyOfTheSnow.cs:41`) — 90-110.0
+---
+
+## Spells
+
+- `Spell` (`Projects/UOContent/Spells/Base/Spell.cs:704`) — CastSkill
+- `NecromancerSpell` (`Projects/UOContent/Spells/Necromancy/NecromancerSpell.cs:14`) — CastSkill
+---
+
+## Crafting
+
+None
+---
+
+## Weapon Abilities
+
+None
+---
+
+## Harvest Systems
+
+None
+---
+
+## Professions
+
+- **[AOS]** Necromancy: 50
+---
+
+## Quests
+
+- `MistakenIdentity` (`Projects/UOContent/Engines/ML Quests/Definitions/MistakenIdentity.cs:292`)
+- `NewHavenSkillTraining` (`Projects/UOContent/Engines/ML Quests/Definitions/NewHavenSkillTraining.cs:547`) — objective threshold: 500
+- `NewHavenSkillTraining` (`Projects/UOContent/Engines/ML Quests/Definitions/NewHavenSkillTraining.cs:1692`)
+- `NewHavenSkillTraining` (`Projects/UOContent/Engines/ML Quests/Definitions/NewHavenSkillTraining.cs:1754`)
+---
+
+## Code Locations
+
+- `27 files` — total code references in UOContent
+
+---
+
 ## Expansion Notes
 
 Necromancy requires the AOS (Age of Shadows) expansion.

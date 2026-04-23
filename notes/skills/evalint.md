@@ -41,6 +41,72 @@ At EvalInt >= 76.0, the user can also see the target's Mana percentage.
 
 ---
 
+---
+
+## Weapons
+
+None
+---
+
+## Items
+
+None
+---
+
+## NPCs
+
+- `BaseHealer` (`Projects/UOContent/Mobiles/Healers/BaseHealer.cs:54`) — 82.0-100.0
+- `HireMage` (`Projects/UOContent/Mobiles/Hireables/HireMage.cs:26`) — 100.0-125
+- `EvilMage` (`Projects/UOContent/Mobiles/Monsters/Humanoid/Magic/EvilMage.cs:41`) — 75.1-100.0
+- `EvilMageLord` (`Projects/UOContent/Mobiles/Monsters/Humanoid/Magic/EvilMageLord.cs:41`) — 80.2-100.0
+
+*... and 36 more NPCs with this skill*
+---
+
+## Spells
+
+- `Spell` (`Projects/UOContent/Spells/Base/Spell.cs:52`) — DamageSkill
+---
+
+## Crafting
+
+None
+---
+
+## Weapon Abilities
+
+None
+---
+
+## Harvest Systems
+
+None
+---
+
+## Professions
+
+None
+---
+
+## Quests
+
+- `MistakenIdentity` (`Projects/UOContent/Engines/ML Quests/Definitions/MistakenIdentity.cs:287`)
+- `NewHavenSkillTraining` (`Projects/UOContent/Engines/ML Quests/Definitions/NewHavenSkillTraining.cs:312`) — objective threshold: 500
+- `NewHavenSkillTraining` (`Projects/UOContent/Engines/ML Quests/Definitions/NewHavenSkillTraining.cs:709`)
+- `NewHavenSkillTraining` (`Projects/UOContent/Engines/ML Quests/Definitions/NewHavenSkillTraining.cs:1086`)
+- `NewHavenSkillTraining` (`Projects/UOContent/Engines/ML Quests/Definitions/NewHavenSkillTraining.cs:1124`)
+- `NewHavenSkillTraining` (`Projects/UOContent/Engines/ML Quests/Definitions/NewHavenSkillTraining.cs:1172`)
+- `NewHavenSkillTraining` (`Projects/UOContent/Engines/ML Quests/Definitions/NewHavenSkillTraining.cs:1211`)
+- `NewHavenSkillTraining` (`Projects/UOContent/Engines/ML Quests/Definitions/NewHavenSkillTraining.cs:1249`)
+---
+
+## Code Locations
+
+- `Projects/UOContent/Skills/EvalInt.cs` — skill handler implementation
+- `148 files` — total code references in UOContent
+
+---
+
 ## Expansion Notes
 
 EvalInt is available from character creation in the base game. No expansion is required.

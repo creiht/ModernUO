@@ -32,6 +32,61 @@
 
 ---
 
+---
+
+## Weapons
+
+None
+---
+
+## Items
+
+None
+---
+
+## NPCs
+
+- `Bard` (`Projects/UOContent/Mobiles/Vendors/NPC/Bard.cs:17`) — 60.0-83.0
+- `BardGuildmaster` (`Projects/UOContent/Mobiles/Vendors/NPC/Guildmasters/BardGuildmaster.cs:15`) — 80.0-100.0
+---
+
+## Spells
+
+None
+---
+
+## Crafting
+
+None
+---
+
+## Weapon Abilities
+
+None
+---
+
+## Harvest Systems
+
+None
+---
+
+## Professions
+
+None
+---
+
+## Quests
+
+None
+---
+
+## Code Locations
+
+- `Projects/UOContent/Skills/Provocation.cs` — skill handler implementation
+- `11 files` — total code references in UOContent
+
+---
+
 ## Expansion Notes
 
 Provocation is available from character creation in the base game. No expansion is required.

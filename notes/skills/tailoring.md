@@ -35,6 +35,63 @@ Tailoring is the most Dexterity-reliant crafting skill and provides balanced sta
 
 ---
 
+---
+
+## Weapons
+
+None
+---
+
+## Items
+
+None
+---
+
+## NPCs
+
+- `Cobbler` (`Projects/UOContent/Mobiles/Vendors/NPC/Cobbler.cs:14`) — 60.0-83.0
+- `TailorGuildmaster` (`Projects/UOContent/Mobiles/Vendors/NPC/Guildmasters/TailorGuildmaster.cs:11`) — 90.0-100.0
+- `Tailor` (`Projects/UOContent/Mobiles/Vendors/NPC/Tailor.cs:16`) — 64.0-100.0
+- `Tanner` (`Projects/UOContent/Mobiles/Vendors/NPC/Tanner.cs:14`) — 36.0-68.0
+- `Weaver` (`Projects/UOContent/Mobiles/Vendors/NPC/Weaver.cs:16`) — 65.0-88.0
+---
+
+## Spells
+
+None
+---
+
+## Crafting
+
+- `DefTailoring` (`Projects/UOContent/Engines/Craft/DefTailoring.cs:25`) — MainSkill, 130 items
+---
+
+## Weapon Abilities
+
+None
+---
+
+## Harvest Systems
+
+None
+---
+
+## Professions
+
+None
+---
+
+## Quests
+
+None
+---
+
+## Code Locations
+
+- `17 files` — total code references in UOContent
+
+---
+
 ## Expansion Notes
 
 Tailoring is available from character creation in the base game. No expansion is required.

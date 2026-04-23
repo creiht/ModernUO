@@ -32,6 +32,63 @@
 
 ---
 
+---
+
+## Weapons
+
+None
+---
+
+## Items
+
+- **Tool/Check:** `FireHorn` (`Projects/UOContent/Items/Skill Items/Misc/FireHorn.cs:77`)
+- **Tool/Check:** `BaseInstrument` (`Projects/UOContent/Items/Skill Items/Musical Instruments/BaseInstrument.cs:529`)
+---
+
+## NPCs
+
+- `HireBard` (`Projects/UOContent/Mobiles/Hireables/HireBard.cs:31`) — 66.0-97.5
+- `HireBardArcher` (`Projects/UOContent/Mobiles/Hireables/HireBardArcher.cs:31`) — 66.0-97.5
+- `Bard` (`Projects/UOContent/Mobiles/Vendors/NPC/Bard.cs:15`) — 64.0-100.0
+- `BardGuildmaster` (`Projects/UOContent/Mobiles/Vendors/NPC/Guildmasters/BardGuildmaster.cs:13`) — 80.0-100.0
+---
+
+## Spells
+
+None
+---
+
+## Crafting
+
+None
+---
+
+## Weapon Abilities
+
+None
+---
+
+## Harvest Systems
+
+None
+---
+
+## Professions
+
+None
+---
+
+## Quests
+
+None
+---
+
+## Code Locations
+
+- `15 files` — total code references in UOContent
+
+---
+
 ## Expansion Notes
 
 Musicianship is available from character creation in the base game. No expansion is required.
