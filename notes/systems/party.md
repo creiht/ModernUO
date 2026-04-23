@@ -316,13 +316,24 @@ GMs can listen to party chat via the `/ListenToParty` command:
 - Toggles listening on/off
 - Listeners are stored in a `HashSet<Mobile> m_Listeners`
 - Staff must not already be in the party to listen
-- Staff within 8 tiles who are GM and have higher access than the speaker also receive messages via `SendToStaffMessage` (line 420-452), even without explicit `/ListenToParty`
+
+### Implicit Staff Listening
+
+`SendToStaffMessage(Mobile from, string text)` (line 420-452):
+
+Automatically delivers formatted messages to GMs within 8 tiles who meet all conditions:
+1. `AccessLevel >= GameMaster`
+2. `AccessLevel > speaker.AccessLevel` (strictly higher than speaker)
+3. `Party != this` (not already in the party)
+4. `!m_Listeners.Contains(mob)` (not already an explicit listener)
+
+This requires no explicit `/ListenToParty` command and works transparently for nearby senior GMs.
 
 ---
 
 ## Death Messages
 
-`Party.OnPlayerDeathEvent(Mobile from)` (line 139-161) is triggered by the `PlayerMobile.PlayerDeathEvent` event:
+`Party.OnPlayerDeathEvent(Mobile from)` (line 140-162) is triggered by the `PlayerMobile.PlayerDeathEvent` event:
 
 | Scenario | Message |
 |----------|---------|
@@ -336,7 +347,7 @@ GMs can listen to party chat via the `/ListenToParty` command:
 
 ### Login
 
-`Party.OnLogin(PlayerMobile from)` (line 163-176):
+`Party.OnLogin(PlayerMobile from)` (line 164-177):
 
 - If the player was in a party before logout, starts a `RejoinTimer` (1-second delay)
 - If not in a party, clears `from.Party = null`
@@ -411,8 +422,10 @@ Implemented in `PartyCommandHandlers` (`Server.Engines.PartySystem.PartyCommandH
 `RemoveFromPartyEntry` (`Server.ContextMenus.RemoveFromPartyEntry`):
 
 - Context menu option (entry ID 0198)
-- Only visible/active when the player is the party leader
-- Leader cannot remove themselves (must use `/party remove` or `/party leave`)
+- Added when any party member right-clicks the party leader (`PlayerMobile.cs:1967-1969`)
+- OnClick checks `p.Leader != from` — only the leader can execute removal
+- Leader can remove themselves via this context menu or `/party remove`
+- Non-leader party members see the entry when right-clicking the leader but cannot use it
 - Calls `p.Remove(mobile)` on click
 
 ---
@@ -536,6 +549,6 @@ Total: 10 bytes (fixed)
 
 ## Cross-References
 
-- [`systems/factions.md`](systems/factions.md) — faction restrictions on party formation
-- [`systems/murder-system.md`](systems/murder-system.md) — murder system interaction with party deaths
-- [`skills/combat-skills.md`](skills/combat-skills.md) — party combat coordination
+- [`../systems/factions.md`](../systems/factions.md) — faction restrictions on party formation
+- [`../systems/murder-system.md`](../systems/murder-system.md) — murder system interaction with party deaths
+- [`../skills/combat-skills.md`](../skills/combat-skills.md) — party combat coordination

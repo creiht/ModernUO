@@ -75,7 +75,7 @@ Level 6+:  max = 9 + (level - 6) * 2
 
 ### Account Tag Tracking
 
-Used rewards are tracked via the account tag `numRewardsChosen` (stored as string). The tag is incremented via `ConsumeRewardPoint()`. GMs are exempt from point consumption.
+Used rewards are tracked via the account tag `numRewardsChosen` (stored as string). The tag is incremented via `ConsumeRewardPoint()`. The GM exemption check is commented out in the source (line 125: `// if (mob.AccessLevel < AccessLevel.GameMaster)`).
 
 ---
 
@@ -132,11 +132,11 @@ Six categories are defined by their ItemID (used as gump background icons). Each
 | Category | Cliloc ID | ItemID | Levels | Entry Count |
 |----------|-----------|--------|--------|-------------|
 | Monster Statues | 1049750 | 1049750 | 1, 3, 4, 5, 10 | 24 total |
-| Cloaks and Robes | 1049752 | 1049752 | 1-5, 10 | 36+ total |
+| Cloaks and Robes | 1049752 | 1049752 | 1-5, 10 | 45 total |
 | Ethereal Steeds | 1049751 | 1049751 | 3-6, 9-12 | 16 total |
 | Special Dye Tubs | 1049753 | 1049753 | 1-5 | 6 total |
-| House AddOns | 1049754 | 1049754 | 1-10 | 20 total |
-| Miscellaneous | 1078596 | 1078596 | 1, 8 | 2 total |
+| House AddOns | 1049754 | 1049754 | 1-10 | 19 total |
+| Miscellaneous | 1078596 | 1078596 | 1, 8 | 3 total |
 
 ---
 
@@ -151,15 +151,13 @@ Six categories are defined by their ItemID (used as gump background icons). Each
 | 1006013 | FurnitureDyeTub |
 | 1006047 | SpecialDyeTub |
 
-**Cloaks and Robes** (9 items):
+**Cloaks and Robes** (6 items):
 | Cliloc | Item Type | Hue | Hue Color | Expansion |
 |--------|-----------|-----|-----------|-----------|
 | 1006009 | RewardCloak | 0x972 | Bronze | Base |
 | 1006010 | RewardRobe | 0x972 | Bronze | Base |
-| 1080366 | RewardDress | 0x972 | Bronze | ML |
 | 1006011 | RewardCloak | 0x96D | Copper | Base |
 | 1006012 | RewardRobe | 0x96D | Copper | Base |
-| 1080367 | RewardDress | 0x96D | Copper | ML |
 
 **Monster Statues** (12 items):
 | Cliloc | Monster Type |
@@ -494,7 +492,7 @@ Main reward selection gump with a 600x450 background (ID 2600). Displays:
 - Category buttons that navigate to sub-pages (24 items per page)
 - Main Menu button (closes and reopens notice)
 
-Category buttons use a custom encoding: `buttonID - 1 = index * 20 + type`, where `type` is the category index (0-5) and `index` is the entry index within that category.
+Category buttons use a custom encoding: `buttonID - 2 = index * 20 + type`, where `type` is the category index (0-5) and `index` is the entry index within that category.
 
 ### Reward Confirm Gump (`RewardConfirmGump`)
 

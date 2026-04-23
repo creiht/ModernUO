@@ -529,10 +529,10 @@ Summoned creatures are created by necromancy and magery spells. SummonedDaemon i
 - [Animals](animals.md) — Non-hostile fauna and mounts
 - [NPCs](npcs.md) — Non-hostile characters (vendors, healers, guards)
 - [Bosses](bosses.md) — Elite creatures and champion spawns
-- [Creature Reference](reference/creature-reference.md) — Complete creature listing
-- [Creature AI Types](reference/creature-ai-types.md) — AI type behavior descriptions
-- [Combat](systems/combat.md) — Combat mechanics
-- [Poisons](poisons.md) — Poison types and resistance
-- [Monster Slaying](skills/monsterslaying.md) — Monster Slaying skill
-- [Weapons](items/weapons.md) — Weapon damage types
-- [Armor](items/armor.md) — Armor vs creature damage
+- [Creature Reference](../reference/creature-reference.md) — Complete creature listing
+- [Creature AI Types](../reference/creature-ai-types.md) — AI type behavior descriptions
+- [Combat](../systems/combat.md) — Combat mechanics
+- [Poisons](../systems/poisons.md) — Poison types and resistance
+- [Monster Slaying](../skills/monsterslaying.md) — Monster Slaying skill
+- [Weapons](../items/weapons.md) — Weapon damage types
+- [Armor](../items/armor.md) — Armor vs creature damage

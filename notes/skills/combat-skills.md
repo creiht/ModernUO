@@ -186,7 +186,7 @@ See also: [[systems/combat]]
 
 **Title:** Samurai | **Primary Stat:** Strength | **Secondary Stat:** Intelligence
 
-Bushido is a combat technique skill that provides special abilities for samurai characters. It is expansion-gated to **SE ( Samurai Edition)** and is the profession skill for the Samurai starting profession.
+Bushido is a combat technique skill that provides special abilities for samurai characters. It is expansion-gated to **SE (Samurai Empire)** and is the profession skill for the Samurai starting profession.
 
 ### Mechanics
 
@@ -204,7 +204,7 @@ See also: [[spells/bushido]]
 
 **Title:** Ninja | **Primary Stat:** Dexterity | **Secondary Stat:** Intelligence
 
-Ninjitsu is a combat technique skill that provides special abilities for ninja characters. It is expansion-gated to **SE (Samurai Edition)** and is the profession skill for the Ninja starting profession.
+Ninjitsu is a combat technique skill that provides special abilities for ninja characters. It is expansion-gated to **SE (Samurai Empire)** and is the profession skill for the Ninja starting profession.
 
 ### mechanics
 
@@ -225,8 +225,8 @@ See also: [[spells/ninjitsu]]
 | Skill | Expansion | Notes |
 |-------|-----------|-------|
 | Focus | AOS (Age of Shadows) | Zero stat scales |
-| Bushido | SE (Samurai Edition) | Samurai profession, zero stat scales |
-| Ninjitsu | SE (Samurai Edition) | Ninja profession, zero stat scales |
+| Bushido | SE (Samurai Empire) | Samurai profession, zero stat scales |
+| Ninjitsu | SE (Samurai Empire) | Ninja profession, zero stat scales |
 | Throwing | SA (Samurai Adventure) | Gargoyle race only, zero stat scales |
 | All others | Base/AOS | Available from character creation |
 

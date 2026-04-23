@@ -885,7 +885,7 @@ These powers can be invoked (the speech phrase matches) but have no effect when 
 
 ## Cross-References
 
-- [`systems/factions.md`](systems/factions.md) — Ethics tied to faction alignment (Hero/Evil factions)
-- [`systems/virtues.md`](systems/virtues.md) — Both moral progression systems (ethics + virtues)
-- [`creatures/npcs.md`](creatures/npcs.md) — Ethic-affiliated NPCs and creatures
-- [`systems/combat.md`](systems/combat.md) — Combat interactions with ethic allegiance
+- [`../systems/factions.md`](../systems/factions.md) — Ethics tied to faction alignment (Hero/Evil factions)
+- [`../systems/virtues.md`](../systems/virtues.md) — Both moral progression systems (ethics + virtues)
+- [`../creatures/npcs.md`](../creatures/npcs.md) — Ethic-affiliated NPCs and creatures
+- [`../systems/combat.md`](../systems/combat.md) — Combat interactions with ethic allegiance

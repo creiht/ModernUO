@@ -7,23 +7,25 @@ Crafting is the system that allows players to create items from raw resources th
 - `Projects/UOContent/Engines/Craft/Core/CraftItem.cs` (1422 lines) — recipe definitions, success/exceptional chance, resource consumption
 - `Projects/UOContent/Engines/Craft/DefBlacksmithy.cs` (709 lines) — largest craft definition
 - `Projects/UOContent/Engines/Craft/DefTailoring.cs` (671 lines)
-- `Projects/UOContent/Engines/Craft/DefInscription.cs` (537 lines)
+- `Projects/UOContent/Engines/Craft/DefInscription.cs` (637 lines)
 - `Projects/UOContent/Engines/Craft/DefCooking.cs` (437 lines)
-- `Projects/UOContent/Engines/Craft/DefBowFletching.cs` (391 lines)
-- `Projects/UOContent/Engines/Craft/DefCarpentry.cs` (343 lines)
-- `Projects/UOContent/Engines/Craft/DefAlchemy.cs` (301 lines)
-- `Projects/UOContent/Engines/Craft/DefTinkering.cs` (291 lines)
-- `Projects/UOContent/Engines/Craft/DefGlassblowing.cs` (281 lines)
-- `Projects/UOContent/Engines/Craft/DefCartography.cs` (217 lines)
-- `Projects/UOContent/Engines/Craft/DefMasonry.cs` (179 lines)
+- `Projects/UOContent/Engines/Craft/DefBowFletching.cs` (272 lines)
+- `Projects/UOContent/Engines/Craft/DefCarpentry.cs` (609 lines)
+- `Projects/UOContent/Engines/Craft/DefAlchemy.cs` (315 lines)
+- `Projects/UOContent/Engines/Craft/DefTinkering.cs` (764 lines) — includes TrapCraft classes and CustomCraft implementations
+- `Projects/UOContent/Engines/Craft/DefGlassblowing.cs` (127 lines)
+- `Projects/UOContent/Engines/Craft/DefCartography.cs` (90 lines)
+- `Projects/UOContent/Engines/Craft/DefMasonry.cs` (149 lines)
 - `Projects/UOContent/Engines/Craft/Core/Repair.cs` (500 lines) — tool repair functionality
-- `Projects/UOContent/Engines/Craft/Core/Resmelt.cs` — ore resmelting
+- `Projects/UOContent/Engines/Craft/Core/Resmelt.cs` (181 lines) — ore resmelting
 - `Projects/UOContent/Engines/Craft/Core/Enhance.cs` (443 lines) — item enhancement
-- `Projects/UOContent/Engines/Craft/Core/Recipes.cs` — recipe scroll learning system
+- `Projects/UOContent/Engines/Craft/Core/Recipes.cs` (98 lines) — recipe scroll learning system
 - `Projects/UOContent/Engines/Craft/Core/CustomCraft.cs` — complex crafting (runebooks, map making)
 - `Projects/UOContent/Engines/Craft/Core/CraftGump.cs` (735 lines) — crafting UI
+- `Projects/UOContent/Engines/Craft/Core/CraftGumpItem.cs` (345 lines) — gump item component
 - `Projects/UOContent/Engines/Craft/Core/QueryMakersMarkGump.cs` — maker's mark confirmation UI
-- `Projects/UOContent/Engines/Craft/Core/CraftContext.cs` — per-player craft context (last resource, mark option)
+- `Projects/UOContent/Engines/Craft/Core/CraftContext.cs` (59 lines) — per-player craft context (last resource, mark option)
+- `Projects/UOContent/Engines/Craft/Core/CraftCollectionExtensions.cs` (56 lines) — collection extension helpers
 - `Projects/UOContent/Engines/Craft/Core/CraftGroup.cs` — category grouping in UI
 - `Projects/UOContent/Engines/Craft/Core/CraftRes.cs` (41 lines) — resource definition
 - `Projects/UOContent/Engines/Craft/Core/CraftSkill.cs` (18 lines) — skill requirement definition
@@ -118,9 +120,9 @@ Three ECA models control how success chance is calculated. All affect both succe
 
 | Value | Name | Behavior | Used By |
 |-------|------|----------|---------|
-| 0 | `ChanceMinusSixty` | `chance - 0.60` | Tailoring, Cooking, Inscription, BowFletching, Carpentry, Alchemy, Tinkering, Glassblowing, Cartography, Masonry |
+| 0 | `ChanceMinusSixty` | `chance - 0.60` | BowFletching, Carpentry, Alchemy, Tinkering, Glassblowing, Cartography, Masonry |
 | 1 | `FiftyPercentChanceMinusTenPercent` | `chance × 0.5 - 0.10` | None in current codebase |
-| 2 | `ChanceMinusSixtyToFortyFive` | Scales above 95 skill: `chance - clamp(0.60 - (skill - 95) × 0.03, 0.45, 0.60)` | Blacksmithy, Cooking |
+| 2 | `ChanceMinusSixtyToFortyFive` | Scales above 95 skill: `chance - clamp(0.60 - (skill - 95) × 0.03, 0.45, 0.60)` | Blacksmithy, Tailoring, Cooking, Inscription |
 
 ### ECA Formula Detail (`ChanceMinusSixtyToFortyFive`)
 
@@ -217,13 +219,13 @@ When `UseAllRes = true` on a `CraftItem`, the crafter can craft multiple units a
 | **Tailoring** | Tailoring | `ChanceMinusSixtyToFortyFive` | DefTailoring.cs | `Repair`, `MarkOption` — `GetChanceAtMin = 0.5` |
 | **Cooking** | Cooking | `ChanceMinusSixtyToFortyFive` | DefCooking.cs | `NeedHeat`, `NeedOven`, `NeedMill` — no tool required |
 | **Inscription** | Magery | `ChanceMinusSixtyToFortyFive` | DefInscription.cs | `MarkOption` — uses Mana as resource, requires blank scroll |
-| **BowFletching** | Bowcraft | `ChanceMinusSixtyToFortyFive` | DefBowFletching.cs | `Repair`, `MarkOption` |
-| **Carpentry** | Carpentry | `ChanceMinusSixtyToFortyFive` | DefCarpentry.cs | `Repair`, `MarkOption` — requires saw in range |
-| **Alchemy** | Alchemy | `ChanceMinusSixtyToFortyFive` | DefAlchemy.cs | `MarkOption` — potions/elixirs |
-| **Tinkering** | Tinkering | `ChanceMinusSixtyToFortyFive` | DefTinkering.cs | `Repair`, `MarkOption` — golem repair, tools |
-| **Glassblowing** | Glassblowing | `ChanceMinusSixtyToFortyFive` | DefGlassblowing.cs | Resource mutation (sand → various glass types) |
-| **Cartography** | Cartography | `ChanceMinusSixtyToFortyFive` | DefCartography.cs | Special: indecipherable maps outside Felucca/Trammel |
-| **Masonry** | Masonry | `ChanceMinusSixtyToFortyFive` | DefMasonry.cs | Stone/brick crafting for housing |
+| **BowFletching** | Bowcraft | `ChanceMinusSixty` | DefBowFletching.cs | `Repair`, `MarkOption` |
+| **Carpentry** | Carpentry | `ChanceMinusSixty` | DefCarpentry.cs | `Repair`, `MarkOption` — requires saw in range |
+| **Alchemy** | Alchemy | `ChanceMinusSixty` | DefAlchemy.cs | `MarkOption` — potions/elixirs |
+| **Tinkering** | Tinkering | `ChanceMinusSixty` | DefTinkering.cs | `Repair`, `MarkOption` — golem repair, tools |
+| **Glassblowing** | Glassblowing | `ChanceMinusSixty` | DefGlassblowing.cs | Resource mutation (sand → various glass types) |
+| **Cartography** | Cartography | `ChanceMinusSixty` | DefCartography.cs | Special: indecipherable maps outside Felucca/Trammel |
+| **Masonry** | Masonry | `ChanceMinusSixty` | DefMasonry.cs | Stone/brick crafting for housing |
 
 ### Blacksmithy-Specific: Anvil & Forge Check
 
@@ -241,7 +243,7 @@ Also checks tiles via `GetStaticAndMultiTiles()` for placed items.
 Tinkering repair has special handling for Golems:
 - Requires 60.0+ Tinkering
 - Can repair up to `skill × 0.3 + 30` hits per attempt
-- Consumes IronIngots at rate of 5 per hit point recovered
+- Consumes IronIngots using ceiling division `(damage + 4) / 5`, giving 5 HP recovered per ingot
 - 12-second cooldown via `BeginAction<Golem>()`
 
 ---

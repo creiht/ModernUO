@@ -33,33 +33,9 @@ Some settings use runtime expressions as defaults, evaluated at startup:
 | Expression | Meaning |
 |------------|---------|
 | `Core.AOS` | True if Age of Shadows expansion is active |
-| `Core.LBR` | True if Lord Britannus Renaissance expansion is active |
+| `Core.LBR` | True if Blackthorn's Revenge expansion is active |
 | `Core.ML` | True if Mondain's Legacy expansion is active |
-| `Core.SA` | True if Sacrament expansion is active |
-| `Core.TOL` | True if Third Age of Britannia expansion is active |
-| `Core.UOR` | True if Ultima Renaissance expansion is active |
-
-## How Configuration Works
-
-ModernUO uses `ServerConfiguration.GetSetting<T>(key, defaultValue)` and `ServerConfiguration.GetOrUpdateSetting<T>(key, defaultValue)` to read settings.
-
-| Method | Behavior |
-|--------|----------|
-| `GetSetting` | Returns stored value or default. Never writes to config file. |
-| `GetOrUpdateSetting` | Returns stored value. If key doesn't exist, writes default to config file first. |
-
-Settings are loaded from `Configuration/modernuo.json`. If a setting key is missing from the file, the default value is used.
-
-## Dynamic Defaults
-
-Some settings use runtime expressions as defaults, evaluated at startup:
-
-| Expression | Meaning |
-|------------|---------|
-| `Core.AOS` | True if Age of Shadows expansion is active |
-| `Core.LBR` | True if Lord Britannus Renaissance expansion is active |
-| `Core.ML` | True if Mondain's Legacy expansion is active |
-| `Core.SA` | True if Sacrament expansion is active |
+| `Core.SA` | True if Stygian Abyss expansion is active |
 | `Core.TOL` | True if Third Age of Britannia expansion is active |
 | `Core.UOR` | True if Ultima Renaissance expansion is active |
 
@@ -119,9 +95,9 @@ Some settings use runtime expressions as defaults, evaluated at startup:
 | `vetRewards` | 3 |
 | `virtualChecks` | 1 |
 | `visibleDamage` | 1 |
-| `world` | 7 |
+| `world` | 4 |
 
-**Total:** 135 settings across 51 systems
+**Total:** 130 settings across 49 systems
 
 ---
 
@@ -300,10 +276,10 @@ Some settings use runtime expressions as defaults, evaluated at startup:
 
 | Key | Type | Default | Get | Description | Source |
 |-----|------|---------|-----|-------------|--------|
-| `maps.enableMapDiffPatches` | ClientVersion | `UOClient.ServerClientVersion < ClientVersion.Version6000` | GetSetting | Enable map diff patches | Projects/Server/TileMatrix/TileMatrixPatch.cs |
-| `maps.enablePostHSMultiComponentFormat` | ClientVersion | `UOClient.ServerClientVersion == null \|\| UOClient.ServerCl...` | GetSetting | Enable post hs multi component format | Projects/Server/Client/MultiData.cs |
-| `maps.enablePre6000Trammel` | dynamic | `isPre6000Trammel` | GetSetting | Enable pre6000trammel | Projects/Server/TileMatrix/TileMatrix.cs |
-| `maps.enableStaticsDiffPatches` | ClientVersion | `UOClient.ServerClientVersion < ClientVersion.Version7090` | GetSetting | Enable statics diff patches | Projects/Server/TileMatrix/TileMatrixPatch.cs |
+| `maps.enableMapDiffPatches` | bool | `UOClient.ServerClientVersion < ClientVersion.Version6000` | GetSetting | Enable map diff patches | Projects/Server/TileMatrix/TileMatrixPatch.cs |
+| `maps.enablePostHSMultiComponentFormat` | bool | `UOClient.ServerClientVersion == null \|\| UOClient.ServerClientVersion >= ClientVersion.Version7090` | GetSetting | Enable post hs multi component format | Projects/Server/Client/MultiData.cs |
+| `maps.enablePre6000Trammel` | bool | `isPre6000Trammel` | GetSetting | Enable pre6000trammel | Projects/Server/TileMatrix/TileMatrix.cs |
+| `maps.enableStaticsDiffPatches` | bool | `UOClient.ServerClientVersion < ClientVersion.Version7090` | GetSetting | Enable statics diff patches | Projects/Server/TileMatrix/TileMatrixPatch.cs |
 
 ## melee
 
@@ -510,6 +486,7 @@ Some settings use runtime expressions as defaults, evaluated at startup:
 | `world.enableAutoRestart` | bool | `false` | GetOrUpdateSetting | Enable auto restart | Projects/UOContent/Misc/AutoRestart.cs |
 | `world.savePath` | string | `"Saves"` | GetSetting | Save path | Projects/UOContent/World Saves/AutoArchive.cs, Projects/Server/World/World.cs |
 | `world.tempSavePath` | string | `"temp"` | GetSetting | Temp save path | Projects/Server/World/World.cs |
+| `world.useMultithreadedSaves` | bool | `true` | GetOrUpdateSetting | Use multithreaded saves | Projects/Server/World/World.cs |
 
 ---
 

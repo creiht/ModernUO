@@ -15,7 +15,7 @@ The Ultima Store is the microtransaction integration for ModernUO, providing a c
 |-------|-------|
 | Packet ID | `0xFA` |
 | Length | 1 byte |
-| Universal | `true` (works without UOTD client) |
+| In-Game Only | `true` (handler only active when client is logged in) |
 
 When the client opens the Ultima Store UI, it sends packet `0xFA` to the server. The server handler is registered via:
 
@@ -78,4 +78,4 @@ The packet registration pattern (`IncomingPackets.Register`) is already in place
 
 ## Cross-References
 
-- `expansions/timeline.md` — client version 7.0.50.0 introduced the Ultima Store protocol flag
+- `ProtocolChanges.cs:38,53` — UltimaStore protocol flag definition and version 7.0.50.0 inclusion

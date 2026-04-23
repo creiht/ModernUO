@@ -348,8 +348,8 @@ The result of poison application attempts (used by the Poisoning skill when appl
 
 ## Cross-References
 
-- [`systems/combat.md`](systems/combat.md) — Poison damage application in combat, `Damage()` method
-- [`skills/combat-skills.md`](skills/combat-skills.md) — Poisoning skill mechanics
-- [`skills/utility-skills.md`](skills/utility-skills.md) — Poisoning skill definition
-- [`items/weapons.md`](items/weapons.md) — Weapon poison application and charges
-- [`items/food.md`](items/food.md) — Poisoning food items
+- [`../systems/combat.md`](../systems/combat.md) — Poison damage application in combat, `Damage()` method
+- [`../skills/combat-skills.md`](../skills/combat-skills.md) — Poisoning skill mechanics
+- [`../skills/utility-skills.md`](../skills/utility-skills.md) — Poisoning skill definition
+- [`../items/weapons.md`](../items/weapons.md) — Weapon poison application and charges
+- [`../items/food.md`](../items/food.md) — Poisoning food items

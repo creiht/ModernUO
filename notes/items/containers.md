@@ -845,9 +845,9 @@ const string DefaultContainerBlockedMessage = "This container cannot be opened a
 
 ## Cross-References
 
-- [`systems/combat.md`](systems/combat.md) — trappable container damage mechanics
-- [`systems/crafting.md`](systems/crafting.md) — salvage mechanics via SalvageBag
-- [`systems/housing.md`](systems/housing.md) — lockdown, secure storage, secure items
-- [`systems/bulk-orders.md`](systems/bulk-orders.md) — bulk order containers
-- [`getting-started/character-creation.md`](getting-started/character-creation.md) — starting backpack
-- [`reference/skill-table.md`](reference/skill-table.md) — Tinkering for lockpicking, Blacksmithing for salvage
+- [`../systems/combat.md`](../systems/combat.md) — trappable container damage mechanics
+- [`../systems/crafting.md`](../systems/crafting.md) — salvage mechanics via SalvageBag
+- [`../systems/housing.md`](../systems/housing.md) — lockdown, secure storage, secure items
+- [`../systems/bulk-orders.md`](../systems/bulk-orders.md) — bulk order containers
+- [`../getting-started/character-creation.md`](../getting-started/character-creation.md) — starting backpack
+- [`../reference/skill-table.md`](../reference/skill-table.md) — Tinkering for lockpicking, Blacksmithing for salvage

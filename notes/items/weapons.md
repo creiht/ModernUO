@@ -264,7 +264,7 @@ Each weapon can require Strength, Dexterity, and/or Intelligence to wield. The `
 
 The slayer system grants **+100% damage** against specific creature types. Weapons have two slayer slots (`Slayer1` and `Slayer2`).
 
-### SlayerName Enum (28 entries)
+### SlayerName Enum (30 entries)
 
 | Name | Target Group |
 |------|-------------|
@@ -297,15 +297,15 @@ The slayer system grants **+100% damage** against specific creature types. Weapo
 | `ElementalBan` | Elemental (super slayer) |
 | `Fey` | Fey (super slayer) |
 
-### SlayerGroups (6 groups with oppositions)
+### SlayerGroups (7 groups with oppositions)
 
 | Group | Opposition | Super Slayer |
 |-------|-----------|-------------|
 | `Humanoid` | `Undead` | `Repond` |
 | `Undead` | `Humanoid` | `Silver` |
-| `Fey` | `Abyss` | `Fey` |
 | `Elemental` | `Abyss` | `ElementalBan` |
 | `Abyss` | `Elemental, Fey` | `Exorcism` |
+| `Fey` | `Abyss` | `Fey` |
 | `Arachnid` | `Reptilian` | `ArachnidDoom` |
 | `Reptilian` | `Arachnid` | `ReptilianDeath` |
 
@@ -356,7 +356,7 @@ AosAttributes provide statistical bonuses to weapons. Each is a bitmask flag:
 
 ---
 
-## AosWeaponAttributes (22 attributes)
+## AosWeaponAttributes (25 attributes)
 
 Weapon-specific attributes with on-hit effects and property modifiers:
 
@@ -439,38 +439,37 @@ All abilities require 70/90 Tactics and have a base cooldown of 3 seconds.
 
 | # | Name | Requires SE | Default Mana | Damage Scalar | Description |
 |---|------|-------------|-------------|---------------|-------------|
-| 1 | *(null)* | — | — | — | — |
-| 2 | `ArmorIgnore` | No | — | — | Ignores part of target's AR |
-| 3 | `BleedAttack` | No | — | — | Causes bleeding damage over time |
-| 4 | `ConcussionBlow` | No | — | — | Reduces target's Int temporarily |
-| 5 | `CrushingBlow` | No | — | 1.75 | Heavy blow with damage multiplier |
-| 6 | `Disarm` | No | — | — | Disarms target, removes weapon |
-| 7 | `Dismount` | No | — | — | Dismounts rider from mount |
-| 8 | `DoubleStrike` | No | — | 0.90 | Two strikes with -10% damage each |
-| 9 | `InfectiousStrike` | No | — | — | Applies poison on hit |
-| 10 | `MortalStrike` | No | — | — | Heals attacker for damage dealt |
-| 11 | `MovingShot` | No | — | — | Allows shooting while moving (ranged) |
-| 12 | `ParalyzingBlow` | No | — | — | Paralyzes target temporarily |
-| 13 | `ShadowStrike` | No | — | — | Shadow-themed attack |
-| 14 | `WhirlwindAttack` | No | — | 1.30 | Area attack hitting multiple targets |
-| 15 | `RidingSwipe` | No | — | — | Swipe attack while mounted |
-| 16 | `FrenziedWhirlwind` | No | — | — | Extended whirlwind attack |
-| 17 | `Block` | No | — | — | Defensive ability, increases defense |
-| 18 | `DefenseMastery` | No | — | — | Mastery of defensive techniques |
-| 19 | `NerveStrike` | Yes | — | — | Strikes nerve points (Ninjitsu/Bushido 50+) |
-| 20 | `TalonStrike` | Yes | — | — | Talon-themed strike (Ninjitsu/Bushido 50+) |
-| 21 | `Feint` | Yes | — | — | Feint attack with accuracy bonus (Poisoning 50+) |
-| 22 | `DualWield` | Yes | — | — | Dual wielding ability |
-| 23 | `DoubleShot` | Yes | — | — | Double shot with ranged weapons |
-| 24 | `ArmorPierce` | Yes | — | — | Pierces armor effectively |
-| 25 | `Bladeweave` | No | — | — | Bladeweaving technique |
-| 26 | `ForceArrow` | No | — | — | Force arrow attack (ranged) |
-| 27 | `LightningArrow` | No | — | — | Lightning arrow attack (bypasses ammo) |
-| 28 | `PsychicAttack` | No | — | — | Psychic damage attack |
-| 29 | `SerpentArrow` | No | — | — | Serpent-themed arrow attack |
-| 30 | `ForceOfNature` | No | — | — | Nature-themed attack |
-| 31 | `InfusedThrow` | No | — | — | Infused throwing attack |
-| 32 | `MysticArc` | No | — | — | Mystic arc attack |
+| 1 | `ArmorIgnore` | No | — | — | Ignores part of target's AR |
+| 2 | `BleedAttack` | No | — | — | Causes bleeding damage over time |
+| 3 | `ConcussionBlow` | No | — | — | Reduces target's Int temporarily |
+| 4 | `CrushingBlow` | No | — | 1.75 | Heavy blow with damage multiplier |
+| 5 | `Disarm` | No | — | — | Disarms target, removes weapon |
+| 6 | `Dismount` | No | — | — | Dismounts rider from mount |
+| 7 | `DoubleStrike` | No | — | 0.90 | Two strikes with -10% damage each |
+| 8 | `InfectiousStrike` | No | — | — | Applies poison on hit |
+| 9 | `MortalStrike` | No | — | — | Heals attacker for damage dealt |
+| 10 | `MovingShot` | No | — | — | Allows shooting while moving (ranged) |
+| 11 | `ParalyzingBlow` | No | — | — | Paralyzes target temporarily |
+| 12 | `ShadowStrike` | No | — | — | Shadow-themed attack |
+| 13 | `WhirlwindAttack` | No | — | 1.30 | Area attack hitting multiple targets |
+| 14 | `RidingSwipe` | No | — | — | Swipe attack while mounted |
+| 15 | `FrenziedWhirlwind` | No | — | — | Extended whirlwind attack |
+| 16 | `Block` | No | — | — | Defensive ability, increases defense |
+| 17 | `DefenseMastery` | No | — | — | Mastery of defensive techniques |
+| 18 | `NerveStrike` | Yes | — | — | Strikes nerve points (Ninjitsu/Bushido 50+) |
+| 19 | `TalonStrike` | Yes | — | — | Talon-themed strike (Ninjitsu/Bushido 50+) |
+| 20 | `Feint` | Yes | — | — | Feint attack with accuracy bonus (Poisoning 50+) |
+| 21 | `DualWield` | Yes | — | — | Dual wielding ability |
+| 22 | `DoubleShot` | Yes | — | — | Double shot with ranged weapons |
+| 23 | `ArmorPierce` | Yes | — | — | Pierces armor effectively |
+| 24 | `Bladeweave` | No | — | — | Bladeweaving technique |
+| 25 | `ForceArrow` | No | — | — | Force arrow attack (ranged) |
+| 26 | `LightningArrow` | No | — | — | Lightning arrow attack (bypasses ammo) |
+| 27 | `PsychicAttack` | No | — | — | Psychic damage attack |
+| 28 | `SerpentArrow` | No | — | — | Serpent-themed arrow attack |
+| 29 | `ForceOfNature` | No | — | — | Nature-themed attack |
+| 30 | `InfusedThrow` | No | — | — | Infused throwing attack |
+| 31 | `MysticArc` | No | — | — | Mystic arc attack |
 
 ### Ability Activation Flow
 
@@ -743,7 +742,7 @@ Weapons integrate with the crafting system through:
 
 ## Cross-References
 
-- [`systems/combat.md`](systems/combat.md) — melee/ranged combat mechanics, hit chance, damage resolution
-- [`reference/craft-resources.md`](reference/craft-resources.md) — full resource bonus tables
-- [`reference/skill-table.md`](reference/skill-table.md) — weapon skill associations
-- [`systems/crafting.md`](systems/crafting.md) — weapon crafting, quality systems
+- [`../systems/combat.md`](../systems/combat.md) — melee/ranged combat mechanics, hit chance, damage resolution
+- [`../reference/craft-resources.md`](../reference/craft-resources.md) — full resource bonus tables
+- [`../reference/skill-table.md`](../reference/skill-table.md) — weapon skill associations
+- [`../systems/crafting.md`](../systems/crafting.md) — weapon crafting, quality systems

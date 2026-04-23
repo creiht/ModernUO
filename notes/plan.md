@@ -18,10 +18,10 @@ notes/
 │
 ├── skills/
 │   ├── index.md                      # Skills overview, skill caps (7000), locks
-│   ├── crafting-skills.md            # Blacksmith, Alchemy, Tinkering, Tailoring, etc. (19 skills)
-│   ├── combat-skills.md              # Swords, Macing, Fencing, Archery, Throwing (8 skills)
-│   ├── magical-skills.md             # Magery, Necromancy, Chivalry, Bushido, Mysticism, etc. (10 skills)
-│   └── utility-skills.md             # Detect Hidden, Tracking, Hiding, Cartography, etc. (12 skills)
+│   ├── crafting-skills.md            # Blacksmith, Alchemy, Tinkering, Tailoring, etc. (10 skills)
+│   ├── combat-skills.md              # Swords, Macing, Fencing, Archery, Throwing (11 skills)
+│   ├── magical-skills.md             # Magery, Necromancy, Chivalry, Bushido, Mysticism, etc. (8 skills)
+│   └── utility-skills.md             # Detect Hidden, Tracking, Hiding, Cartography, etc. (29 skills)
 │
 ├── spells/
 │   ├── index.md                      # Spellcasting overview, mana, reagents, FC/FCR/LMC
@@ -31,7 +31,7 @@ notes/
 │   ├── ninjitsu.md                   # 10 Ninja skills/spells
 │   ├── necromancy.md                 # 19 Necromancer spells
 │   ├── mysticism.md                  # 9 Gargoyle spells
-│   ├── spellweaving.md               # 17 spells + 4 items/classes
+  │   ├── spellweaving.md               # 13 spells + 3 base classes + 2 items + 3 mobile classes
 │   └── gargoyle.md                   # Fly spell + Gargoyle traits
 │
 ├── items/
@@ -57,7 +57,7 @@ notes/
 │   ├── combat.md                     # Melee, ranged, damage types, resistances, armor calculation
 │   ├── crafting.md                   # 11 craft definitions, ECA, quality, resmelt, repair
 │   ├── harvesting.md                 # Mining, Lumberjacking, Fishing mechanics
-│   ├── poisons.md                    # 5 poison families (Standard, Darkglow, Parasitic), damage tables
+│   ├── poisons.md                    # 3 poison families (Standard, Darkglow, Parasitic), damage tables
 │   ├── ethics.md                     # Hero vs Evil morals, powers, player states
 │   ├── virtues.md                    # 8 virtues, 3 levels (Seeker, Follower, Knight)
 │   ├── factions.md                   # Faction system, elections, tithe, towns, stability
@@ -76,7 +76,7 @@ notes/
 └── reference/
     ├── index.md                      # Reference index
     ├── skill-table.md                # All 58 skills: name, category, primary stat, scales, gains
-    ├── spell-index.md                # All ~117 spells: name, school, circle, reagents, effects
+    ├── spell-index.md                # All ~135 spells: name, school, circle, reagents, effects
     ├── resistance-table.md           # Physical/Fire/Cold/Poison/Energy details
     ├── craft-resources.md            # All craft resources: properties, bonuses, tier
     ├── creature-ai-types.md          # AI types: Melee, Archer, Mage, Animal, etc. with descriptions
@@ -97,7 +97,7 @@ Extract data programmatically from source files:
 | File | Source | Content |
 |---|---|---|
 | `reference/skill-table.md` | `Server/Skills.cs` | All 58 skills, name, category, stat scales, gain rates |
-| `reference/spell-index.md` | `Spells/*/` (all spell files) | All ~117 spells, school, circle, reagents, mana cost, effects |
+| `reference/spell-index.md` | `Spells/*/` (all spell files) | All ~135 spells, school, circle, reagents, mana cost, effects |
 | `reference/craft-resources.md` | `CraftResource` enum + resource definitions | All resources, tier, bonuses, hue |
 | `reference/creature-ai-types.md` | `AIType` enum | All AI types with behavior descriptions |
 | `reference/creature-reference.md` | `Mobiles/*/` directory structure | Every creature type by name, organized by category |
@@ -263,9 +263,9 @@ Extract all configurable settings from engine files and configuration definition
 | Category | Count |
 |---|---|
 | Skills | 58 (across 4 category pages) |
-| Spells | ~117 (across 8 school pages) |
+| Spells | ~135 (across 8 school pages) |
 | Item Types | ~20 categories (documented by type, not individually) |
-| Creature Types | ~650+ (documented by category with full reference table) |
+| Creature Types | ~590+ (documented by category with full reference table) |
 | Engine Systems | ~28 (documented in systems/ and expansions/) |
 | Craft Resources | ~30+ resources |
 | Resistance Types | 5 |

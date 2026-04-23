@@ -22,7 +22,7 @@ Three poison families (Standard, Darkglow, Parasitic) with 14 total poison level
 Hero and Evil moral alignments, each with 8 unique powers. Players choose an ethic that affects available abilities and interactions.
 
 ### [Virtues](virtues.md)
-Eight UO virtues (Honesty, Honor, Humility, Sacrifice, etc.) with three progression levels: Seeker, Follower, and Knight.
+Eight UO virtues (Honesty, Honor, Humility, Sacrifice, etc.) with three progression levels above None: Seeker, Follower, and Knight.
 
 ### [Factions](factions.md)
 Four-player faction PvP system (TrueBritannians, CouncilOfMages, Minax, Shadowlords) with town capture via sigils, kill point rankings, silver economy with tithe system, elections with weighted voting, guard and vendor management, faction imbued items, power items (BloodRose, StormsEye, etc.), faction traps, and a stability code to prevent faction dominance.
@@ -33,13 +33,13 @@ Tracks player-killing with short-term (8h decay) and long-term (40h decay) murde
 ## Progression & Rewards
 
 ### [Bulk Orders](bulk-orders.md)
-Small and Large Bulk Order Deeds for Blacksmithing and Tailoring. Includes BOD generation (skill-based quantity, material, and exceptional chance), reward calculation (Smith: 21 tiers up to Runic Hammer+8 / Ancient Hammer+60; Tailor: 14 tiers up to Runic Kit+3), Bulk Order Book collection system with dual-scope filtering (book + personal), entry persistence via BOBEntries registry, and the small/large BOD combine flow.
+Small and Large Bulk Order Deeds for Blacksmithing and Tailoring. Includes BOD generation (skill-based quantity, material, and exceptional chance), reward calculation (Smith: 9 tiers up to Runic Hammer+8 / Ancient Hammer+60; Tailor: 14 tiers up to Runic Kit+3), Bulk Order Book collection system with dual-scope filtering (book + personal), entry persistence via BOBEntries registry, and the small/large BOD combine flow.
 
 ### [Veteran Rewards](veteran-rewards.md)
 Account age-based rewards with progressive tiers, special items, and skill cap bonuses at level 4.
 
 ### [Quests](quests.md)
-Two quest systems: the ML Quest System (Mondain's Legacy, template-based with 21 quest definitions, chain triggers, timed objectives, escort missions, skill training) and the Modern Quest System (player-owned with 11 profession-restricted quests, dialogue trees, regional objectives, and dynamic quest items). Includes quest gumps, objective tracking, reward distribution, and GM tools.
+Two quest systems: the ML Quest System (Mondain's Legacy, template-based with 21 quest types, chain triggers, timed objectives, escort missions, skill training) and the Modern Quest System (player-owned with 11 profession-restricted quest types, dialogue trees, regional objectives, and dynamic quest items). Includes quest gumps, objective tracking, reward distribution, and GM tools.
 
 ### [Party](party.md)
 Party formation, shared loot distribution, and coordination tools.
@@ -49,10 +49,13 @@ Party formation, shared loot distribution, and coordination tools.
 ### [Khaldun](khaldun.md)
 A self-contained puzzle dungeon with switch-activated stone walls, tile-morphing puzzle pieces, ambient sound effects, and a final cylinder-lock puzzle chest. Features 4 cursed NPC guardians and 3 lore journals telling the story of Khal Ankur's tomb.
 
+### [Housing](housing.md)
+House system: foundation types, ownership, permissions, co-owners, friend/ban lists, lockdown, secure storage, vendor contracts, decay mechanics, and design tools.
+
 ### [Ultima Store](ultima-store.md)
 Microtransaction integration for cosmetic and convenience items.
 
-## Expansion Features
+## Expansions
 
 ### [Expansions](../expansions/readme.md)
 12 expansion levels (T2A through EJ) with cumulative feature unlocks including new maps, races, skills, and spells.

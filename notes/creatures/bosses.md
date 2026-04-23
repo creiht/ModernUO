@@ -193,8 +193,8 @@ Abilities are grouped via `MonsterAbilityGroup` and triggered by `MonsterAbility
 
 ## See Also
 
-- [Taming](skills/taming.md) — Taming high-skill creatures
-- [Combat](systems/combat.md) — Combat mechanics and resistance management
-- [Virtues](systems/virtues.md) — Valor virtue and champion skulls
-- [Jewels](items/jewels.md) — Artifacts and champion loot
-- [Creature Reference](reference/creature-reference.md) — Complete creature listing
+- [Taming](../skills/taming.md) — Taming high-skill creatures
+- [Combat](../systems/combat.md) — Combat mechanics and resistance management
+- [Virtues](../systems/virtues.md) — Valor virtue and champion skulls
+- [Jewels](../items/jewels.md) — Artifacts and champion loot
+- [Creature Reference](../reference/creature-reference.md) — Complete creature listing

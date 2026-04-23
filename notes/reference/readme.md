@@ -8,7 +8,7 @@ Quick-reference tables and data extracted from source code. These pages provide 
 Complete table of all **58 skills** with name, category, primary stat, scaling stats, and gain rates.
 
 ### [Spell Index](spell-index.md)
-Complete listing of all **~117 spells** organized by school, with circle, reagents, mana cost, and effects.
+Complete listing of all **~135 spells** organized by school, with circle, reagents, mana cost, and effects.
 
 ### [Resistance Table](resistance-table.md)
 Details on the **5 resistance types**: Physical, Fire, Cold, Poison, and Energy. Includes damage type interactions.

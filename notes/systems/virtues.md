@@ -1,6 +1,6 @@
 # Virtues
 
-The Virtues system tracks eight moral attributes that progress through **three advancement paths** (Seeker → Follower → Knight) based on cumulative virtue points. Each virtue has a maximum value, and four of them (Sacrifice, Justice, Compassion, Valor) decay when inactive through a periodic atrophy timer. The three activatable virtues — Honor, Sacrifice, and Valor — provide distinct gameplay mechanics: Honor modifies combat damage and rewards, Sacrifice enables resurrection and fame-for-virtue exchange, and Valor challenges champion spawns. The system uses `VirtueContext` for per-player state and persists via `GenericPersistence`.
+The Virtues system tracks eight moral attributes that progress through **three advancement tiers** (Seeker → Follower → Knight) above the default `None` state, based on cumulative virtue points. Each virtue has a maximum value, and four of them (Sacrifice, Justice, Compassion, Valor) decay when inactive through a periodic atrophy timer. The three activatable virtues — Honor, Sacrifice, and Valor — provide distinct gameplay mechanics: Honor modifies combat damage and rewards, Sacrifice enables resurrection and fame-for-virtue exchange, and Valor challenges champion spawns. The system uses `VirtueContext` for per-player state and persists via `GenericPersistence`.
 
 **Source Files:**
 - `Projects/UOContent/Engines/Virtues/VirtueSystem.cs` (399 lines) — core engine, level calculation, awarding, atrophy, persistence
@@ -12,9 +12,10 @@ The Virtues system tracks eight moral attributes that progress through **three a
 - `Projects/UOContent/Engines/Virtues/Sacrifice.cs` (193 lines) — resurrection, fame-for-virtue exchange, atrophy
 - `Projects/UOContent/Engines/Virtues/Valor.cs` (138 lines) — champion challenge system, atrophy
 - `Projects/UOContent/Engines/Virtues/VirtueGump.cs` (153 lines) — virtue display gump with dynamic hues
-- `Projects/UOContent/Engines/Virtues/VirtueInfoGump.cs`, `VirtueStatusGump.cs` — info/status UI
 - `Projects/UOContent/Engines/Virtues/HonorSelfGump.cs` (30 lines) — confirmation dialog for honor embrace
-- **12 total files** in Virtues/
+- `Projects/UOContent/Engines/Virtues/VirtueInfoGump.cs`, `VirtueStatusGump.cs` — info/status UI
+- `Projects/UOContent/Engines/Virtues/IHonorTarget.cs` (6 lines) — interface for honor target marking
+- **13 total files** in Virtues/
 
 ---
 
@@ -24,7 +25,7 @@ The Virtues system comprises **8 virtues** that players can advance by performin
 
 **Key Mechanics:**
 - **8 Virtues**: Humility, Sacrifice, Compassion, Spirituality, Valor, Honor, Justice, Honesty
-- **3 Advancement Paths**: Seeker (≥4000), Follower (4000–max−1), Knight (≥max)
+- **3 Advancement Tiers**: Seeker (≥4000), Follower (≥10000 and below max), Knight (≥max)
 - **Atrophy**: 4 virtues decay after 7 days of inactivity (Sacrifice, Justice, Compassion, Valor)
 - **Compassion Daily Limit**: 5 gains per day (resets at midnight)
 - **Honor Embrace**: Self-buff costing virtue points, duration varies by level
@@ -39,7 +40,7 @@ The Virtues system comprises **8 virtues** that players can advance by performin
 |-------|------|-------------|
 | `0` | `None` | Value < 4000 |
 | `1` | `Seeker` | Value ≥ 4000 |
-| `2` | `Follower` | Value ≥ 4000 AND below max (formula: `(v + 9999) / 10000 == 1`) |
+| `2` | `Follower` | Value ≥ 10000 AND below max (formula: `(v + 9999) / 10000 == 2`) |
 | `3` | `Knight` | Value ≥ max for that virtue |
 
 ---
@@ -323,11 +324,13 @@ Target a **Champion Idol of the Champion** to challenge a champion spawn.
 
 **Embrace Mechanics:**
 
-| Level | Duration | Cost |
-|-------|----------|------|
-| Seeker | 30 seconds | 400 points (if Honor < 4399) |
-| Follower | 90 seconds | 600 points (if Honor < 10599) |
-| Knight | 300 seconds (5 minutes) | 1000 points (if Honor ≥ 10599) |
+| Virtue Level | Duration | Cost |
+|--------------|----------|------|
+| Seeker | 30 seconds | Value-based: <4399 → 400, <10599 → 600, ≥10599 → 1000 |
+| Follower | 90 seconds | Value-based: <4399 → 400, <10599 → 600, ≥10599 → 1000 |
+| Knight | 300 seconds (5 minutes) | Value-based: <4399 → 400, <10599 → 600, ≥10599 → 1000 |
+
+**Note:** Duration is determined by virtue level, but cost is determined by current Honor value thresholds, not virtue level.
 
 **Embrace Validation:**
 1. Player must be alive
@@ -346,8 +349,8 @@ Target a creature to begin an honor context. The creature must:
 - Implement `IHonorTarget`
 - Not already be honored by someone else (or be the same honoror)
 - Be at full HP (≥90% HP check: `target.Hits < target.HitsMax`)
-- Not be in a guarded region if humanoid and not always-attackable
-- Not be a player (ML expansion check)
+- Not be a player (ML expansion check: `Core.ML`)
+- Not be in a guarded region with harmful restrictions if humanoid and not always-attackable/always-murderer (message `1001018`)
 
 **Honor Combat Tracking** (see `HonorContext` below):
 
@@ -887,14 +890,15 @@ public void SetValue(int index, int value)
 |----|------|
 | `1053001` | "This virtue is not activated through the virtue menu." |
 | `1053004` | "You must wait about a day before you can gain in compassion again." |
+| `1114420` | "You have lost some Compassion." |
 
 ---
 
 ## Cross-References
 
-- [`systems/ethics.md`](systems/ethics.md) — Both moral progression systems (ethics + virtues)
-- [`systems/factions.md`](systems/factions.md) — Virtue Honor affects faction interactions
-- [`systems/combat.md`](systems/combat.md) — Honor combat mechanics, damage tracking
-- [`creatures/npcs.md`](creatures/npcs.md) — Virtue-related NPCs and champion idols
-- [`systems/party.md`](systems/party.md) — Party system (no direct virtue integration)
-- [`systems/murder-system.md`](systems/murder-system.md) — Murderer flag blocks virtue invocation
+- [`../systems/ethics.md`](../systems/ethics.md) — Both moral progression systems (ethics + virtues)
+- [`../systems/factions.md`](../systems/factions.md) — Virtue Honor affects faction interactions
+- [`../systems/combat.md`](../systems/combat.md) — Honor combat mechanics, damage tracking
+- [`../creatures/npcs.md`](../creatures/npcs.md) — Virtue-related NPCs and champion idols
+- [`../systems/party.md`](../systems/party.md) — Party system (no direct virtue integration)
+- [`../systems/murder-system.md`](../systems/murder-system.md) — Murderer flag blocks virtue invocation

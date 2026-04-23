@@ -6,10 +6,9 @@ The Factions system is a large-scale PvP-based town control and economic game mo
 - `Projects/UOContent/Engines/Factions/Core/FactionSystem.cs` (126 lines) — persistence, toggle config
 - `Projects/UOContent/Engines/Factions/Core/Faction.cs` (1541 lines) — core faction logic
 - `Projects/UOContent/Engines/Factions/Core/FactionState.cs` (308 lines) — serializable state
-- `Projects/UOContent/Engines/Factions/Core/PlayerState.cs` (307 lines) — per-player faction data
-- `Projects/UOContent/Engines/Factions/Core/Town.cs` (544 lines) — town ownership and management
-- `Projects/UOContent/Engines/Factions/Core/TownState.cs` (139 lines) — per-town serializable state
-- `Projects/UOContent/Engines/Factions/Core/Election.cs` (560 lines) — election management
+- `Projects/UOContent/Engines/Factions/Core/PlayerState.cs` (306 lines) — per-player faction data
+- `Projects/UOContent/Engines/Factions/Core/TownState.cs` (138 lines) — per-town serializable state
+- `Projects/UOContent/Engines/Factions/Core/Election.cs` (559 lines) — election management
 - `Projects/UOContent/Engines/Factions/Definitions/FactionDefinition.cs` (91 lines) — faction config
 - `Projects/UOContent/Engines/Factions/Definitions/RankDefinition.cs` (21 lines) — per-rank config
 - `Projects/UOContent/Engines/Factions/Definitions/GuardDefinition.cs` (37 lines) — per-guard config
@@ -291,7 +290,7 @@ totalFactor = clamp(
 
 ### Vote Cleaning (Mule Vote Removal)
 
-Votes with `factor < 90` are considered illegitimate ("mule votes") and are automatically cleaned. GMs can also remove candidates and individual voters via `ElectionManagementGump`.
+Votes with `factor < 90` are considered illegitimate ("mule votes"). The `CleanMuleVotes()` method exists in `Election.cs:527-538` but is **currently commented out** at the call site (`Election.cs:362`), meaning mule vote removal is not active in the current source. GMs can also remove candidates and individual voters via `ElectionManagementGump`.
 
 ### Win Conditions
 
@@ -340,9 +339,18 @@ cooldown = tracked via LastHonorTime
 
 ### Atrophy Cycle
 
-Every **47 hours**, the `HandleAtrophy()` method runs across all factions:
+Every **47 hours**, the static `HandleAtrophy()` method in `Faction.cs:137-176` runs across all factions. The process is:
+
+1. **Readiness check** — All factions must be ready (line 141-145); if any faction's `IsAtrophyReady` returns false, the method returns early
+2. **Collect active players** — Gather all players with `KillPoints > 0 && IsActive` into a list (lines 147-158)
+3. **Process atrophy** — For each faction, call `CheckAtrophy()` which:
+   - Marks all `IsActive` players as inactive for the next cycle (lines 234-237)
+   - Applies atrophy to inactive players with KP > 0: `atrophy = (KillPoints + 9) / 10` (ceiling division, line 242)
+   - Returns the total atrophy distributed
+4. **Redistribute** — The collected atrophy is randomly distributed (+1 KP at a time) among the active players list (lines 172-175)
 
 ```
+// CheckAtrophy per faction
 for each player in faction:
     if player.IsActive:
         player.IsActive = false  // Mark active as inactive for next cycle
@@ -351,15 +359,16 @@ for each player in faction:
         atrophy = (KillPoints + 9) / 10  // Ceiling division by 10
         player.KillPoints -= atrophy
         distrib += atrophy
-    else:
-        player loses all atrophy
+    // Players with KP <= 0 and IsActive=false are skipped (no explicit handling)
 
-// Distribute collected atrophy randomly among active members
+// HandleAtrophy distribution
+for (var i = 0; i < distrib; ++i):
+    activePlayers.RandomElement().KillPoints++
 ```
 
 ### Active Status
 
-A player is `IsActive` if they have recently participated in PvP against opposing factions. Inactive members lose all accumulated atrophy without penalty, while active members with KP lose atrophy proportional to their kill points.
+A player is `IsActive` if they have recently participated in PvP against opposing factions. During atrophy, active members are marked inactive for the next cycle, while inactive members with KP > 0 lose atrophy proportional to their kill points. The collected atrophy is then redistributed randomly among currently active players with KP > 0.
 
 ---
 
@@ -516,9 +525,9 @@ Guards use the `GuardAI` system with configurable spell combos:
 - Dispels summoned creatures
 - Uses healing when damaged or poisoned
 - Recalls if far from home and HP < 10%
-- Uses stat buffs/debuffs (2% chance each)
+- Uses stat buffs/debuffs (2% chance when stats are lowered, GuardAI.cs:689)
 - Uses potions when mana is low
-- 20% chance for combo, 2% for random spell, 2% for buff/debuff per tick
+- 20% chance to enter magic branch per tick; within that: 80% uses spell combo, 20% uses random offense spell (effective: 16% combo, 4% random spell)
 
 ### Guard Speech Commands
 
@@ -610,7 +619,7 @@ Special speech keywords allow players to interact with town guards and the syste
 
 ## Gumps
 
-### FactionStoneGump (364 lines)
+### FactionStoneGump (363 lines)
 
 Main faction hub opened via FactionStone. Pages:
 
@@ -626,7 +635,7 @@ Main faction hub opened via FactionStone. Pages:
 
 Hire/fire Sheriff and Finance Minister. Only the faction commander can use it. The commander cannot be elected to town positions.
 
-### SheriffGump (169 lines)
+### SheriffGump (168 lines)
 
 | Page | Content |
 |------|---------|
@@ -635,7 +644,7 @@ Hire/fire Sheriff and Finance Minister. Only the faction commander can use it. T
 | 3 | Guard hire overview |
 | 4+ | Individual guard type pages with count, max, cost, upkeep, hire button |
 
-### FinanceGump (295 lines)
+### FinanceGump (294 lines)
 
 | Page | Content |
 |------|---------|
@@ -649,11 +658,11 @@ Hire/fire Sheriff and Finance Minister. Only the faction commander can use it. T
 
 Displays election state (Pending/Campaign/Election) with countdown. Campaign page shows "CAMPAIGN FOR LEADERSHIP" button for rank ≥ 5 members. Election page shows "VOTE FOR LEADERSHIP".
 
-### VoteGump (75 lines)
+### VoteGump (74 lines)
 
 Lists candidates with vote counts. Each member can vote once per election cycle.
 
-### LeaveFactionGump (115 lines)
+### LeaveFactionGump (114 lines)
 
 Initiates a 3-day leave period (`LeavePeriod`). Guild leaders can resign their entire guild at once.
 
@@ -665,7 +674,7 @@ Simple join confirmation with faction info display.
 
 Crafting integration for imbuing items. Shows item quality, silver cost, available silver, and primary/secondary color selection. Consumes silver from the player's backpack.
 
-### HorseBreederGump (96 lines)
+### HorseBreederGump (95 lines)
 
 Purchase war horse for 500 silver + 3,000 gold. Checks follower capacity.
 
@@ -693,16 +702,18 @@ Guild leaders can resign their entire guild from the faction through the leave g
 
 ## Admin Commands
 
-| Command | Description |
-|---------|-------------|
-| `/FactionElection` | Open election management for targeted faction stone |
-| `/FactionCommander` | Set targeted player as faction commander |
-| `/FactionReset` | Reset all faction data (members, items, traps) |
-| `/FactionTownReset` | Reset towns, sigils, monoliths |
-| `/FactionItemReset` | Reset faction item associations |
-| `/FactionKick` | Kick a player from their faction |
-| `/FactionBan` | Ban a player's account from factions |
-| `/FactionUnban` | Remove faction ban from a player's account |
+| Command | Access | Description |
+|---------|--------|-------------|
+| `/FactionElection` | GameMaster | Open election management for targeted faction stone |
+| `/FactionCommander` | Administrator | Set targeted player as faction commander |
+| `/FactionReset` | Administrator | Reset all faction data (members, items, traps) |
+| `/FactionTownReset` | Administrator | Reset towns, sigils, monoliths |
+| `/FactionItemReset` | Administrator | Reset faction item associations |
+| `/FactionKick` | Administrator | Kick a player from their faction |
+| `/FactionBan` | Administrator | Ban a player's account from factions |
+| `/FactionUnban` | Administrator | Remove faction ban from a player's account |
+| `/GenerateFactions` | Developer | Generate faction strongholds and items |
+| `/GrantTownSilver` | Administrator | Grant silver to a targeted town |
 
 ---
 
@@ -759,10 +770,10 @@ Faction commanders can broadcast messages to all faction members:
 
 ## Cross-References
 
-- [`systems/ethics.md`](systems/ethics.md) — faction alignment tied to ethics (Hero/Evil)
-- [`systems/virtues.md`](systems/virtues.md) — virtue Honor affects faction interactions
-- [`systems/murder-system.md`](systems/murder-system.md) — PvP overlap with murder tracking
-- [`systems/party.md`](systems/party.md) — faction restriction on party formation
-- [`creatures/npcs.md`](creatures/npcs.md) — faction NPCs (guards, vendors, war horses)
-- [`items/tools.md`](items/tools.md) — trap placement and faction tools
-- [`expansions/timeline.md`](expansions/timeline.md) — expansion-specific sigil timelines (SE vs AOS)
+- [`../systems/ethics.md`](../systems/ethics.md) — faction alignment tied to ethics (Hero/Evil)
+- [`../systems/virtues.md`](../systems/virtues.md) — virtue Honor affects faction interactions
+- [`../systems/murder-system.md`](../systems/murder-system.md) — PvP overlap with murder tracking
+- [`../systems/party.md`](../systems/party.md) — faction restriction on party formation
+- [`../creatures/npcs.md`](../creatures/npcs.md) — faction NPCs (guards, vendors, war horses)
+- [`../items/tools.md`](../items/tools.md) — trap placement and faction tools
+- [`../expansions/timeline.md`](../expansions/timeline.md) — expansion-specific sigil timelines (SE vs AOS)

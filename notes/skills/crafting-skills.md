@@ -86,10 +86,10 @@ Carpentry is used to craft wooden items including furniture, barrels, doors, and
 
 - **Stat scaling:** +0.2 Str and +0.05 Dex per point of those stats
 - **Gain rates:** 2.0 Str gain, 0.5 Dex gain per use (highest Str gain, tied with Mining and Lumberjacking)
-- **StatTotal:** 25 (highest among crafting skills)
+- **StatTotal:** 25 (tied highest among crafting skills)
 - **Primary use:** Crafting wooden items from lumber resources
 
-Carpentry is one of three skills with a StatTotal of 50 or higher, making it one of the most stat-influenced skills in the game.
+Carpentry is one of two crafting skills with a StatTotal of 25, tied with Cartography and Tailoring.
 
 ---
 

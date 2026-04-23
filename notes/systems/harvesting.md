@@ -132,7 +132,7 @@ public override object GetLock(...) => this;
 | OutOfRange | `500446` — "That is too far away." | `500446` — "That is too far away." | `500976` — "You need to be closer to the water to fish!" |
 | TimedOutOfRange | — | `503041` — "You have moved too far away to continue mining." | `500976` — "You need to be closer to the water to fish!" |
 | DoubleHarvest | — | `503042` — "Someone has gotten to the metal before you." | — |
-| PackFull | `500497` — "You can't place any wood into your backpack!" | `1010481` — "Your backpack is full, so the ore you mined is lost." / `1044632` — sand pack full | `503176` — "You do not have room in your backpack for a fish." |
+| PackFull | `500497` — "You can't place any wood into your backpack!" | `1010481` — "Your backpack is full, so the ore you mined is lost." / `1044632` — "Your backpack can't hold the sand, and it is lost!" | `503176` — "You do not have room in your backpack for a fish." |
 | ToolBroke | `500499` — "You broke your axe." | `1044038` — "You have worn out your tool!" | `503174` — "You broke your fishing pole." |
 
 ### Effect Properties
@@ -167,7 +167,7 @@ key = new Point2D(gridX, gridY)
 `GetVeinAt(map, x, y)` selects the vein for a bank location:
 
 1. If only one vein exists: return it directly
-2. If `RandomizeVeins = true`: use `GetVeinFrom(Utility.Random(VeinWeights))`
+2. If `RandomizeVeins = true`: use `GetVeinFrom((uint)Utility.Random(1000))`
 3. Otherwise: deterministic selection using `StableRandom` with seed `(x * 17 + y * 11 + map.MapID * 3)`
 
 Vein weights are accumulated cumulatively. Each vein's `VeinChance` is an upper bound in the cumulative sum.
@@ -290,7 +290,7 @@ Lumberjacking extracts wood from trees using an equipped axe. It is the simplest
 ### Tree Tiles (~150 static tile IDs)
 
 Tree tiles are stored in `m_TreeTiles[]` (sorted during `Initialize()`). The array includes:
-- Standard tree IDs: `0x0CCA` through `0x0DFF` range
+- Standard tree IDs: `0x0CCA` through `0x0D97` (individual IDs, not contiguous)
 - UO:SE tree IDs: `0x12B5` through `0x12C7` range
 
 Trees are **not** ranged tiles — each tile ID must match exactly.
@@ -323,7 +323,7 @@ Trees are **not** ranged tiles — each tile ID must match exactly.
 
 | Index | Chance | Message | Item Type |
 |-------|--------|---------|-----------|
-| 0 | 99.4% | — | Nothing |
+| 0 | 83.9% | — | Nothing |
 | 1 | 10.0% | `1072548` | `BarkFragment` |
 | 2 | 3.0% | `1072550` | `LuminescentFungi` |
 | 3 | 2.0% | `1072547` | `SwitchItem` |
@@ -437,7 +437,7 @@ Each ore resource has up to 3 types: primary ore (index 0), granite (index 1), a
 
 ### Sand Tiles (ranges)
 
-`_sandTiles[]` — ~30 tile IDs in the 22-1650 range.
+`_sandTiles[]` — ~34 tile IDs in the 22-1650 range.
 
 ### Special Behaviors
 
@@ -464,7 +464,7 @@ if (from.IsBodyMod && !from.Body.IsHuman)
 (from is PlayerMobile mobile && mobile.Skills.Mining.Base >= 100.0 && mobile.SandMining)
 ```
 
-**Stone mining toggle**: `GetResourceType()` gives 10% chance to get granite instead of ore:
+**Stone mining toggle**: `GetResourceType()` gives 10% chance to get granite instead of ore, requiring 100.0+ Mining skill, PlayerMobile type, and BOTH `StoneMining` and `ToggleMiningStone` properties:
 ```csharp
 if (from.Skills.Mining.Base >= 100.0 && from is PlayerMobile pm && pm.StoneMining && pm.ToggleMiningStone
     && Utility.RandomDouble() < 0.1)
@@ -721,9 +721,9 @@ Several harvesting features depend on expansion flags:
 
 ## Cross-References
 
-- [`skills/utility-skills.md`](skills/utility-skills.md) — Fishing, Lumberjacking, Mining skill definitions
-- [`items/tools.md`](items/tools.md) — Harvesting tools (pickaxes, axes, fishing poles)
-- [`systems/crafting.md`](systems/crafting.md) — Crafted resources (logs → boards, ore → ingots)
-- [`creatures/monsters.md`](creatures/monsters.md) — Elemental creatures from mining with Gargoyles Pickaxe
-- [`creatures/npcs.md`](creatures/npcs.md) — Quest NPCs (Witch Apprentice, Collector Quest)
-- [`expansions/timeline.md`](expansions/timeline.md) — Expansion flags (Core.ML, Core.AOS)
+- [`../skills/utility-skills.md`](../skills/utility-skills.md) — Fishing, Lumberjacking, Mining skill definitions
+- [`../items/tools.md`](../items/tools.md) — Harvesting tools (pickaxes, axes, fishing poles)
+- [`../systems/crafting.md`](../systems/crafting.md) — Crafted resources (logs → boards, ore → ingots)
+- [`../creatures/monsters.md`](../creatures/monsters.md) — Elemental creatures from mining with Gargoyles Pickaxe
+- [`../creatures/npcs.md`](../creatures/npcs.md) — Quest NPCs (Witch Apprentice, Collector Quest)
+- [`../expansions/timeline.md`](../expansions/timeline.md) — Expansion flags (Core.ML, Core.AOS)

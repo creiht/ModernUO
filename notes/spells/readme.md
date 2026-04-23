@@ -1,6 +1,6 @@
 # Spells
 
-ModernUO includes **~117 spells** across 8 spell schools. Spells are the primary magical abilities available to characters, with varying mana costs, reagent requirements, cast times, and effects.
+ModernUO includes **~135 spells** across 8 spell schools. Spells are the primary magical abilities available to characters, with varying mana costs, reagent requirements, cast times, and effects.
 
 Spellcasting relies on the Magery skill (and sometimes related magical skills). The chance to successfully cast a spell and its effectiveness are determined by the caster's skill level, the spell's requirements, and various modifiers from equipment (FCR, mana leech, etc.).
 
@@ -24,7 +24,7 @@ Dark magic of the undead, including summoning, life drain, and curse spells.
 ### [Mysticism](mysticism.md) — 9 spells
 Gargoyle magic tied to elemental forces and the afterlife.
 
-### [Spellweaving](spellweaving.md) — 21 spells (17 spells + 4 items/classes)
+### [Spellweaving](spellweaving.md) — 13 spells + 3 base classes + 2 items + 3 mobile classes
 Ancient magic from the Isle of Silk, featuring unique spell mechanics.
 
 ### [Gargoyle](gargoyle.md) — 1 spell + traits

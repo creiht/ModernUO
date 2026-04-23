@@ -188,9 +188,9 @@ Familiars have `PoisonImmune(Lethal)`, `BardImmune`, `Commandable = false`, `Ign
 
 ## See Also
 
-- [Creature Reference](reference/creature-reference.md) — Complete creature listing
-- [Taming](skills/taming.md) — Taming and pet control mechanics
-- [Combat](systems/combat.md) — Combat systems
-- [Crafting](systems/crafting.md) — Crafting professions and vendor relationships
-- [Necromancy](spells/necromancy.md) — Familiar summoning spells
-- [Ethics](systems/ethics.md) — Evil Healer alignment system
+- [Creature Reference](../reference/creature-reference.md) — Complete creature listing
+- [Taming](../skills/taming.md) — Taming and pet control mechanics
+- [Combat](../systems/combat.md) — Combat systems
+- [Crafting](../systems/crafting.md) — Crafting professions and vendor relationships
+- [Necromancy](../spells/necromancy.md) — Familiar summoning spells
+- [Ethics](../systems/ethics.md) — Evil Healer alignment system

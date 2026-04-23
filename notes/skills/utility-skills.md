@@ -1,6 +1,6 @@
 # Utility Skills
 
-Utility skills provide support, detection, navigation, and quality-of-life capabilities. ModernUO features **22 utility skills** that enhance gameplay beyond direct combat and crafting.
+Utility skills provide support, detection, navigation, and quality-of-life capabilities. ModernUO features **29 utility skills** that enhance gameplay beyond direct combat and crafting.
 
 **Source:** `Projects/UOContent/Skills/SkillsInfo.cs`, `Projects/UOContent/Skills/*.cs`, `Data/skills.json`
 
@@ -31,10 +31,11 @@ Utility skills provide support, detection, navigation, and quality-of-life capab
 | TasteID | Praegustator | Int | Str | 0 | 0 | 0 | 0.2 | 0 | 0.8 |
 | Tracking | Ranger | Int | Dex | 0 | 0.125 | 0.125 | 0 | 1.25 | 1.25 |
 | Veterinary | Veterinarian | Int | Dex | 0.08 | 0.04 | 0.08 | 0.8 | 0.4 | 0.8 |
+| AnimalTaming | Tamer | Str | Int | 0.14 | 0.02 | 0.04 | 1.4 | 0.2 | 0.4 |
+| Discordance | Demoralizer | Int | Dex | 0 | 0.025 | 0.025 | 0 | 0.25 | 0.25 |
 | Fishing | Fisherman | Dex | Str | 0 | 0 | 0 | 0.5 | 0.5 | 0 |
 | Lumberjacking | Lumberjack | Str | Dex | 0.2 | 0 | 0 | 2 | 0 | 0 |
 | Mining | Miner | Str | Dex | 0.2 | 0 | 0 | 2 | 0 | 0 |
-| Discordance | Demoralizer | Int | Dex | 0 | 0.025 | 0.025 | 0 | 0.25 | 0.25 |
 | Musicianship | Bard | Dex | Int | 0 | 0 | 0 | 0 | 0.8 | 0.2 |
 | Peacemaking | Pacifier | Int | Dex | 0 | 0 | 0 | 0 | 0 | 0 |
 | Provocation | Rouser | Int | Dex | 0 | 0.045 | 0.005 | 0 | 0.45 | 0.05 |
@@ -102,6 +103,12 @@ Item Identification reveals the properties and value of unidentified items. It i
 
 ## Animal Skills
 
+### Animal Taming (AnimalTaming)
+
+**Title:** Tamer | **Primary Stat:** Strength | **Secondary Stat:** Intelligence
+
+Animal Taming allows players to capture and tame wild creatures as companions. See [[skills/taming]] for detailed mechanics.
+
 ### Animal Lore (AnimalLore)
 
 **Title:** Naturalist | **Primary Stat:** Intelligence | **Secondary Stat:** Strength
@@ -130,7 +137,7 @@ See source: `Skills/AnimalLore.cs`
 
 ### Animal Taming (AnimalTaming)
 
-**Title:** Beastmaster | **Primary Stat:** Strength | **Secondary Stat:** Dexterity
+**Title:** Tamer | **Primary Stat:** Strength | **Secondary Stat:** Intelligence
 
 Animal Taming allows players to tame wild creatures as companions. It is one of the most complex skills with multiple validation checks and scaling mechanics.
 
@@ -506,6 +513,6 @@ All utility skills are available from character creation in the base game. No ut
 - [Crafting Skills](crafting-skills.md) — Item creation skills
 - [Combat Skills](combat-skills.md) — Offensive and defensive skills
 - [Magical Skills](magical-skills.md) — Spellcasting and magical abilities
-- [Systems: Combat](systems/combat.md) — Combat mechanics
-- [Systems: Crafting](systems/crafting.md) — Crafting engine
-- [Getting Started: Stats](getting-started/stats.md) — Stat-skill relationships
+- [Systems: Combat](../systems/combat.md) — Combat mechanics
+- [Systems: Crafting](../systems/crafting.md) — Crafting engine
+- [Getting Started: Stats](../getting-started/stats.md) — Stat-skill relationships

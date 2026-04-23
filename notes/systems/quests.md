@@ -1,19 +1,27 @@
 # Quests
 
-Quests provide structured player objectives with narrative progression, item collection, creature slaying, escort missions, and reward distribution. ModernUO implements **two distinct quest systems**: the **ML Quest System** (Mondain's Legacy, template-based with per-player context tracking) and the **Modern Quest System** (player-owned with inline objectives and conversations). The ML system supports 21 quest definitions across multiple areas with chain triggers, timed objectives, and skill training quests. The modern system implements 11 quests with profession-restricted access, dialogue trees, and regional objectives.
+Quests provide structured player objectives with narrative progression, item collection, creature slaying, escort missions, and reward distribution. ModernUO implements **two distinct quest systems**: the **ML Quest System** (Mondain's Legacy, template-based with per-player context tracking) and the **Modern Quest System** (player-owned with inline objectives and conversations). The ML system supports 20 quest definitions plus 1 base class (BaseEscort) across multiple areas with chain triggers, timed objectives, and skill training quests. The modern system implements 11 quests with profession-restricted access, dialogue trees, and regional objectives.
 
 **Source Files:**
 - `Projects/UOContent/Engines/ML Quests/MLQuestSystem.cs` (865 lines) — ML quest management, speech events, quest resolution, GM commands
 - `Projects/UOContent/Engines/ML Quests/MLQuest.cs` (308 lines) — ML quest template, objectives/rewards definitions, instance creation
-- `Projects/UOContent/Engines/ML Quests/MLQuestContext.cs` — per-player ML quest tracking, completion history, chain offers
+- `Projects/UOContent/Engines/ML Quests/MLQuestContext.cs` (307 lines) — per-player ML quest tracking, completion history, chain offers
 - `Projects/UOContent/Engines/ML Quests/MLQuestEntry.cs` (567 lines) — ML quest instance data, objective instances, timer, reward flow
 - `Projects/UOContent/Engines/ML Quests/MLQuestPersistence.cs` (63 lines) — save/load singleton
+- `Projects/UOContent/Engines/ML Quests/MLQuestPackets.cs` (32 lines) — ML quest packet handling
+- `Projects/UOContent/Engines/ML Quests/QuestArea.cs` (61 lines) — quest area wrapper for location checks
+- `Projects/UOContent/Engines/ML Quests/QuesterNameAttribute.cs` (33 lines) — quester name attribute
+- `Projects/UOContent/Engines/ML Quests/IQuestGiver.cs` (15 lines) — quest giver interface
 - `Projects/UOContent/Engines/Quests/Core/QuestSystem.cs` (700 lines) — modern quest system, player-owned quest engine
 - `Projects/UOContent/Engines/Quests/Core/QuestObjective.cs` (250 lines) — modern quest objective base class
 - `Projects/UOContent/Engines/Quests/Core/QuestConversation.cs` (138 lines) — modern quest dialogue events
 - `Projects/UOContent/Engines/Quests/Core/BaseQuester.cs` (91 lines) — quest-giving NPC base vendor
-- **80+ ML Quest files** (Definitions, Gumps, Items, Mobiles, Objectives, Rewards)
-- **60+ Modern Quest files** (Core, Quest definitions, regions, items, NPCs)
+- `Projects/UOContent/Engines/Quests/Core/QuestCallbackEntry.cs` (21 lines) — context menu callback entry
+- `Projects/UOContent/Engines/Quests/Core/QuestItemInfo.cs` (57 lines) — quest item info display
+- `Projects/UOContent/Engines/Quests/Core/QuestRestartInfo.cs` (35 lines) — restart tracking data
+- `Projects/UOContent/Engines/Quests/Core/QuestSerializer.cs` (194 lines) — quest serialization
+- **109 ML Quest files** (Definitions, Gumps, Items, Mobiles, Objectives, Rewards)
+- **136 Modern Quest files** (Core, Quest definitions, regions, items, NPCs)
 
 ---
 
@@ -27,7 +35,7 @@ The ML Quest System is a template-based quest engine where quest templates defin
 questSystem.enableMLQuests = true  # Default: Core.ML
 ```
 
-**Config File:** `Data/MLQuests.cfg` (tab-separated: `QuestType QuesterType1 QuesterType2...`) — maps quest types to their NPC quest givers. **Not present by default**; quests are auto-registered via code.
+**Config File:** `Data/MLQuests.cfg` (tab-separated: `QuestType [QuesterType1 QuesterType2...]`) — maps quest types to their NPC quest givers. **Present by default** with 265 quest entries; quests are also auto-registered via code.
 
 ### Core Engine (`MLQuestSystem`)
 
@@ -326,8 +334,8 @@ Each modern quest is a `QuestSystem` subclass with 11 total quest definitions.
 | `From` | `PlayerMobile` | The player who owns this quest |
 | `Objectives` | `List<QuestObjective>` | Active objectives |
 | `Conversations` | `List<QuestConversation>` | Active conversation events |
-| `Name` | `string` | Quest name (abstract, overridden per quest) |
-| `OfferMessage` | `string` | Initial offer message (abstract) |
+| `Name` | `object` | Quest name (abstract, overridden per quest; typically returns CLLOC int) |
+| `OfferMessage` | `object` | Initial offer message (abstract; typically returns CLLOC int) |
 | `Picture` | `int` | Gump icon (abstract) |
 | `IsTutorial` | `bool` | Whether this is a tutorial quest (abstract) |
 | `RestartDelay` | `TimeSpan` | Delay before repeat (abstract; `Zero` = no restart, `MaxValue` = never) |
@@ -541,9 +549,9 @@ Core quest-specific items in `Projects/UOContent/Engines/Quests/Core/Items/`:
 
 ## Cross-References
 
-- [`getting-started/character-creation.md`](getting-started/character-creation.md) — Profession restrictions for Uzeraan, Dark Tides, Emino's, Haochi's quests
-- [`systems/crafting.md`](systems/crafting.md) — Crafting-related quest objectives (item collection)
-- [`skills/combat-skills.md`](skills/combat-skills.md) — Combat skill training via ML quests
-- [`creatures/npcs.md`](creatures/npcs.md) — Quest-giving NPCs across both systems
-- [`items/containers.md`](items/containers.md) — Quest item storage and backpack management
-- [`expansions/timeline.md`](expansions/timeline.md) — ML expansion context (Mondain's Legacy)
+- [`../getting-started/character-creation.md`](../getting-started/character-creation.md) — Profession restrictions for Uzeraan, Dark Tides, Emino's, Haochi's quests
+- [`../systems/crafting.md`](../systems/crafting.md) — Crafting-related quest objectives (item collection)
+- [`../skills/combat-skills.md`](../skills/combat-skills.md) — Combat skill training via ML quests
+- [`../creatures/npcs.md`](../creatures/npcs.md) — Quest-giving NPCs across both systems
+- [`../items/containers.md`](../items/containers.md) — Quest item storage and backpack management
+- [`../expansions/timeline.md`](../expansions/timeline.md) — ML expansion context (Mondain's Legacy)

@@ -193,9 +193,9 @@ Familiars are summoned via necromancy spells and persist for a limited duration.
 
 ## See Also
 
-- [Taming](skills/taming.md) — Taming skill mechanics and progression
-- [Animal Lore](skills/animallore.md) — Animal Lore skill for identifying creatures
-- [Combat](systems/combat.md) — Combat mechanics and mounted combat
-- [Tools](items/tools.md) — Whips and other animal handling tools
-- [Creature Reference](reference/creature-reference.md) — Complete creature listing
-- [Creature AI Types](reference/creature-ai-types.md) — AI type behavior descriptions
+- [Taming](../skills/taming.md) — Taming skill mechanics and progression
+- [Animal Lore](../skills/animallore.md) — Animal Lore skill for identifying creatures
+- [Combat](../systems/combat.md) — Combat mechanics and mounted combat
+- [Tools](../items/tools.md) — Whips and other animal handling tools
+- [Creature Reference](../reference/creature-reference.md) — Complete creature listing
+- [Creature AI Types](../reference/creature-ai-types.md) — AI type behavior descriptions

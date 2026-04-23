@@ -279,7 +279,7 @@ Exceptional quality adds +20 to the durability bonus.
 
 ### Virtual Armor
 
-Players can set `VirtualArmor` and `VirtualArmorMod` properties on `Mobile` (`Mobile.cs:918-468`) to adjust their effective armor rating independently of equipment.
+Players can set `VirtualArmor` and `VirtualArmorMod` properties on `Mobile` (`Mobile.cs:456,918`) to adjust their effective armor rating independently of equipment.
 
 ---
 
@@ -409,9 +409,9 @@ Defined in `SlayerName` enum (`SlayerName.cs:3-33`):
 
 `CheckSlayers()` (`BaseWeapon.cs:2288-2330`) checks in order:
 
-1. Weapon's `Slayer` attribute
-2. Weapon's `Slayer2` attribute
-3. Talisman slayer (if `ButchersWarCleaver` equipped)
+1. Talisman slayer (if `ButchersWarCleaver` equipped)
+2. Weapon's `Slayer` attribute (via `SlayerGroup`)
+3. Weapon's `Slayer2` attribute (via `SlayerGroup`)
 4. Attacker's equipped talisman
 5. Defender's equipped spellbook/weapon slayer (defensive slayer — reduces damage)
 
@@ -430,7 +430,8 @@ The damage application chain when a mobile is hit:
 ```
 Mobile.Damage(amount, from)
   ├─ CanBeDamaged() check (blessed mobiles cannot be damaged)
-  ├─ Region.OnDamage() check (region hooks can cancel/modify)
+  ├─ Region.OnDamage() check (region hooks can/cancel/modify)
+  ├─ m_Spell?.OnCasterHurt() (notify active spell)
   ├─ RegisterDamage(amount, from) — tracks damage entries
   ├─ DisruptiveAction() — interrupts casting/mounting
   ├─ Paralyzed = false
@@ -529,7 +530,7 @@ _scalar = percent × 0.01  (percent is HP% per tick)
 
 | Effect | Cures | Condition |
 |--------|-------|-----------|
-| Vampiric Embrace Spell | Poison levels < 4 | SA+ |
+| Vampiric Embrace Spell | Poison levels < 4 | AOS+ |
 | Orange Petals | Poison levels < 3 | — |
 | Unicorn transformation (Animal Form) | All levels | — |
 
@@ -638,8 +639,8 @@ Defined in `AOS.cs:1268-1277`:
 
 ## Cross-References
 
-- [`items/weapons.md`](items/weapons.md) — weapon damage, slayer system, abilities
-- [`items/armor.md`](items/armor.md) — AR calculation, resist bonuses
-- [`systems/poisons.md`](systems/poisons.md) — poison damage mechanics
-- [`getting-started/stats.md`](getting-started/stats.md) — stat formulas, stat locks
-- [`reference/configuration.md`](reference/configuration.md) — combat config settings
+- [`../items/weapons.md`](../items/weapons.md) — weapon damage, slayer system, abilities
+- [`../items/armor.md`](../items/armor.md) — AR calculation, resist bonuses
+- [`../systems/poisons.md`](../systems/poisons.md) — poison damage mechanics
+- [`../getting-started/stats.md`](../getting-started/stats.md) — stat formulas, stat locks
+- [`../reference/configuration.md`](../reference/configuration.md) — combat config settings

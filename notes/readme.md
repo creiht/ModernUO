@@ -16,13 +16,13 @@ Begin your journey in Britannia. Learn character creation, core stats, and movem
 ### [Skills](skills/readme.md)
 ModernUO features **58 skills** across four categories, each with unique mechanics and gain rates.
 
-- [Crafting Skills](skills/crafting-skills.md) — 19 skills: Blacksmith, Alchemy, Tinkering, Tailoring, etc.
-- [Combat Skills](skills/combat-skills.md) — 8 skills: Swords, Macing, Fencing, Archery, Throwing, etc.
-- [Magical Skills](skills/magical-skills.md) — 10 skills: Magery, Necromancy, Chivalry, Bushido, Mysticism, etc.
-- [Utility Skills](skills/utility-skills.md) — 12 skills: Detect Hidden, Tracking, Hiding, Cartography, etc.
+- [Crafting Skills](skills/crafting-skills.md) — 10 skills: Blacksmith, Alchemy, Tinkering, Tailoring, etc.
+- [Combat Skills](skills/combat-skills.md) — 11 skills: Swords, Macing, Fencing, Archery, Throwing, etc.
+- [Magical Skills](skills/magical-skills.md) — 8 skills: Magery, Necromancy, Chivalry, Bushido, Mysticism, etc.
+- [Utility Skills](skills/utility-skills.md) — 29 skills: Detect Hidden, Tracking, Hiding, Cartography, etc.
 
 ### [Spells](spells/readme.md)
-ModernUO includes **~117 spells** across 8 spell schools, from basic magic to advanced arcane arts.
+ModernUO includes **~135 spells** across 8 spell schools, from basic magic to advanced arcane arts.
 
 - [Magery](spells/magery.md) — 64 spells across 8 circles
 - [Chivalry](spells/chivalry.md) — 11 Paladin spells
@@ -30,7 +30,7 @@ ModernUO includes **~117 spells** across 8 spell schools, from basic magic to ad
 - [Ninjitsu](spells/ninjitsu.md) — 10 Ninja skills/spells
 - [Necromancy](spells/necromancy.md) — 19 Necromancer spells
 - [Mysticism](spells/mysticism.md) — 9 Gargoyle spells
-- [Spellweaving](spells/spellweaving.md) — 17 spells + 4 items/classes
+- [Spellweaving](spells/spellweaving.md) — 13 spells + 3 base classes + 2 items + 3 mobile classes
 - [Gargoyle](spells/gargoyle.md) — Fly spell + Gargoyle traits
 
 ### [Items](items/readme.md)
@@ -80,7 +80,7 @@ ModernUO supports 12 expansion levels (0–11) with cumulative feature unlocks.
 Quick-reference tables and data extracted from source code.
 
 - [Skill Table](reference/skill-table.md) — All 58 skills: name, category, primary stat, scales, gains
-- [Spell Index](reference/spell-index.md) — All ~117 spells: name, school, circle, reagents, effects
+- [Spell Index](reference/spell-index.md) — All ~135 spells: name, school, circle, reagents, effects
 - [Resistance Table](reference/resistance-table.md) — Physical/Fire/Cold/Poison/Energy details
 - [Craft Resources](reference/craft-resources.md) — All resources: properties, bonuses, tier
 - [Creature AI Types](reference/creature-ai-types.md) — AI types with behavior descriptions

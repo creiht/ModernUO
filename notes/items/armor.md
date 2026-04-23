@@ -809,7 +809,7 @@ Gargish armor files are organized in subdirectories: `Cloth/`, `Leather/`, with 
 
 ## Cross-References
 
-- [`reference/craft-resources.md`](reference/craft-resources.md) — full resource bonus tables for all metals, leathers, scales
-- [`systems/crafting.md`](systems/crafting.md) — armor crafting (Blacksmithing, Tailoring)
-- [`systems/combat.md`](systems/combat.md) — armor rating and resistance mechanics in combat
-- [`reference/skill-table.md`](reference/skill-table.md) — skill-to-armor associations (ArmsLore, Parry)
+- [`../reference/craft-resources.md`](../reference/craft-resources.md) — full resource bonus tables for all metals, leathers, scales
+- [`../systems/crafting.md`](../systems/crafting.md) — armor crafting (Blacksmithing, Tailoring)
+- [`../systems/combat.md`](../systems/combat.md) — armor rating and resistance mechanics in combat
+- [`../reference/skill-table.md`](../reference/skill-table.md) — skill-to-armor associations (ArmsLore, Parry)

@@ -61,8 +61,8 @@ The murder system is managed by the static `PlayerMurderSystem` class, which ext
 | `OnLogin(PlayerMobile)` | `void` | Restarts kill decay timers on login |
 | `OnDisconnected(Mobile)` | `void` | Decays kills and cleans up context on disconnect |
 | `MigrateContext(PlayerMobile, TimeSpan, TimeSpan)` | `void` | Migration helper during world loading from old system |
-| `Deserialize(IGenericReader)` | `void` | Persists murder contexts to disk (version 0) |
-| `Serialize(IGenericWriter)` | `void` | Loads murder contexts from disk |
+| `Deserialize(IGenericReader)` | `void` | Loads murder contexts from disk (version 0) |
+| `Serialize(IGenericWriter)` | `void` | Persists murder contexts to disk |
 | `GetMurderContext(PlayerMobile, out MurderContext)` | `bool` | Lookup helper, returns false if no context exists |
 | `GetOrCreateMurderContext(PlayerMobile)` | `MurderContext` | Creates context if none exists |
 | `GetBounty(PlayerMobile)` | `int` | Returns current bounty amount |
@@ -144,7 +144,7 @@ If Kills > 0 and _longTermElapse < gameTime:
     Kills--
 ```
 
-Both decays use wall-clock time (server time), not in-game time.
+Both decays use real-world TimeSpan durations compared against game-time progression (not pure wall-clock).
 
 ### Migration Methods
 
@@ -181,7 +181,7 @@ Available when `Core.T2A && !Core.LBR`. Ping Pongs are a separate counter from K
 
 | Condition | Effect |
 |-----------|--------|
-| Player reaches exactly 5 Kills | `PingPongs++` |
+| Player reaches exactly 5 Kills (and `PingPongEnabled`) | `PingPongs++` |
 | Player uses Ping Pong | Short-term murder timer resets |
 
 Ping Pongs are migrated from legacy V0 data: `Kills >= 5 ? 1 : 0`.
@@ -215,7 +215,7 @@ When a player dies, other players involved in the combat can report the killer. 
 | Condition | Karma Award | Fame Award |
 |-----------|-------------|------------|
 | Defender Notoriety == Innocent | `ourKarma > -2500 ? -850 : -110 - m.Karma / 100` | `m.Fame / 200` |
-| Defender Notoriety == Criminal/Murderer | `50` | `m.Fame / 200` |
+| Defender Notoriety == Criminal or Murderer | `50` | `m.Fame / 200` |
 
 ### Step 2: Report Gump (`ReportMurdererGump`)
 
@@ -225,8 +225,8 @@ After 4 seconds, the reporter sees a gump showing the killer's name:
 |---------|-------|
 | Background | 320x290 at (265, 205), type 5054 |
 | Message | Loc 1049066: "Would you like to report..." |
-| Button 1 | Yes (ID 0xFA5/0xFA7) → Calls `PlayerMurderSystem.ReportMurder()` |
-| Button 2 | No (ID 0xFA5/0xFA7) → Dismisses |
+| Button 1 | Yes (gump IDs 0xFA5/0xFA7) → Calls `PlayerMurderSystem.ReportMurder()` |
+| Button 2 | No (gump IDs 0xFA5/0xFA7) → Dismisses |
 
 Multiple killers are shown sequentially (advances `_idx` after each response).
 
@@ -240,8 +240,8 @@ Multiple killers are shown sequentially (advances `_idx` after each response).
 5. Call OnPlayerMurder(pk) to increment counters
 6. Send "You have been reported for murder!" to PK
 7. If killer just became a murderer: "You are now known as a murderer!"
-8. If Stealing.SuspendOnMurder && PK has exactly 1 kill && in Thieves Guild:
-   Send suspension message
+8. If Stealing.SuspendOnMurder && PK.Kills == 1 && PK in Thieves Guild:
+    Send Loc 501562 (Thieves Guild suspension message)
 ```
 
 ### Step 4: Bounty Gump (If Bounties Enabled)
@@ -251,7 +251,7 @@ If `BountiesEnabled` is true, `BountyReportMurdererGump` is shown after the repo
 | Element | Value |
 |---------|-------|
 | Background | 393x270 at (265, 205), type 70000, image 1140 overlay |
-| Message | "Would you like to report {killer} as a murderer?" |
+| Message | Dynamic: `"Would you like to report {_killers[_idx].Name} as a murderer?"` |
 | Bounty field | Shown if killer.Kills >= 4 AND victim has bank balance > 0 |
 | Max bounty | Victim's current bank balance |
 | Button 1 | Yes → Report + optionally place bounty |
@@ -264,15 +264,15 @@ If `BountiesEnabled` is true, `BountyReportMurdererGump` is shown after the repo
 2. If valid and > 0: bounty = Math.Min(requested, Banker.GetBalance(from))
 3. If Banker.Withdraw(from, bounty) succeeds:
    a. PlayerMurderSystem.AddBounty(pk, bounty)
-   b. PK receives: "{reporter.Name} has placed a bounty of {bounty}gp on your head!"
-   c. Reporter receives: "You place a bounty of {bounty}gp on {pk.Name}'s head."
+  b. PK receives: `"{reporter.Name} has placed a bounty of {bounty} {(bounty==1?"gold piece":"gold pieces")} on your head!"`
+    c. Reporter receives: `"You place a bounty of {bounty}gp on {pk.Name}'s head."`
 ```
 
 ### Bounty Eligibility
 
 | Condition | Requirement |
 |-----------|-------------|
-| Killer must have | `Kills >= 4` |
+| Killer must have | `Kills >= 4` (for bounty feature; report itself has no kill minimum) |
 | Victim must have | Bank balance > 0 |
 | Max bounty | Victim's current bank balance |
 | Bounty expiry | Configurable (`bountyExpiry`, default 14 days) |
@@ -386,19 +386,30 @@ The bounty includes a description of the target's appearance based on their curr
 | 0x454–0x455 | black |
 | 0x456–0x458 | copper |
 | 0x459–0x45C | brown |
+| 0x45D | reddish brown |
 | 0x45E–0x460 | blonde |
+| 0x461–0x463 | light brown |
+| 0x464–0x465 | golden brown |
+| 0x466–0x468 | golden |
+| 0x469–0x46B | bronze |
+| 0x46C–0x46D | dark brown |
+| 0x46E–0x46F | sandy |
+| 0x470–0x472 | honey-colored |
 | 0x473–0x475 | red |
+| 0x476–0x478 | nut brown |
+| 0x479–0x47B | rich brown |
+| 0x47C–0x47D | very dark brown |
 | other | outlandishly colored |
 
 #### Skin Tone Mapping
 
 | Hue(s) | Tone |
 |--------|------|
-| 0x3EA–0x3EB, 0x3F9–0x3FB | fair |
-| 0x3F1, 0x3F2, etc. | pale |
-| 0x3F3, 0x3F4, etc. | tanned |
-| 0x3EC–0x3ED, etc. | copper |
-| 0x3EF, etc. | dark |
+| 0x3EA, 0x3EB, 0x3F9–0x3FB | fair |
+| 0x3F1, 0x3F2, 0x3F8, 0x3FF–0x400, 0x406–0x408, 0x40D–0x40E, 0x415–0x416 | pale |
+| 0x3F3, 0x3F4, 0x3FC, 0x401–0x402, 0x409, 0x40F–0x411, 0x418 | tanned |
+| 0x3EC–0x3EE, 0x3F5, 0x403, 0x412–0x413, 0x419, 0x421 | copper |
+| 0x3EF–0x3FE, 0x404–0x40B, 0x40C, 0x414, 0x41A–0x41B, 0x420 | dark |
 | 0x41C–0x41E | yellow |
 | other | deathly |
 
@@ -417,21 +428,21 @@ When a player checks their murder status, the message format varies by expansion
 | Expansion | Behavior |
 |-----------|----------|
 | SA | Single message with short-term and long-term kills tab-separated |
-| SE | Two `SendMessage` calls |
+| SE | One `SendMessage` call (short-term and long-term on same line) |
 | AOS | Two `SendMessage` calls + Ping Pong count if enabled |
-| T2A with PingPong >= 5 | Loc 502123 (red if >= 5 short-term, yellow otherwise) |
-| T2A with short-term >= 5 | Loc 502126 (red) |
-| T2A with short-term > 0 | Loc 502125 (yellow) |
-| T2A with kills > 0 | Loc 502124 (yellow) |
-| T2A with no kills | Loc 502122 (yellow) |
+| T2A with PingPong >= 5 | Loc 502123 (hue 0x22 red if short-term >= 5, 0x59 yellow otherwise) |
+| T2A with short-term >= 5 | Loc 502126 (hue 0x22 red) |
+| T2A with short-term > 0 | Loc 502125 (hue 0x59 yellow) |
+| T2A with kills > 0 | Loc 502124 (hue 0x59 yellow) |
+| T2A with no kills | Loc 502122 (hue 0x59 yellow) |
 | Pre-T2A | No message at all |
 
 ---
 
 ## Cross-References
 
-- [`systems/factions.md`](systems/factions.md) — Faction kill point mechanics
-- [`systems/virtues.md`](systems/virtues.md) — Honor virtue interaction
-- [`skills/combat-skills.md`](skills/combat-skills.md) — Murderer status affects combat
-- [`items/weapons.md`](items/weapons.md) — Poison application by murderers
-- [`skills/utility-skills.md`](skills/utility-skills.md) — Thieves Guild suspension on murder
+- [`../systems/factions.md`](../systems/factions.md) — Faction kill point mechanics
+- [`../systems/virtues.md`](../systems/virtues.md) — Honor virtue interaction
+- [`../skills/combat-skills.md`](../skills/combat-skills.md) — Murderer status affects combat
+- [`../items/weapons.md`](../items/weapons.md) — Poison application by murderers
+- [`../skills/utility-skills.md`](../skills/utility-skills.md) — Thieves Guild suspension on murder

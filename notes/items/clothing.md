@@ -27,7 +27,7 @@ All clothing pieces are assigned a `Layer` at construction that determines where
 
 ## Layer System
 
-Layers define the wearable slot for each clothing item. There are **22 layer values** in `Layer.cs` that span character body slots, internal slots, and system slots.
+Layers define the wearable slot for each clothing item. `Layer.cs` defines **30 unique values** (0x00–0x1D) spanning character body slots, internal slots, and system slots (20 character-wearable, 9 internal/non-wearable, plus 4 alias/unused entries).
 
 ### Character-Wearable Layers
 
@@ -258,9 +258,9 @@ Hue changes from resource assignment are handled by the `Resource` property sett
 
 ---
 
-## AosAttributes (20 Entries)
+## AosAttributes (24 Entries)
 
-Clothing supports the same 20 AosAttributes as weapons and armor:
+Clothing supports the same 24 AosAttributes as weapons and armor:
 
 | Attribute | Display Message ID | Description |
 |-----------|-------------------|-------------|
@@ -285,8 +285,8 @@ Clothing supports the same 20 AosAttributes as weapons and armor:
 | `ReflectPhysical` | 1060442 | Reflect physical damage (%) |
 | `EnhancePotions` | 1060411 | Enhance potions (%) |
 | `Luck` | 1060436 | Luck |
-| `SpellChanneling` | 1060482 | Spell channeling |
-| `NightSight` | 1060441 | Night sight |
+| `SpellChanneling` | 1060482 | Allows casting without reagents |
+| `NightSight` | 1060441 | Night vision mode |
 | `IncreasedKarmaLoss` | 1075210 | Increased karma loss (%) — ML+ only |
 
 ---

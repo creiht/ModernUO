@@ -14,10 +14,10 @@ ModernUO uses a cumulative expansion model. The server's current expansion is st
 public enum Expansion
 {
     None,    // 0 — Base UO
-    T2A,     // 1 — Third Age
-    UOR,     // 2 — Age of Revelation
-    UOTD,    // 3 — The Dark Tide
-    LBR,     // 4 — Legends Britannia
+    T2A,     // 1 — The Second Age
+    UOR,     // 2 — Renaissance
+    UOTD,    // 3 — Third Dawn
+    LBR,     // 4 — Lord Blackthorn's Revenge
     AOS,     // 5 — Age of Shadows
     SE,      // 6 — Samurai Empire
     ML,      // 7 — Mondain's Legacy
@@ -43,17 +43,17 @@ This cumulative design means enabling expansion AOS automatically grants all fea
 | # | Level | Expansion | Core Flag | Unlocks |
 |---|-------|-----------|-----------|---------|
 | 0 | 0 | **None** | — | Base UO content |
-| 1 | 1 | **T2A** (Third Age) | `Core.T2A` | Bushido, Gargoyles intro, Tokuno, Statues, Elves |
-| 2 | 2 | **UOR** (Age of Revelation) | `Core.UOR` | Spellweaving, new creatures |
-| 3 | 3 | **UOTD** (The Dark Tide) | `Core.UOTD` | Sea-themed content |
-| 4 | 4 | **LBR** (Legends Britannia) | `Core.LBR` | New maps, creatures |
+| 1 | 1 | **T2A** (The Second Age) | `Core.T2A` | Bushido, Gargoyles intro, Tokuno, Statues, Elves |
+| 2 | 2 | **UOR** (Renaissance) | `Core.UOR` | Spellweaving, new creatures |
+| 3 | 3 | **UOTD** (Third Dawn) | `Core.UOTD` | Sea-themed content |
+| 4 | 4 | **LBR** (Lord Blackthorn's Revenge) | `Core.LBR` | New maps, creatures |
 | 5 | 5 | **AOS** (Age of Shadows) | `Core.AOS` | Mysticism, Ninjitsu, Ethics, Virtues, AOS stats, Ilshenar/Malas/TerMur |
 | 6 | 6 | **SE** (Samurai Empire) | `Core.SE` | Bushido refinement, new spells |
 | 7 | 7 | **ML** (Mondain's Legacy) | `Core.ML` | Quest system, bonus harvest, Parasitic/Darkglow poisons, skill cap bonus |
-| 8 | 8 | **SA** (Shard Age) | `Core.SA` | Gothic/Rustic housing themes |
-| 9 | 9 | **HS** (Harbinger Series) | `Core.HS` | Additional content |
-| 10 | 10 | **TOL** (The Last Refuge) | `Core.TOL` | Jungle/Shadowguard themes, full Gargoyle content |
-| 11 | 11 | **EJ** (Event Journal) | `Core.EJ` | Latest features |
+| 8 | 8 | **SA** (Stygian Abyss) | `Core.SA` | Gothic/Rustic housing themes |
+| 9 | 9 | **HS** (High Seas) | `Core.HS` | Additional content |
+| 10 | 10 | **TOL** (Time of Legends) | `Core.TOL` | Jungle/Shadowguard themes, full Gargoyle content |
+| 11 | 11 | **EJ** (Endless Journey) | `Core.EJ` | Latest features |
 
 ---
 
@@ -62,6 +62,8 @@ This cumulative design means enabling expansion AOS automatically grants all fea
 Each expansion has a `FeatureFlags` value — a bitmask of features that are enabled. These flags are cumulative, built using bitwise OR operations:
 
 ### Individual Feature Flags
+
+There are **24 individual feature flags** defined in the `FeatureFlags` enum.
 
 | Flag | Value | Unlocked At | Description |
 |------|-------|-------------|-------------|
@@ -73,14 +75,14 @@ Each expansion has a `FeatureFlags` value — a bitmask of features that are ena
 | SixthCharacterSlot | `0x00000020` | AOS | 6th character slot |
 | SE | `0x00000040` | SE | Samurai Empire |
 | ML | `0x00000080` | ML | Mondain's Legacy |
-| EighthAge | `0x00000100` | ML | Eighth Age content |
+| EighthAge | `0x00000100` | — | Eighth Age content |
 | NinthAge | `0x00000200` | ML | Crystal/Shadow custom house tiles |
 | TenthAge | `0x00000400` | — | Tenth Age content |
 | IncreasedStorage | `0x00000800` | — | Increased housing/bank storage |
 | SeventhCharacterSlot | `0x00001000` | — | 7th character slot |
 | RoleplayFaces | `0x00002000` | — | RP face options |
 | TrialAccount | `0x00004000` | — | Trial account support |
-| LiveAccount | `0x00008000` | AOS | Live account support |
+| LiveAccount | `0x00008000` | — | Live account support |
 | SA | `0x00010000` | SA | SA features |
 | HS | `0x00020000` | HS | HS features |
 | Gothic | `0x00040000` | SA | Gothic housing tiles |
@@ -121,6 +123,7 @@ Client flags control which maps and features are advertised to the game client:
 | Tokuno | `0x00000010` | T2A | Tokuno map |
 | TerMur | `0x00000020` | AOS | TerMur map |
 | KR | `0x00000040` | — | Korean client flag |
+| Unk2 | `0x00000080` | — | Unknown/unused flag |
 | UOTD | `0x00000100` | UOTD | UOTD client flag |
 
 ---
@@ -142,6 +145,8 @@ Character list flags control what appears in the client's login screen:
 | NewMovementSystem | `0x00004000` | — | New movement system |
 | NewFeluccaAreas | `0x00008000` | — | New Felucca areas |
 
+The `CharacterListFlags` enum also contains undocumented flags: `Unk1`, `OverwriteConfigButton`, `OneCharacterSlot`, `SlotLimit`, `Unk3`, and `Unk4`. The table above documents only the known/used flags.
+
 ### Cumulative Character List Flag Values
 
 ```
@@ -151,12 +156,12 @@ ExpansionUOR   = ContextMenus
 ExpansionUOTD  = ContextMenus
 ExpansionLBR   = ContextMenus
 ExpansionAOS   = ContextMenus | AOS
-ExpansionSE    = AOS | SE
-ExpansionML    = SE | ML
-ExpansionSA    = ML
-ExpansionHS    = SA
-ExpansionTOL   = HS
-ExpansionEJ    = TOL
+ExpansionSE    = ExpansionAOS | SE
+ExpansionML    = ExpansionSE | ML
+ExpansionSA    = ExpansionML
+ExpansionHS    = ExpansionSA
+ExpansionTOL   = ExpansionHS
+ExpansionEJ    = ExpansionTOL
 ```
 
 ---
@@ -297,17 +302,17 @@ None → T2A → UOR → UOTD → LBR → AOS → SE → ML → SA → HS → TO
  0      1      2      3      4     5     6     7     8     9    10    11
 
  Key milestones:
- ├─ T2A (1):  Bushido, Tokuno, Elves, Statues
- ├─ UOR (2):  Spellweaving
- ├─ UOTD (3): Sea-themed content
- ├─ LBR (4):  New maps, creatures
+ ├─ The Second Age (1):  Bushido, Tokuno, Elves, Statues
+  ├─ Renaissance (2):  Spellweaving
+  ├─ Third Dawn (3): Sea-themed content
+  ├─ Lord Blackthorn's Revenge (4):  New maps, creatures
  ├─ AOS (5):  Mysticism, Ninjitsu, Ethics, Virtues, AOS stats system, Ilshenar/Malas/TerMur
  ├─ SE (6):   Samurai Empire refinement
  ├─ ML (7):   Quest system, bonus harvest, Parasitic/Darkglow poisons, skill cap bonus
- ├─ SA (8):   Gothic/Rustic housing themes
- ├─ HS (9):   Additional content
- ├─ TOL (10): Jungle/Shadowguard themes, full Gargoyle content
- └─ EJ (11):  Latest features
+ ├─ Stygian Abyss (8):   Gothic/Rustic housing themes
+  ├─ High Seas (9):   Additional content
+  ├─ Time of Legends (10): Jungle/Shadowguard themes, full Gargoyle content
+  └─ Endless Journey (11):  Latest features
 ```
 
 ---
@@ -329,5 +334,5 @@ None → T2A → UOR → UOTD → LBR → AOS → SE → ML → SA → HS → TO
 - [Quests](../systems/quests.md) — ML quest system (ML+)
 - [Veteran Rewards](../systems/veteran-rewards.md) — skill cap bonus at level 4 (ML+)
 - [Harvesting](../systems/harvesting.md) — bonus harvest resources (ML+)
-- [Skill Table](./reference/skill-table.md) — skill expansion associations
-- [Configuration](./reference/configuration.md) — expansion-dependent config settings
+- [Skill Table](../reference/skill-table.md) — skill expansion associations
+- [Configuration](../reference/configuration.md) — expansion-dependent config settings

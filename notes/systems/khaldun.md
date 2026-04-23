@@ -8,9 +8,9 @@ The Khaldun dungeon is a self-contained puzzle dungeon generated via the `/GenKh
 - `Projects/UOContent/Engines/Khaldun/RaiseSwitch.cs` (185 lines) — switches that raise raisable items
 - `Projects/UOContent/Engines/Khaldun/KhaldunPitTeleporter.cs` (64 lines) — teleporters for the dungeon
 - `Projects/UOContent/Engines/Khaldun/PuzzleChest.cs` (842 lines) — end reward chest with cylinder puzzle
-- `Projects/UOContent/Engines/Khaldun/Books/GrimmochJournal.cs` (578 lines) — Grimmoch's 11 journal entries
+- `Projects/UOContent/Engines/Khaldun/Books/GrimmochJournal.cs` (578 lines) — Grimmoch's 9 journal entries
 - `Projects/UOContent/Engines/Khaldun/Books/LysanderNotebook.cs` (402 lines) — Lysander's 6 notebooks
-- `Projects/UOContent/Engines/Khaldun/Books/TavarasJournal.cs` (1025 lines) — Tavara's 14 journal entries
+- `Projects/UOContent/Engines/Khaldun/Books/TavarasJournal.cs` (1025 lines) — Tavara's 13 journal entries
 - `Projects/UOContent/Engines/Khaldun/Mobiles/GrimmochDrummel.cs` (106 lines) — archer NPC
 - `Projects/UOContent/Engines/Khaldun/Mobiles/LysanderGathenwale.cs` (103 lines) — mage NPC
 - `Projects/UOContent/Engines/Khaldun/Mobiles/MorgBergen.cs` (81 lines) — melee NPC
@@ -198,7 +198,7 @@ public partial class DisappearingRaiseSwitch : RaiseSwitch
 - **Flip()**: No-op (doesn't visually toggle)
 - **Reset()**: No-op (no auto-reset)
 - **OnMovement**: Calls `Refresh()` when player enters/exits range
-- **Refresh()**: Scans `GetMobilesInRange(CurrentRange)` — visible if any non-hidden or non-player mobile is present
+- **Refresh()**: Scans `GetMobilesInRange(CurrentRange)` — visible if any non-hidden mobile or any mobile with `AccessLevel <= Player` is present (hidden GMs do not trigger)
 - **Range**: 3 tiles when visible, 2 tiles when invisible
 
 ### Switch Pairing
@@ -380,13 +380,13 @@ The puzzle solving UI (`PuzzleChest.PuzzleGump`, lines 575-784):
 
 | Skill Range | Hints Shown |
 |-------------|-------------|
-| 60+ | "Lockpicking hint:" label + FirstHint |
-| 70+ | + SecondHint |
-| 80+ | First cylinder hint + FirstHint |
-| 90+ | + SecondHint |
+| 60-79 | "Lockpicking hint:" label + FirstHint (used in unknown slot) |
+| 70-79 | + SecondHint (used in unknown slot) |
+| 80-89 | First slot reveal (`Solution.First`) + FirstHint |
+| 90-99 | + SecondHint |
 | 100+ | + ThirdHint |
 
-**Note**: The first cylinder hint shows `Solution.First` (the actual first cylinder from positions 1-4), not `FirstHint`. This gives a direct hint about position 0.
+**Note**: At 80+, the hint changes from "unknown slot" hints to a direct reveal of the first cylinder's color (`Solution.First`). The first cylinder hint shows `Solution.First` (the actual first cylinder from positions 1-4), not `FirstHint`. This gives a direct hint about position 0.
 
 ### PuzzleChest Subtypes
 
@@ -604,7 +604,7 @@ All 4 Khaldun NPCs are `BaseCreature` with `AlwaysMurderer = true`, `DeleteCorps
 
 The dungeon's story is told through 3 journal books, each representing a different perspective on the same events. The books are dropped by NPCs on death (Grimmoch and Tavara ~33% chance, Lysander ~33% chance).
 
-### GrimmochJournal (11 entries)
+### GrimmochJournal (9 entries)
 
 Grimmoch Drummel's perspective — a huntsman who grows increasingly disturbed by the tomb.
 
@@ -633,7 +633,7 @@ Lysander Gathenwale's perspective — a cultist of Khal Ankur seeking dark power
 | LysanderNotebook8 | Day Eight-Ten | Workers missing, suspects they fled, vows to kill them |
 | LysanderNotebook11 | Day Eleven-Thirteen | Found Khal Ankur's path, killed 2 workers, joined the Khaldun |
 
-### TavarasJournal (14 entries)
+### TavarasJournal (13 entries)
 
 Tavara Sewel's perspective — a scholar leading the archaeological expedition.
 
@@ -694,7 +694,7 @@ Morph items are used for:
 
 ## Cross-References
 
-- [`creatures/npcs.md`](creatures/npcs.md) — Khaldun NPCs (Grimmoch, Lysander, Morg, Tavara)
-- [`items/weapons.md`](items/weapons.md) — weapons used by Khaldun NPCs (Bow, Bardiche, Kryss)
-- [`items/armor.md`](items/armor.md) — armor types used by Khaldun NPCs (Leather, Ringmail, Plate)
-- [`systems/combat.md`](systems/combat.md) — combat mechanics used by Khaldun NPCs
+- [`../creatures/npcs.md`](../creatures/npcs.md) — Khaldun NPCs (Grimmoch, Lysander, Morg, Tavara)
+- [`../items/weapons.md`](../items/weapons.md) — weapons used by Khaldun NPCs (Bow, Bardiche, Kryss)
+- [`../items/armor.md`](../items/armor.md) — armor types used by Khaldun NPCs (Leather, Ringmail, Plate)
+- [`../systems/combat.md`](../systems/combat.md) — combat mechanics used by Khaldun NPCs
