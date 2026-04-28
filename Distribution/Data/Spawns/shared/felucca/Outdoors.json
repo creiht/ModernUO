@@ -1288,29 +1288,6 @@
   },
   {
     "type": "Spawner",
-    "guid": "21abb157-384a-4001-9ba6-743cd407fe3f",
-    "name": "Spawner (213)",
-    "location": [3459, 2655, 9],
-    "map": "Felucca",
-    "count": 3,
-    "minDelay": "01:00:00",
-    "maxDelay": "01:00:00",
-    "team": 0,
-    "homeRange": 30,
-    "walkingRange": 30,
-    "entries": [
-      { "name": "Brigand", "maxCount": 3, "probability": 100 },
-      { "name": "Harpy", "maxCount": 3, "probability": 100 },
-      { "name": "Lizardman", "maxCount": 3, "probability": 100 },
-      { "name": "OrcishMage", "maxCount": 3, "probability": 100 },
-      { "name": "Orc", "maxCount": 3, "probability": 100 },
-      { "name": "Ratman", "maxCount": 3, "probability": 100 },
-      { "name": "Spectre", "maxCount": 3, "probability": 100 },
-      { "name": "Troll", "maxCount": 3, "probability": 100 }
-    ]
-  },
-  {
-    "type": "Spawner",
     "guid": "22a47de7-ed67-461f-830e-d7d395e638c4",
     "name": "Spawner (213)",
     "location": [1812, 3036, 5],
@@ -2140,29 +2117,6 @@
     "walkingRange": 30,
     "entries": [
       { "name": "Troll", "maxCount": 10, "probability": 100 }
-    ]
-  },
-  {
-    "type": "Spawner",
-    "guid": "4124fe40-7dde-4264-8393-5f92e87bdd80",
-    "name": "Spawner (213)",
-    "location": [3446, 2741, 49],
-    "map": "Felucca",
-    "count": 7,
-    "minDelay": "01:00:00",
-    "maxDelay": "01:00:00",
-    "team": 0,
-    "homeRange": 50,
-    "walkingRange": 50,
-    "entries": [
-      { "name": "Brigand", "maxCount": 7, "probability": 100 },
-      { "name": "Harpy", "maxCount": 7, "probability": 100 },
-      { "name": "Lizardman", "maxCount": 7, "probability": 100 },
-      { "name": "OrcishMage", "maxCount": 7, "probability": 100 },
-      { "name": "Orc", "maxCount": 7, "probability": 100 },
-      { "name": "Ratman", "maxCount": 7, "probability": 100 },
-      { "name": "Spectre", "maxCount": 7, "probability": 100 },
-      { "name": "Troll", "maxCount": 7, "probability": 100 }
     ]
   },
   {
@@ -4090,29 +4044,6 @@
       { "name": "Harpy", "maxCount": 5, "probability": 100 },
       { "name": "Reaper", "maxCount": 5, "probability": 100 },
       { "name": "Skeleton", "maxCount": 5, "probability": 100 }
-    ]
-  },
-  {
-    "type": "Spawner",
-    "guid": "769cc51f-efed-48b2-ba94-013f544fcb5a",
-    "name": "Spawner (213)",
-    "location": [3411, 2592, 44],
-    "map": "Felucca",
-    "count": 6,
-    "minDelay": "01:00:00",
-    "maxDelay": "01:00:00",
-    "team": 0,
-    "homeRange": 40,
-    "walkingRange": 40,
-    "entries": [
-      { "name": "Brigand", "maxCount": 6, "probability": 100 },
-      { "name": "Harpy", "maxCount": 6, "probability": 100 },
-      { "name": "Lizardman", "maxCount": 6, "probability": 100 },
-      { "name": "OrcishMage", "maxCount": 6, "probability": 100 },
-      { "name": "Orc", "maxCount": 6, "probability": 100 },
-      { "name": "Ratman", "maxCount": 6, "probability": 100 },
-      { "name": "Spectre", "maxCount": 6, "probability": 100 },
-      { "name": "Troll", "maxCount": 6, "probability": 100 }
     ]
   },
   {
@@ -6815,29 +6746,6 @@
   },
   {
     "type": "Spawner",
-    "guid": "c8211671-8686-48e8-ae56-66a5d815ecda",
-    "name": "Spawner (213)",
-    "location": [3379, 2693, 35],
-    "map": "Felucca",
-    "count": 3,
-    "minDelay": "01:00:00",
-    "maxDelay": "01:00:00",
-    "team": 0,
-    "homeRange": 30,
-    "walkingRange": 30,
-    "entries": [
-      { "name": "Brigand", "maxCount": 3, "probability": 100 },
-      { "name": "Harpy", "maxCount": 3, "probability": 100 },
-      { "name": "Lizardman", "maxCount": 3, "probability": 100 },
-      { "name": "OrcishMage", "maxCount": 3, "probability": 100 },
-      { "name": "Orc", "maxCount": 3, "probability": 100 },
-      { "name": "Ratman", "maxCount": 3, "probability": 100 },
-      { "name": "Spectre", "maxCount": 3, "probability": 100 },
-      { "name": "Troll", "maxCount": 3, "probability": 100 }
-    ]
-  },
-  {
-    "type": "Spawner",
     "guid": "c8bb9b2d-6144-4bc2-82c9-0479a8d336af",
     "name": "Spawner (213)",
     "location": [1304, 1413, 0],
@@ -7007,29 +6915,6 @@
       { "name": "Ettin", "maxCount": 8, "probability": 100 },
       { "name": "Harpy", "maxCount": 8, "probability": 100 },
       { "name": "Orc", "maxCount": 8, "probability": 100 }
-    ]
-  },
-  {
-    "type": "Spawner",
-    "guid": "cbf48240-08c5-4939-9f2b-ec6e972b25a9",
-    "name": "Spawner (213)",
-    "location": [3485, 2595, 12],
-    "map": "Felucca",
-    "count": 3,
-    "minDelay": "01:00:00",
-    "maxDelay": "01:00:00",
-    "team": 0,
-    "homeRange": 30,
-    "walkingRange": 30,
-    "entries": [
-      { "name": "Brigand", "maxCount": 3, "probability": 100 },
-      { "name": "Harpy", "maxCount": 3, "probability": 100 },
-      { "name": "Lizardman", "maxCount": 3, "probability": 100 },
-      { "name": "OrcishMage", "maxCount": 3, "probability": 100 },
-      { "name": "Orc", "maxCount": 3, "probability": 100 },
-      { "name": "Ratman", "maxCount": 3, "probability": 100 },
-      { "name": "Spectre", "maxCount": 3, "probability": 100 },
-      { "name": "Troll", "maxCount": 3, "probability": 100 }
     ]
   },
   {
@@ -8275,29 +8160,6 @@
     "entries": [
       { "name": "GiantSpider", "maxCount": 2, "probability": 100 },
       { "name": "Scorpion", "maxCount": 2, "probability": 100 }
-    ]
-  },
-  {
-    "type": "Spawner",
-    "guid": "f2e12985-afee-4b4d-8981-d50e99e1a1d6",
-    "name": "Spawner (213)",
-    "location": [3464, 2503, 49],
-    "map": "Felucca",
-    "count": 7,
-    "minDelay": "01:00:00",
-    "maxDelay": "01:00:00",
-    "team": 0,
-    "homeRange": 50,
-    "walkingRange": 50,
-    "entries": [
-      { "name": "Brigand", "maxCount": 7, "probability": 100 },
-      { "name": "Harpy", "maxCount": 7, "probability": 100 },
-      { "name": "Lizardman", "maxCount": 7, "probability": 100 },
-      { "name": "OrcishMage", "maxCount": 7, "probability": 100 },
-      { "name": "Orc", "maxCount": 7, "probability": 100 },
-      { "name": "Ratman", "maxCount": 7, "probability": 100 },
-      { "name": "Spectre", "maxCount": 7, "probability": 100 },
-      { "name": "Troll", "maxCount": 7, "probability": 100 }
     ]
   },
   {

@@ -87,6 +87,7 @@ public static partial class CharacterCreation
 
     public static readonly CityInfo[] FeluccaStartingCities =
     [
+        new("New Haven", "The Bountiful Harvest Inn", 1150168, 3503, 2574, 14, Map.Felucca),
         new("Yew", "The Empath Abbey", 1075072, 633, 858, 0, Map.Felucca),
         new("Minoc", "The Barnacle", 1075073, 2476, 413, 15, Map.Felucca),
         new("Britain", "Sweet Dreams Inn", 1075074, 1496, 1628, 10, Map.Felucca),

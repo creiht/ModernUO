@@ -541,39 +541,6 @@
   },
   {
     "type": "Spawner",
-    "guid": "19957abb-f841-4c9a-b52a-ac8c19cd0ab0",
-    "name": "Spawner (225)",
-    "location": [3674, 2289, -2],
-    "map": "Felucca",
-    "count": 1,
-    "minDelay": "00:05:00",
-    "maxDelay": "00:10:00",
-    "team": 0,
-    "homeRange": 0,
-    "walkingRange": 5,
-    "entries": [
-      { "name": "Fisherman", "maxCount": 1, "probability": 100 }
-    ]
-  },
-  {
-    "type": "Spawner",
-    "guid": "19fad4db-4751-4907-8561-8ef0a0d22959",
-    "name": "Spawner (225)",
-    "location": [3629, 2608, 0],
-    "map": "Felucca",
-    "count": 2,
-    "minDelay": "00:05:00",
-    "maxDelay": "00:10:00",
-    "team": 0,
-    "homeRange": 0,
-    "walkingRange": 5,
-    "entries": [
-      { "name": "Healer", "maxCount": 1, "probability": 100 },
-      { "name": "HealerGuildmaster", "maxCount": 1, "probability": 100 }
-    ]
-  },
-  {
-    "type": "Spawner",
     "guid": "1aa3d9a8-9ace-49cb-969e-6a4350b5ba08",
     "name": "Spawner (225)",
     "location": [2216, 1192, 0],
@@ -675,22 +642,6 @@
   },
   {
     "type": "Spawner",
-    "guid": "22666a8e-0c05-4ebd-b93e-92411a48d9c9",
-    "name": "Spawner (225)",
-    "location": [3672, 2654, 0],
-    "map": "Felucca",
-    "count": 1,
-    "minDelay": "00:05:00",
-    "maxDelay": "00:10:00",
-    "team": 0,
-    "homeRange": 0,
-    "walkingRange": 5,
-    "entries": [
-      { "name": "InnKeeper", "maxCount": 1, "probability": 100 }
-    ]
-  },
-  {
-    "type": "Spawner",
     "guid": "2325bd37-aa70-467d-a132-c77447fa333d",
     "name": "Spawner (225)",
     "location": [2963, 813, 0],
@@ -770,22 +721,6 @@
       { "name": "Mage", "maxCount": 1, "probability": 100 },
       { "name": "Alchemist", "maxCount": 1, "probability": 100 },
       { "name": "MageGuildmaster", "maxCount": 1, "probability": 100 }
-    ]
-  },
-  {
-    "type": "Spawner",
-    "guid": "279cfcf8-24e9-4390-a4e2-a507e02e89ef",
-    "name": "Spawner (225)",
-    "location": [3673, 2614, 0],
-    "map": "Felucca",
-    "count": 1,
-    "minDelay": "00:05:00",
-    "maxDelay": "00:10:00",
-    "team": 0,
-    "homeRange": 0,
-    "walkingRange": 5,
-    "entries": [
-      { "name": "InnKeeper", "maxCount": 1, "probability": 100 }
     ]
   },
   {
@@ -1549,22 +1484,6 @@
   },
   {
     "type": "Spawner",
-    "guid": "46c5c4a0-48d4-4e36-88ae-cbf18533e56b",
-    "name": "Spawner (225)",
-    "location": [3647, 2681, -2],
-    "map": "Felucca",
-    "count": 1,
-    "minDelay": "00:05:00",
-    "maxDelay": "00:10:00",
-    "team": 0,
-    "homeRange": 0,
-    "walkingRange": 5,
-    "entries": [
-      { "name": "Fisherman", "maxCount": 1, "probability": 100 }
-    ]
-  },
-  {
-    "type": "Spawner",
     "guid": "4723e0e9-a7e0-4657-9e74-0610afdf5a24",
     "name": "Spawner (225)",
     "location": [2920, 856, 0],
@@ -1598,24 +1517,6 @@
   },
   {
     "type": "Spawner",
-    "guid": "47601b12-bda9-4dab-92db-13ba9022ebaf",
-    "name": "Spawner (225)",
-    "location": [3667, 2586, 0],
-    "map": "Felucca",
-    "count": 3,
-    "minDelay": "00:05:00",
-    "maxDelay": "00:10:00",
-    "team": 0,
-    "homeRange": 0,
-    "walkingRange": 5,
-    "entries": [
-      { "name": "Tailor", "maxCount": 1, "probability": 100 },
-      { "name": "Weaver", "maxCount": 1, "probability": 100 },
-      { "name": "TailorGuildmaster", "maxCount": 1, "probability": 100 }
-    ]
-  },
-  {
-    "type": "Spawner",
     "guid": "4a3ad267-fe69-4133-8021-6a46265945e8",
     "name": "Spawner (225)",
     "location": [2906, 3485, 10],
@@ -1628,22 +1529,6 @@
     "walkingRange": 5,
     "entries": [
       { "name": "Butcher", "maxCount": 1, "probability": 100 }
-    ]
-  },
-  {
-    "type": "Spawner",
-    "guid": "4cc10b14-a086-4781-84ff-f656af24f44e",
-    "name": "Spawner (225)",
-    "location": [3665, 2140, 20],
-    "map": "Felucca",
-    "count": 1,
-    "minDelay": "00:05:00",
-    "maxDelay": "00:10:00",
-    "team": 0,
-    "homeRange": 0,
-    "walkingRange": 5,
-    "entries": [
-      { "name": "MinerGuildmaster", "maxCount": 1, "probability": 100 }
     ]
   },
   {
@@ -1791,22 +1676,6 @@
     "walkingRange": 5,
     "entries": [
       { "name": "Fisherman", "maxCount": 1, "probability": 100 }
-    ]
-  },
-  {
-    "type": "Spawner",
-    "guid": "56b03849-fb73-4883-8368-9f0a01df0403",
-    "name": "Spawner (225)",
-    "location": [3708, 2649, 20],
-    "map": "Felucca",
-    "count": 1,
-    "minDelay": "00:05:00",
-    "maxDelay": "00:10:00",
-    "team": 0,
-    "homeRange": 0,
-    "walkingRange": 5,
-    "entries": [
-      { "name": "Butcher", "maxCount": 1, "probability": 100 }
     ]
   },
   {
@@ -2515,22 +2384,6 @@
   },
   {
     "type": "Spawner",
-    "guid": "7acbc3b8-8176-40ce-8d76-848b7ce1bedc",
-    "name": "Spawner (225)",
-    "location": [3665, 2531, 0],
-    "map": "Felucca",
-    "count": 1,
-    "minDelay": "00:05:00",
-    "maxDelay": "00:10:00",
-    "team": 0,
-    "homeRange": 0,
-    "walkingRange": 5,
-    "entries": [
-      { "name": "BardGuildmaster", "maxCount": 1, "probability": 100 }
-    ]
-  },
-  {
-    "type": "Spawner",
     "guid": "7b2c31b7-20c9-46b8-9cd1-6b624a505c01",
     "name": "Spawner (225)",
     "location": [1880, 2802, 0],
@@ -3040,24 +2893,6 @@
   },
   {
     "type": "Spawner",
-    "guid": "912580fa-084c-4ad0-ae90-e3dec3330cad",
-    "name": "Spawner (225)",
-    "location": [3628, 2541, 0],
-    "map": "Felucca",
-    "count": 3,
-    "minDelay": "00:05:00",
-    "maxDelay": "00:10:00",
-    "team": 0,
-    "homeRange": 0,
-    "walkingRange": 5,
-    "entries": [
-      { "name": "Mage", "maxCount": 1, "probability": 100 },
-      { "name": "Alchemist", "maxCount": 1, "probability": 100 },
-      { "name": "MageGuildmaster", "maxCount": 1, "probability": 100 }
-    ]
-  },
-  {
-    "type": "Spawner",
     "guid": "9240f638-d05a-4e70-93bc-8be1c163e508",
     "name": "Spawner (225)",
     "location": [1427, 1716, 20],
@@ -3145,23 +2980,6 @@
   },
   {
     "type": "Spawner",
-    "guid": "9808a90b-2ba1-4951-a011-a5ca40a24c8b",
-    "name": "Spawner (225)",
-    "location": [3632, 2595, 0],
-    "map": "Felucca",
-    "count": 2,
-    "minDelay": "00:05:00",
-    "maxDelay": "00:10:00",
-    "team": 0,
-    "homeRange": 0,
-    "walkingRange": 5,
-    "entries": [
-      { "name": "Armorer", "maxCount": 1, "probability": 100 },
-      { "name": "Weaponsmith", "maxCount": 1, "probability": 100 }
-    ]
-  },
-  {
-    "type": "Spawner",
     "guid": "98952a90-a316-4809-a85f-d5840e2f6716",
     "name": "Spawner (225)",
     "location": [5300, 90, 15],
@@ -3197,22 +3015,6 @@
   },
   {
     "type": "Spawner",
-    "guid": "992f2215-28dd-466b-aa19-25b5d0089c1a",
-    "name": "Spawner (225)",
-    "location": [3612, 2466, 0],
-    "map": "Felucca",
-    "count": 1,
-    "minDelay": "00:05:00",
-    "maxDelay": "00:10:00",
-    "team": 0,
-    "homeRange": 0,
-    "walkingRange": 5,
-    "entries": [
-      { "name": "Scribe", "maxCount": 1, "probability": 100 }
-    ]
-  },
-  {
-    "type": "Spawner",
     "guid": "997c3a7c-c590-4bd7-a2a7-f3b839ad0fd6",
     "name": "Spawner (225)",
     "location": [2505, 432, 15],
@@ -3225,23 +3027,6 @@
     "walkingRange": 5,
     "entries": [
       { "name": "MinerGuildmaster", "maxCount": 1, "probability": 100 }
-    ]
-  },
-  {
-    "type": "Spawner",
-    "guid": "99dbe037-b50c-43b1-b490-94940fbe4cf9",
-    "name": "Spawner (225)",
-    "location": [3695, 2511, 0],
-    "map": "Felucca",
-    "count": 2,
-    "minDelay": "00:05:00",
-    "maxDelay": "00:10:00",
-    "team": 0,
-    "homeRange": 0,
-    "walkingRange": 5,
-    "entries": [
-      { "name": "Banker", "maxCount": 1, "probability": 100 },
-      { "name": "Minter", "maxCount": 1, "probability": 100 }
     ]
   },
   {
@@ -3877,23 +3662,6 @@
   },
   {
     "type": "Spawner",
-    "guid": "b5a5d0c9-fa97-4709-9804-097f6bb733ce",
-    "name": "Spawner (225)",
-    "location": [3636, 2565, 0],
-    "map": "Felucca",
-    "count": 2,
-    "minDelay": "00:05:00",
-    "maxDelay": "00:10:00",
-    "team": 0,
-    "homeRange": 0,
-    "walkingRange": 5,
-    "entries": [
-      { "name": "Provisioner", "maxCount": 1, "probability": 100 },
-      { "name": "Cobbler", "maxCount": 1, "probability": 100 }
-    ]
-  },
-  {
-    "type": "Spawner",
     "guid": "b9ebd4f7-d90e-4664-be98-a53c91926c79",
     "name": "Spawner (225)",
     "location": [1231, 1714, 0],
@@ -3990,22 +3758,6 @@
     "entries": [
       { "name": "Armorer", "maxCount": 1, "probability": 100 },
       { "name": "Weaponsmith", "maxCount": 1, "probability": 100 }
-    ]
-  },
-  {
-    "type": "Spawner",
-    "guid": "bdb81c0f-d54b-4054-91a3-485614472f6f",
-    "name": "Spawner (225)",
-    "location": [3610, 2577, 0],
-    "map": "Felucca",
-    "count": 1,
-    "minDelay": "00:05:00",
-    "maxDelay": "00:10:00",
-    "team": 0,
-    "homeRange": 0,
-    "walkingRange": 5,
-    "entries": [
-      { "name": "Baker", "maxCount": 1, "probability": 100 }
     ]
   },
   {
@@ -4882,23 +4634,6 @@
   },
   {
     "type": "Spawner",
-    "guid": "e558f44a-c896-4b7a-ac0e-d45a0c1672b3",
-    "name": "Spawner (225)",
-    "location": [3602, 2615, 0],
-    "map": "Felucca",
-    "count": 2,
-    "minDelay": "00:05:00",
-    "maxDelay": "00:10:00",
-    "team": 0,
-    "homeRange": 0,
-    "walkingRange": 5,
-    "entries": [
-      { "name": "Tanner", "maxCount": 1, "probability": 100 },
-      { "name": "Furtrader", "maxCount": 1, "probability": 100 }
-    ]
-  },
-  {
-    "type": "Spawner",
     "guid": "e59444cb-2d90-4137-85bc-e4e15e18e6a9",
     "name": "Spawner (225)",
     "location": [1493, 1616, 20],
@@ -5061,23 +4796,6 @@
     "walkingRange": 5,
     "entries": [
       { "name": "MerchantGuildmaster", "maxCount": 1, "probability": 100 }
-    ]
-  },
-  {
-    "type": "Spawner",
-    "guid": "ed469ec1-25ae-4d8c-ab82-32d94428571c",
-    "name": "Spawner (225)",
-    "location": [3632, 2640, 0],
-    "map": "Felucca",
-    "count": 2,
-    "minDelay": "00:05:00",
-    "maxDelay": "00:10:00",
-    "team": 0,
-    "homeRange": 0,
-    "walkingRange": 5,
-    "entries": [
-      { "name": "Shipwright", "maxCount": 1, "probability": 100 },
-      { "name": "Mapmaker", "maxCount": 1, "probability": 100 }
     ]
   },
   {
