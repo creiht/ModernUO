@@ -4602,23 +4602,6 @@
   },
   {
     "type": "Spawner",
-    "guid": "87bb1dc1-dc09-44cf-b2cc-1b72e55ac804",
-    "name": "Spawner (213)",
-    "location": [3602, 2815, 28],
-    "map": "Felucca",
-    "count": 1,
-    "minDelay": "00:45:00",
-    "maxDelay": "01:00:00",
-    "team": 0,
-    "homeRange": 1,
-    "walkingRange": 10,
-    "entries": [
-      { "name": "OrcCamp", "maxCount": 1, "probability": 100 },
-      { "name": "RatCamp", "maxCount": 1, "probability": 100 }
-    ]
-  },
-  {
-    "type": "Spawner",
     "guid": "87e84f7b-43c8-41fc-9891-000423b0afb8",
     "name": "Spawner (213)",
     "location": [1595, 3045, 0],

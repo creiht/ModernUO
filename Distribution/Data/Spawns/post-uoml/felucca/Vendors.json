@@ -897,22 +897,6 @@
   },
   {
     "type": "Spawner",
-    "guid": "044b2029-6882-4e73-90ff-e23baf6f6067",
-    "name": "Spawner (125)",
-    "location": [3555, 2698, 5],
-    "map": "Felucca",
-    "count": 1,
-    "minDelay": "00:05:00",
-    "maxDelay": "00:10:00",
-    "team": 0,
-    "homeRange": 0,
-    "walkingRange": 2,
-    "entries": [
-      { "name": "Dryad", "maxCount": 1, "probability": 100 }
-    ]
-  },
-  {
-    "type": "Spawner",
     "guid": "70c30dc7-1d69-4bac-9767-3e4a869f3f0f",
     "name": "Spawner (125)",
     "location": [3545, 2563, 5],
