@@ -1026,3 +1026,39 @@ public partial class ConditionTeleporter : Teleporter
         DeadOnly = 0x100
     }
 }
+
+[SerializationGenerator(0, false)]
+public partial class RopeTeleporter : Teleporter
+{
+    [Constructible]
+    public RopeTeleporter
+    [Constructible]
+    public Teleporter(Point3D pointDest, Map mapDest = null) : base(pointDest, mapDest)
+    {
+        Visible = true;
+        ItemID = 0x14FA;
+    }
+
+    public override bool OnMoveOver(Mobile m) => true;
+
+    public override void OnDoubleClick(Mobile m)
+    {
+        base.OnDoubleClick(m);
+
+        if (Active && CanTeleport(m))
+        {
+            if (!m.InRange(GetWorldLocation(), 1))
+            {
+                return;
+            }
+
+            StartTeleport(m);
+
+        }
+    }
+
+    public override void OnDoubleClickDead(Mobile m)
+    {
+        return OnDoubleClick(m);
+    }
+}

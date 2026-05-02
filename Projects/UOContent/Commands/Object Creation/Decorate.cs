@@ -885,6 +885,75 @@ namespace Server.Commands
                     kt.ItemID = m_ItemID;
                 }
             }
+            else if (item is RopeTeleporter tp)
+            {
+                for (var i = 0; i < m_Params.Length; ++i)
+                {
+                    if (m_Params[i].StartsWithOrdinal("PointDest"))
+                    {
+                        var indexOf = m_Params[i].IndexOfOrdinal('=');
+
+                        if (indexOf >= 0)
+                        {
+                            tp.PointDest = Point3D.Parse(m_Params[i][++indexOf..]);
+                        }
+                    }
+                    else if (m_Params[i].StartsWithOrdinal("MapDest"))
+                    {
+                        var indexOf = m_Params[i].IndexOfOrdinal('=');
+
+                        if (indexOf >= 0)
+                        {
+                            tp.MapDest = Map.Parse(m_Params[i][++indexOf..]);
+                        }
+                    }
+                    else if (m_Params[i].StartsWithOrdinal("Creatures"))
+                    {
+                        var indexOf = m_Params[i].IndexOfOrdinal('=');
+
+                        if (indexOf >= 0)
+                        {
+                            tp.Creatures = Utility.ToBoolean(m_Params[i][++indexOf..]);
+                        }
+                    }
+                    else if (m_Params[i].StartsWithOrdinal("SourceEffect"))
+                    {
+                        var indexOf = m_Params[i].IndexOfOrdinal('=');
+
+                        if (indexOf >= 0)
+                        {
+                            tp.SourceEffect = Utility.ToBoolean(m_Params[i][++indexOf..]);
+                        }
+                    }
+                    else if (m_Params[i].StartsWithOrdinal("DestEffect"))
+                    {
+                        var indexOf = m_Params[i].IndexOfOrdinal('=');
+
+                        if (indexOf >= 0)
+                        {
+                            tp.DestEffect = Utility.ToBoolean(m_Params[i][++indexOf..]);
+                        }
+                    }
+                    else if (m_Params[i].StartsWithOrdinal("SoundID"))
+                    {
+                        var indexOf = m_Params[i].IndexOfOrdinal('=');
+
+                        if (indexOf >= 0)
+                        {
+                            tp.SoundID = Utility.ToInt32(m_Params[i].AsSpan()[++indexOf..]);
+                        }
+                    }
+                    else if (m_Params[i].StartsWithOrdinal("Delay"))
+                    {
+                        var indexOf = m_Params[i].IndexOfOrdinal('=');
+
+                        if (indexOf >= 0)
+                        {
+                            tp.Delay = TimeSpan.Parse(m_Params[i][++indexOf..]);
+                        }
+                    }
+                }
+            }
             else if (item is Teleporter tp)
             {
                 for (var i = 0; i < m_Params.Length; ++i)
