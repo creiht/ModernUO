@@ -885,8 +885,10 @@ namespace Server.Commands
                     kt.ItemID = m_ItemID;
                 }
             }
-            else if (item is RopeTeleporter rtp)
+            else if (item is InteractionTeleporter itp)
             {
+                itp.ItemID = m_ItemID;
+                
                 for (var i = 0; i < m_Params.Length; ++i)
                 {
                     if (m_Params[i].StartsWithOrdinal("PointDest"))
@@ -895,7 +897,7 @@ namespace Server.Commands
 
                         if (indexOf >= 0)
                         {
-                            rtp.PointDest = Point3D.Parse(m_Params[i][++indexOf..]);
+                            itp.PointDest = Point3D.Parse(m_Params[i][++indexOf..]);
                         }
                     }
                     else if (m_Params[i].StartsWithOrdinal("MapDest"))
@@ -904,16 +906,7 @@ namespace Server.Commands
 
                         if (indexOf >= 0)
                         {
-                            rtp.MapDest = Map.Parse(m_Params[i][++indexOf..]);
-                        }
-                    }
-                    else if (m_Params[i].StartsWithOrdinal("Creatures"))
-                    {
-                        var indexOf = m_Params[i].IndexOfOrdinal('=');
-
-                        if (indexOf >= 0)
-                        {
-                            rtp.Creatures = Utility.ToBoolean(m_Params[i][++indexOf..]);
+                            itp.MapDest = Map.Parse(m_Params[i][++indexOf..]);
                         }
                     }
                     else if (m_Params[i].StartsWithOrdinal("SourceEffect"))
@@ -922,7 +915,7 @@ namespace Server.Commands
 
                         if (indexOf >= 0)
                         {
-                            rtp.SourceEffect = Utility.ToBoolean(m_Params[i][++indexOf..]);
+                            itp.SourceEffect = Utility.ToBoolean(m_Params[i][++indexOf..]);
                         }
                     }
                     else if (m_Params[i].StartsWithOrdinal("DestEffect"))
@@ -931,7 +924,7 @@ namespace Server.Commands
 
                         if (indexOf >= 0)
                         {
-                            rtp.DestEffect = Utility.ToBoolean(m_Params[i][++indexOf..]);
+                            itp.DestEffect = Utility.ToBoolean(m_Params[i][++indexOf..]);
                         }
                     }
                     else if (m_Params[i].StartsWithOrdinal("SoundID"))
@@ -940,7 +933,7 @@ namespace Server.Commands
 
                         if (indexOf >= 0)
                         {
-                            rtp.SoundID = Utility.ToInt32(m_Params[i].AsSpan()[++indexOf..]);
+                            itp.SoundID = Utility.ToInt32(m_Params[i].AsSpan()[++indexOf..]);
                         }
                     }
                     else if (m_Params[i].StartsWithOrdinal("Delay"))
@@ -949,7 +942,16 @@ namespace Server.Commands
 
                         if (indexOf >= 0)
                         {
-                            rtp.Delay = TimeSpan.Parse(m_Params[i][++indexOf..]);
+                            itp.Delay = TimeSpan.Parse(m_Params[i][++indexOf..]);
+                        }
+                    }
+                    else if (m_Params[i].StartsWithOrdinal("Name"))
+                    {
+                        var indexOf = m_Params[i].IndexOfOrdinal('=');
+
+                        if (indexOf >= 0)
+                        {
+                            item.Name = m_Params[i][++indexOf..];
                         }
                     }
                 }
