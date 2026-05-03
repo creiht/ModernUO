@@ -1031,9 +1031,15 @@ public partial class ConditionTeleporter : Teleporter
 public partial class RopeTeleporter : Teleporter
 {
     [Constructible]
-    public RopeTeleporter
+    public RopeTeleporter()
+    {
+        Visible = true;
+        ItemID = 0x14FA;
+        Name = "a sturdy rope";
+    }
+
     [Constructible]
-    public Teleporter(Point3D pointDest, Map mapDest = null) : base(pointDest, mapDest)
+    public RopeTeleporter(Point3D pointDest, Map mapDest = null) : base(pointDest, mapDest)
     {
         Visible = true;
         ItemID = 0x14FA;
@@ -1045,20 +1051,22 @@ public partial class RopeTeleporter : Teleporter
     {
         base.OnDoubleClick(m);
 
-        if (Active && CanTeleport(m))
+        if (Active && CanTeleport(m) && m.InRange(GetWorldLocation(), 2))
         {
-            if (!m.InRange(GetWorldLocation(), 1))
-            {
-                return;
-            }
-
             StartTeleport(m);
-
         }
     }
 
     public override void OnDoubleClickDead(Mobile m)
     {
-        return OnDoubleClick(m);
+        OnDoubleClick(m);
+    }
+
+    public override void SendPropertiesTo(NetState ns)
+    {
+        if (ns.Account.AccessLevel >= AccessLevel.GameMaster)
+        {
+            base.SendPropertiesTo(ns);
+        }
     }
 }
