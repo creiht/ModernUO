@@ -218,24 +218,6 @@
   },
   {
     "type": "Spawner",
-    "guid": "6301492f-d4ed-4f24-afb2-cbbedb68afe6",
-    "name": "Spawner (223)",
-    "location": [3645, 2661, -2],
-    "map": "Felucca",
-    "count": 3,
-    "minDelay": "00:05:00",
-    "maxDelay": "00:10:00",
-    "team": 0,
-    "homeRange": 10,
-    "walkingRange": 20,
-    "entries": [
-      { "name": "EscortableMage", "maxCount": 3, "probability": 100 },
-      { "name": "SeekerOfAdventure", "maxCount": 3, "probability": 100 },
-      { "name": "Noble", "maxCount": 3, "probability": 100 }
-    ]
-  },
-  {
-    "type": "Spawner",
     "guid": "63416791-9505-4a1e-ab72-91c9438612df",
     "name": "Spawner (223)",
     "location": [1483, 1760, -2],

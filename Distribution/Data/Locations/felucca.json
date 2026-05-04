@@ -321,11 +321,13 @@
           ]
         },
         {
-          "name": "Ocllo",
+          "name": "Haven",
           "locations": [
-            { "name": "Docks", "location": [3650, 2653, 0] },
-            { "name": "Farmlands", "location": [3722, 2647, 20] },
-            { "name": "North", "location": [3650, 2516, 0] }
+            { "name": "Old Haven", "location": [3650, 2592, 0] },
+            { "name": "Old Haven North", "location": [3650, 2516, 0] },
+            { "name": "New Haven", "location": [3506, 2570, 14] },
+            { "name": "New Haven North", "location": [3502, 2475, 34] },
+            { "name": "Farmlands", "location": [3722, 2647, 20] }
           ]
         },
         {
