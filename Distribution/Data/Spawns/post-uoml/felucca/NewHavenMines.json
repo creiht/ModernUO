@@ -2,7 +2,7 @@
   {
     "type": "Spawner",
     "guid": "1d962bd2-42e4-40f1-9dc6-2c26ca68ec1c",
-    "name": "Spawner (New Haven Mine Lizardmen)",
+    "name": "Spawner (NH Mine Lizardmen)",
     "location": [5953, 318, 1],
     "map": "Felucca",
     "count": 4,
@@ -18,7 +18,7 @@
   {
     "type": "Spawner",
     "guid": "f6f5cf34-2797-40cc-84f3-149f873a66c3",
-    "name": "Spawner (New Haven Mine Ogre Lords)",
+    "name": "Spawner (NH Mine Ogre Lords)",
     "location": [5923, 319, 22],
     "map": "Felucca",
     "count": 1,
@@ -34,7 +34,7 @@
   {
     "type": "Spawner",
     "guid": "132cdcf2-19ff-4961-9e00-deb005961859",
-    "name": "Spawner (New Haven Mine Ogre Lords)",
+    "name": "Spawner (NH Mine Ogre Lords)",
     "location": [5951, 345, -22],
     "map": "Felucca",
     "count": 1,
@@ -50,7 +50,7 @@
   {
     "type": "Spawner",
     "guid": "9e5562e7-a5bb-4a19-a9bb-3bb8239ad31a",
-    "name": "Spawner (New Haven Mine Ogre Lords)",
+    "name": "Spawner (NH Mine Ogre Lords)",
     "location": [5977, 320, -22],
     "map": "Felucca",
     "count": 1,
@@ -66,7 +66,7 @@
   {
     "type": "Spawner",
     "guid": "e8e766be-4928-4db7-8b0a-5b6a69e09309",
-    "name": "Spawner (New Haven Mine Ogre Lords)",
+    "name": "Spawner (NH Mine Ogre Lords)",
     "location": [5951, 289, 22],
     "map": "Felucca",
     "count": 1,
@@ -82,7 +82,7 @@
   {
     "type": "Spawner",
     "guid": "61d195fd-f7bc-42b9-a9cb-a1cd3db75c51",
-    "name": "Spawner (New Haven Mine Earth Elementals)",
+    "name": "Spawner (NH Mine Earth Elementals)",
     "location": [5916, 284, 0],
     "map": "Felucca",
     "count": 2,
@@ -98,7 +98,7 @@
   {
     "type": "Spawner",
     "guid": "983b46a5-2908-4294-b44f-0d093688f558",
-    "name": "Spawner (New Haven Mine Earth Elementals)",
+    "name": "Spawner (NH Mine Earth Elementals)",
     "location": [5986, 284, 0],
     "map": "Felucca",
     "count": 2,
@@ -114,7 +114,7 @@
   {
     "type": "Spawner",
     "guid": "12aae1f5-3df2-4365-be0d-ec54cd807abd",
-    "name": "Spawner (New Haven Mine Earth Elementals)",
+    "name": "Spawner (NH Mine Earth Elementals)",
     "location": [5986, 354, 0],
     "map": "Felucca",
     "count": 2,
@@ -125,6 +125,86 @@
     "walkingRange": 20,
     "entries": [
       { "name": "earthelemental", "probability": 100, "maxCount": 2 }
+    ]
+  },
+  {
+    "type": "Spawner",
+    "guid": "e665c2e1-12ca-4cf7-bf69-17f470df185c",
+    "name": "Spawner (NH Treasure Chests)",
+    "location": [5952, 318, 1],
+    "map": "Felucca",
+    "count": 4,
+    "minDelay": "00:30:00",
+    "maxDelay": "01:00:00",
+    "team": 0,
+    "homeRange": 10,
+    "walkingRange": 10,
+    "entries": [
+      { "name": "TreasureChestLevel1", "maxCount": 4, "probability": 100 }
+    ]
+  },
+  {
+    "type": "Spawner",
+    "guid": "95128132-70f1-4440-85be-f114d2e4e392",
+    "name": "Spawner (NH Treasure Chests)",
+    "location": [5922, 319, 22],
+    "map": "Felucca",
+    "count": 1,
+    "minDelay": "00:30:00",
+    "maxDelay": "01:00:00",
+    "team": 0,
+    "homeRange": 5,
+    "walkingRange": 5,
+    "entries": [
+      { "name": "TreasureChestLevel2", "maxCount": 1, "probability": 100 }
+    ]
+  },
+  {
+    "type": "Spawner",
+    "guid": "fc215695-6ce8-43f6-9c80-d8757a4d6ad4",
+    "name": "Spawner (NH Treasure Chests)",
+    "location": [5951, 344, -22],
+    "map": "Felucca",
+    "count": 1,
+    "minDelay": "00:30:00",
+    "maxDelay": "01:00:00",
+    "team": 0,
+    "homeRange": 5,
+    "walkingRange": 5,
+    "entries": [
+      { "name": "TreasureChestLevel2", "maxCount": 1, "probability": 100 }
+    ]
+  },
+  {
+    "type": "Spawner",
+    "guid": "43b1d6dd-9cd1-42df-b018-e4c3e7082a3e",
+    "name": "Spawner (NH Treasure Chests)",
+    "location": [5976, 320, -22],
+    "map": "Felucca",
+    "count": 1,
+    "minDelay": "00:30:00",
+    "maxDelay": "01:00:00",
+    "team": 0,
+    "homeRange": 5,
+    "walkingRange": 5,
+    "entries": [
+      { "name": "TreasureChestLevel2", "maxCount": 1, "probability": 100 }
+    ]
+  },
+  {
+    "type": "Spawner",
+    "guid": "b0b4c5f7-4d2b-46b3-a015-34dc1278f144",
+    "name": "Spawner (NH Treasure Chests)",
+    "location": [5952, 289, 22],
+    "map": "Felucca",
+    "count": 1,
+    "minDelay": "00:30:00",
+    "maxDelay": "01:00:00",
+    "team": 0,
+    "homeRange": 5,
+    "walkingRange": 5,
+    "entries": [
+      { "name": "TreasureChestLevel2", "maxCount": 1, "probability": 100 }
     ]
   }
 ]
