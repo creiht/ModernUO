@@ -12,110 +12,110 @@ namespace Server;
 
 public enum MusicName
 {
-    Invalid = -1,
-    OldUlt01 = 0,
-    Create1,
-    DragFlit,
-    OldUlt02,
-    OldUlt03,
-    OldUlt04,
-    OldUlt05,
-    OldUlt06,
-    Stones2,
-    Britain1,
-    Britain2,
-    Bucsden,
-    Jhelom,
-    LBCastle,
-    Linelle,
-    Magincia,
-    Minoc,
-    Ocllo,
-    Samlethe,
-    Serpents,
-    Skarabra,
-    Trinsic,
-    Vesper,
-    Wind,
-    Yew,
-    Cave01,
-    Dungeon9,
-    Forest_a,
-    InTown01,
-    Jungle_a,
-    Mountn_a,
-    Plains_a,
-    Sailing,
-    Swamp_a,
-    Tavern01,
-    Tavern02,
-    Tavern03,
-    Tavern04,
-    Combat1,
-    Combat2,
-    Combat3,
-    Approach,
-    Death,
-    Victory,
-    BTCastle,
-    Nujelm,
-    Dungeon2,
-    Cove,
-    Moonglow,
-    Zento,
-    TokunoDungeon,
-    Taiko,
-    DreadHornArea,
-    ElfCity,
-    GrizzleDungeon,
-    MelisandesLair,
-    ParoxysmusLair,
-    GwennoConversation,
-    GoodEndGame,
-    GoodVsEvil,
-    GreatEarthSerpents,
-    Humanoids_U9,
-    MinocNegative,
-    Paws,
-    SelimsBar,
-    SerpentIsleCombat_U7,
-    ValoriaShips,
-    TheWanderer,
-    Castle,
-    Festival,
-    Honor,
-    Medieval,
-    BattleOnStones,
-    Docktown,
-    GargoyleQueen,
-    GenericCombat,
-    Holycity,
-    HumanLevel,
-    LoginLoop,
-    NorthernForestBattleonStones,
-    PrimevalLich,
-    QueenPalace,
-    RoyalCity,
-    SlasherVeil,
-    StygianAbyss,
-    StygianDragon,
-    Void,
-    CodexShrine,
-    AnvilStrikeInMinoc,
-    ASkaranLullaby,
-    BlackthornsMarch,
-    DupresNightInTrinsic,
-    FayaxionAndTheSix,
-    FlightOfTheNexus,
-    GalehavenJaunt,
-    JhelomToArms,
-    MidnightInYew,
-    MoonglowSonata,
-    NewMaginciaMarch,
-    NujelmWaltz,
-    SherrysSong,
-    StarlightInBritain,
-    TheVesperMist,
+    Invalid = -1,   // File listed in default `Config.txt`
+    OldUlt01 = 0,   // turfin,loop
+    Create1,        // turfin,loop
+    DragFlit,       // turfin,loop
+    OldUlt02,       // turfin,loop
+    OldUlt03,       // turfin,loop
+    OldUlt04,       // turfin,loop
+    OldUlt05,       // turfin,loop
+    OldUlt06,       // turfin,loop
+    Stones2,        // stones1
+    Britain1,       // britainpos,loop
+    Britain2,       // britain1
+    Bucsden,        // bucsden,loop
+    Jhelom,         // jhelom
+    LBCastle,       // lbc
+    Linelle,        // linelle
+    Magincia,       // newmagincia,loop
+    Minoc,          // minocpos,loop
+    Ocllo,          // valoriapos,loop
+    Samlethe,       // ambrosia,loop
+    Serpents,       // stones
+    Skarabra,       // scarabreapos,loop
+    Trinsic,        // trinsicpos,loop
+    Vesper,         // vesper1
+    Wind,           // yew1
+    Yew,            // yewpos,loop
+    Cave01,         // dungeon
+    Dungeon9,       // dragonshi,loop
+    Forest_a,       // citynightedit,loop
+    InTown01,       // walking,loop
+    Jungle_a,       // citynightedit,loop
+    Mountn_a,       // walking,loop
+    Plains_a,       // citynightedit,loop
+    Sailing,        // boattravel
+    Swamp_a,        // citynightedit,loop
+    Tavern01,       // tavern1
+    Tavern02,       // tavern2
+    Tavern03,       // tavern3
+    Tavern04,       // pubtune,loop
+    Combat1,        // goodevil,loop
+    Combat2,        // humanoids,loop
+    Combat3,        // gargoyles,loop
+    Approach,       // turfin,loop
+    Death,          // deathtune
+    Victory,        // victory
+    BTCastle,       // overlordv2
+    Nujelm,         // nujelm
+    Dungeon2,       // ragonslo,loop
+    Cove,           // cove,loop
+    Moonglow,       // moonglowpos,loop
+    Zento,          // zento,loop
+    TokunoDungeon,  // tokunodungeon,loop
+    Taiko,          // taiko,loop
+    DreadHornArea,  // dread_horn_area,loop
+    ElfCity,        // elf_city_1,loop
+    GrizzleDungeon, // grizzle_dungeon,loop
+    MelisandesLair, // melisandes_lair,loop
+    ParoxysmusLair, // paroxysmus_lair,loop
+    GwennoConversation, // ConversationWithGwenno.mp3
+    GoodEndGame,    // GoodEndGame.mp3
+    GoodVsEvil,     // GoodVsEvil.mp3
+    GreatEarthSerpents, // GreatEarthSerpentsTheme.mp3
+    Humanoids_U9,   // HumanoidsU9.mp3
+    MinocNegative,  // MinocNegative.mp3
+    Paws,           // Paws.mp3
+    SelimsBar,      // SelimsBar.mp3
+    SerpentIsleCombat_U7,   // UltimaVIISerpentIsleCombat.mp3
+    ValoriaShips,   // ValoriaShips.mp3
+    TheWanderer,    // TheWanderer.mp3
+    Castle,         // Castle.mp3
+    Festival,       // Festival.mp3
+    Honor,          // Honor.mp3
+    Medieval,       // Medieval.mp3
+    BattleOnStones, // BattleOnStones.mp3
+    Docktown,       // Docktown.mp3
+    GargoyleQueen,  // GargoyleQueen.mp3
+    GenericCombat,  // GenericCombat.mp3
+    Holycity,       // Holycity.mp3 
+    HumanLevel,     // HumanLevel.mp3
+    LoginLoop,      // LoginLoop.mp3,loop
+    NorthernForestBattleonStones,   // NorthernForestBattleonStones.mp3
+    PrimevalLich,   // PrimevalLich.mp3
+    QueenPalace,    // QueenPalace.mp3
+    RoyalCity,      // RoyalCity.mp3
+    SlasherVeil,    // SlasherVeil.mp3
+    StygianAbyss,   // StygianAbyss.mp3
+    StygianDragon,  // StygianDragon.mp3 
+    Void,           // Void.mp3
+    CodexShrine,    // CodexShrine.mp3
+    AnvilStrikeInMinoc, // AnvilStrikeInMinoc.mp3
+    ASkaranLullaby,     // ASkaranLullaby.mp3
+    BlackthornsMarch,   // BlackthornsMarch.mp3
+    DupresNightInTrinsic,   // DupresNightInTrinsic.mp3
+    FayaxionAndTheSix,  // FayaxionAndTheSix.mp3
+    FlightOfTheNexus,   // FlightOfTheNexus.mp3
+    GalehavenJaunt,     // GalehavenJaunt.mp3
+    JhelomToArms,       // JhelomToArms.mp3
+    MidnightInYew,      // MidnightInYew.mp3
+    MoonglowSonata,     // MoonglowSonata.mp3
+    NewMaginciaMarch,   // NewMaginciaMarch.mp3
+    NujelmWaltz,        // NujelmWaltz.mp3
+    SherrysSong,        // SherrysSong.mp3
+    StarlightInBritain, // StarlightInBritain.mp3
+    TheVesperMist,      // TheVesperMist.mp3
     NoMusic = 0x1FFF
 }
 
