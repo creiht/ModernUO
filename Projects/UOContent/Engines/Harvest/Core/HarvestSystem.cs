@@ -248,6 +248,15 @@ namespace Server.Engines.Harvest
             }
 
             OnHarvestFinished(from, tool, def, vein, bank, resource, toHarvest);
+
+            //if (def.ContinuousHarvesting && CheckResources(from, tool, def, map, loc, false)
+            //    && CheckRange(from, tool, def, map, loc, false)
+            //    && CheckHarvest(from, tool, def, toHarvest))
+            if (def.ContinuousHarvesting)
+            {
+                // Continue harvesting
+                Timer.StartTimer(TimeSpan.FromMilliseconds(500), () => StartHarvesting(from, tool, toHarvest));
+            }
         }
 
         public virtual void OnHarvestFinished(

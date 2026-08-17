@@ -40,6 +40,8 @@ namespace Server.Engines.Harvest
 
         public int[] EffectCounts { get; set; }
 
+        public bool ContinuousHarvesting { get; set; }
+
         public int[] EffectSounds { get; set; }
 
         public TimeSpan EffectSoundDelay { get; set; }

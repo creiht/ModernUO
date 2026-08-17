@@ -87,6 +87,7 @@ namespace Server.Engines.Harvest
                 EffectCounts = new[] { 1 },
                 EffectDelay = TimeSpan.Zero,
                 EffectSoundDelay = TimeSpan.FromSeconds(8.0),
+                ContinuousHarvesting = true,
                 NoResourcesMessage = 503172,     // The fish don't seem to be biting here.
                 FailMessage = 503171,            // You fish a while, but fail to catch anything.
                 TimedOutOfRangeMessage = 500976, // You need to be closer to the water to fish!

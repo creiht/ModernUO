@@ -57,6 +57,7 @@ namespace Server.Engines.Harvest
                 EffectCounts = Core.AOS ? new[] { 1 } : new[] { 1, 2, 2, 2, 3 },
                 EffectDelay = TimeSpan.FromSeconds(1.6),
                 EffectSoundDelay = TimeSpan.FromSeconds(0.9),
+                ContinuousHarvesting = true,
                 NoResourcesMessage = 500493, // There's not enough wood here to harvest.
                 FailMessage = 500495,        // You hack at the tree for a while, but fail to produce any useable wood.
                 OutOfRangeMessage = 500446,  // That is too far away.

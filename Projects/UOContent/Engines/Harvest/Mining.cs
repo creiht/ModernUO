@@ -101,6 +101,7 @@ namespace Server.Engines.Harvest
                 EffectCounts = new[] { 1 },
                 EffectDelay = TimeSpan.FromSeconds(1.6),
                 EffectSoundDelay = TimeSpan.FromSeconds(0.9),
+                ContinuousHarvesting = true,
                 NoResourcesMessage = 503040,     // There is no metal here to mine.
                 DoubleHarvestMessage = 503042,   // Someone has gotten to the metal before you.
                 TimedOutOfRangeMessage = 503041, // You have moved too far away to continue mining.
@@ -240,6 +241,7 @@ namespace Server.Engines.Harvest
                 EffectCounts = new[] { 6 },
                 EffectDelay = TimeSpan.FromSeconds(1.6),
                 EffectSoundDelay = TimeSpan.FromSeconds(0.9),
+                ContinuousHarvesting = true,
                 NoResourcesMessage = 1044629, // There is no sand here to mine.
                 DoubleHarvestMessage = 1044629, // There is no sand here to mine.
                 TimedOutOfRangeMessage = 503041, // You have moved too far away to continue mining.
