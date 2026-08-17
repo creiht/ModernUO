@@ -19,6 +19,7 @@ using System.Linq;
 using System.Net;
 using System.Net.NetworkInformation;
 using System.Network;
+using System.Numerics;
 
 namespace Server.Network;
 
@@ -28,9 +29,10 @@ namespace Server.Network;
 public partial class NetState
 {
     // Buffer sizes
-    private const int RecvBufferSize = 1024 * 64;   // 64KB recv buffers
-    private const int SendBufferSize = 1024 * 256;  // 256KB send buffers
-    private const int MaxConnections = 4096;        // Max concurrent connections
+    private const int RecvBufferSize = 1024 * 64;    // 64KB recv buffers
+    private const int DefaultSendBufferSize = 1024 * 256;  // 256KB send buffers
+    private const int MinSendBufferSize = 1024 * 64;       // Platform allocation granularity
+    private const int MaxConnections = 4096;         // Max concurrent connections
 
     private static readonly Queue<NetState> _disposed = [];
     private static readonly TimeSpan ConnectingSocketIdleLimit = TimeSpan.FromMilliseconds(5000); // 5 seconds
@@ -41,7 +43,9 @@ public partial class NetState
     // NetState storage indexed by RingSocket.Id
     private static readonly NetState[] _netStates = new NetState[MaxConnections];
 
-    // Events buffer for ProcessCompletions
+    // Events buffer for ProcessCompletions. Bounded by one event per peeked completion
+    // (maxSockets), doubled for headroom. Undersizing drops DataReceived events whose bytes were
+    // already committed, leaving them unparsed until the next recv completes.
     private static readonly RingSocketEvent[] _events = new RingSocketEvent[MaxConnections * 2];
 
     // Listener management
@@ -68,6 +72,24 @@ public partial class NetState
     }
 
     /// <summary>
+    /// Wakes the game loop if it is blocked in <see cref="WaitForCompletion"/>. Safe from any
+    /// thread; a no-op before networking is configured or after teardown. The signal is sticky,
+    /// so a wake racing the loop's decision to sleep is not lost.
+    /// </summary>
+    public static void Wake()
+    {
+        _socketManager?.Ring?.Wake();
+    }
+
+    /// <summary>
+    /// True when no queued network work remains for the loop to drain. <see cref="Slice"/> defers
+    /// work in several places, so an empty completion queue alone is not enough.
+    /// </summary>
+    internal static bool IsIdle =>
+        _throttled.Count == 0 && _throttledPending.Count == 0 &&
+        _flushPending.Count == 0 && _pendingDisconnects.Count == 0 && _disposed.Count == 0;
+
+    /// <summary>
     /// Gets the listening addresses that the server is bound to.
     /// </summary>
     public static IPEndPoint[] ListeningAddresses { get; private set; }
@@ -88,18 +110,59 @@ public partial class NetState
         // Initialize IP rate limiter
         _ipRateLimiter = new IPRateLimiter(10, 10000, 1000, 2.0, 3_600_000, Core.ClosingTokenSource.Token);
 
+        // Sends in flight per connection; honoured by RIO only (see IIORingGroup). Costs a
+        // request-queue and completion-queue slot per send, not another buffer. Worst-case added
+        // latency is roughly completion RTT / this value.
+        var maxOutstandingSends = ServerConfiguration.GetOrUpdateSetting("network.maxOutstandingSends", 32);
+
         // Initialize IORingGroup
-        var ring = IORingGroup.Create(queueSize: MaxConnections * 2, maxConnections: MaxConnections);
+        var ring = IORingGroup.Create(
+            queueSize: MaxConnections * 2,
+            maxConnections: MaxConnections,
+            maxOutstandingSends: maxOutstandingSends
+        );
+
+        // Per-connection send buffer: the lever for "send buffer exhausted" disconnects, and the
+        // per-connection memory ceiling.
+        var sendBufferSize = GetSendBufferSize();
 
         // Create socket manager which handles buffer pools and socket lifecycle
         _socketManager = new RingSocketManager(
             ring,
             maxSockets: MaxConnections,
             recvBufferSize: RecvBufferSize,
-            sendBufferSize: SendBufferSize,
+            sendBufferSize: sendBufferSize,
             initialBufferSlabs: 8,
             maxBufferSlabs: 32
         );
+    }
+
+    /// <summary>
+    /// Reads the configured send buffer size, coerced to a power of two of at least the platform
+    /// allocation granularity. IORingBuffer requires this and would otherwise throw at socket
+    /// creation rather than at startup.
+    /// </summary>
+    private static int GetSendBufferSize()
+    {
+        var configured = ServerConfiguration.GetOrUpdateSetting("network.sendBufferSize", DefaultSendBufferSize);
+        var size = Math.Max(MinSendBufferSize, configured);
+
+        if (!BitOperations.IsPow2(size))
+        {
+            size = (int)BitOperations.RoundUpToPowerOf2((uint)size);
+        }
+
+        if (size != configured)
+        {
+            logger.Warning(
+                "network.sendBufferSize {Configured} is not a power of two of at least {Minimum}; using {Adjusted}",
+                configured,
+                MinSendBufferSize,
+                size
+            );
+        }
+
+        return size;
     }
 
     /// <summary>
@@ -224,10 +287,19 @@ public partial class NetState
                 if (_ipRateLimiter != null && !_ipRateLimiter.Verify(remoteIP, out var totalAttempts))
                 {
                     logger.Debug("{Address} Past IP limit threshold ({TotalAttempts})", remoteIP, totalAttempts);
+
+                    if (Bans.BanConfiguration.Settings.ReportRateLimitTrips)
+                    {
+                        // Enqueue-only contribution; NOT added to the local firewall set (the limiter already
+                        // gates it here and the OS bouncer drops it at the kernel).
+                        Bans.BanChannel.Report(remoteIP, Bans.BanConfiguration.Settings.AutoBanDuration, Bans.BanReasons.RateLimit);
+                    }
                 }
-                else if (Firewall.IsBlocked(remoteIP))
+                else if (ConnectionFilters.ShouldDeny(remoteIP, out var deniedBy))
                 {
-                    logger.Debug("{Address} Firewalled", remoteIP);
+                    // Whatever a hit implies (persisting, promoting to an OS bouncer, contributing to the
+                    // ban channel) is the filter's own business; the accept path just drops the socket.
+                    logger.Debug("{Address} denied by connection filter '{Filter}'", remoteIP, deniedBy);
                 }
                 else
                 {
@@ -308,6 +380,18 @@ public partial class NetState
             // Socket must have finished the entire authentication process or be forcibly disconnected
             if (!ns.SentFirstPacket || !ns.Seeded)
             {
+                // Only the totally silent ones are evidence. A connection that sent SOME data and ran out of
+                // time is far more likely a slow link, and banning those makes the player retry, trip the
+                // rate limiter, and compound it into an hours-long ban.
+                if (!ns._receivedData && Bans.BanConfiguration.Settings.ReportBadConnects)
+                {
+                    Bans.BanChannel.Report(
+                        ns.Address,
+                        Bans.BanConfiguration.Settings.BadConnectDuration,
+                        Bans.BanReasons.SilentConnect
+                    );
+                }
+
                 ns.Disconnect(null);
 
                 // Force immediate cleanup - these are unauthenticated connections
@@ -482,6 +566,11 @@ public partial class NetState
         if (!ns._running)
         {
             return;
+        }
+
+        if (bytesReceived > 0)
+        {
+            ns._receivedData = true;
         }
 
         // Data is already committed to buffer by RingSocketManager

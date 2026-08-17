@@ -14,6 +14,7 @@
  *************************************************************************/
 
 using System;
+using System.Diagnostics;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Runtime.CompilerServices;
@@ -208,6 +209,10 @@ public partial class Item : IHued, IComparable<Item>, ISpawnable, IObjectPropert
     private ItemDelta m_DeltaFlags;
     private Direction m_Direction;
     private ImplFlag m_Flags;
+
+    // Where DecayScheduler tracks this item. Not serialized; PostDeserialize re-registers.
+    internal sbyte DecaySlot = DecayScheduler.SlotNone;
+
     private int m_Hue;
     private int m_ItemID;
     private Layer m_Layer;
@@ -225,12 +230,12 @@ public partial class Item : IHued, IComparable<Item>, ISpawnable, IObjectPropert
         m_ItemID = itemID;
         Serial = World.NewItem;
 
-        Visible = true;
-        Movable = true;
+        // Assigned directly: the Visible/Movable setters and SetLastMoved() would register the item
+        // for decay while m_Map is still null, then unregister it once it is Map.Internal.
+        m_Flags = ImplFlag.Visible | ImplFlag.Movable;
         Amount = 1;
         m_Map = Map.Internal;
-
-        SetLastMoved();
+        LastMoved = Core.Now;
 
         World.AddEntity(this);
     }
@@ -536,6 +541,14 @@ public partial class Item : IHued, IComparable<Item>, ISpawnable, IObjectPropert
         }
     }
 
+    // SendMobileIncoming (0x78) sends only the first item per layer (it dedupes via the
+    // `layers` span). Equipment Layer comes from tiledata, so e.g. a two-handed weapon and a
+    // shield both resolve to Layer.TwoHanded; a later same-layer item sent on its own via
+    // EquipUpdate (0x2E) or its OPL would leave the client holding two items on one equipment
+    // slot (a use-after-free on the legacy 2D client when that slot is later torn down).
+    // Returns true if this equipped item is such a later duplicate and must not be sent alone.
+    public bool IsDupedEquipLayer() => m_Parent is Mobile m && m.FindItemOnLayer(m_Layer) != this;
+
     public List<Item> Items => LookupItems() ?? EmptyItems;
 
     public int LookupContainerVersion() => (this as Container)?._version ?? LookupCompactInfo()?.Version ?? 0;
@@ -736,6 +749,12 @@ public partial class Item : IHued, IComparable<Item>, ISpawnable, IObjectPropert
 
     public static bool ScissorCopyLootType { get; set; }
 
+    /// <summary>
+    ///     True when the item was produced by the crafting system rather than bought or looted.
+    /// </summary>
+    [CommandProperty(AccessLevel.GameMaster)]
+    public bool PlayerConstructed { get; set; }
+
     [CommandProperty(AccessLevel.GameMaster)]
     public bool QuestItem
     {
@@ -786,7 +805,22 @@ public partial class Item : IHued, IComparable<Item>, ISpawnable, IObjectPropert
 
     public virtual int HuedItemID => m_ItemID;
 
-    public ObjectPropertyList PropertyList => m_PropertyList ??= InitializePropertyList(new ObjectPropertyList(this));
+    public ObjectPropertyList PropertyList
+    {
+        get
+        {
+            if (m_PropertyList == null)
+            {
+                // Publish the list before building it so a nested InvalidateProperties can see the
+                // build in progress and defer instead of recursing into a second throwaway list.
+                var list = new ObjectPropertyList(this);
+                m_PropertyList = list;
+                InitializePropertyList(list);
+            }
+
+            return m_PropertyList;
+        }
+    }
 
     /// <summary>
     ///     Overridable. Fills an <see cref="ObjectPropertyList" /> with everything applicable. By default, this invokes
@@ -808,10 +842,6 @@ public partial class Item : IHued, IComparable<Item>, ISpawnable, IObjectPropert
     [IgnoreDupe]
     [CommandProperty(AccessLevel.Counselor)]
     public Serial Serial { get; }
-
-    public byte SerializedThread { get; set; }
-    public int SerializedPosition { get; set; }
-    public int SerializedLength { get; set; }
 
     public virtual void Serialize(IGenericWriter writer)
     {
@@ -953,6 +983,11 @@ public partial class Item : IHued, IComparable<Item>, ISpawnable, IObjectPropert
         if (implFlags != (ImplFlag.Visible | ImplFlag.Movable))
         {
             flags |= SaveFlag.ImplFlags;
+        }
+
+        if (PlayerConstructed)
+        {
+            flags |= SaveFlag.PlayerConstructed;
         }
 
         writer.Write((int)flags);
@@ -1099,7 +1134,9 @@ public partial class Item : IHued, IComparable<Item>, ISpawnable, IObjectPropert
         var oldLocation = GetWorldLocation();
         var oldRealLocation = m_Location;
 
-        SetLastMoved();
+        // Register at the end instead: CanDecay() reads parent, map and location, none of which
+        // are final yet.
+        LastMoved = Core.Now;
 
         if (Parent is Mobile mobile)
         {
@@ -1234,6 +1271,8 @@ public partial class Item : IHued, IComparable<Item>, ISpawnable, IObjectPropert
             Map = map;
             Location = location;
         }
+
+        UpdateDecayRegistration();
     }
 
     /// <summary>
@@ -1384,6 +1423,14 @@ public partial class Item : IHued, IComparable<Item>, ISpawnable, IObjectPropert
                 }
             }
 
+            return;
+        }
+
+        // A second item sharing an equipment layer is omitted by SendMobileIncoming (0x78);
+        // sending it on its own via EquipUpdate/OPL would leave the client with two items on
+        // one slot. Skip the per-client sends entirely for the dupe.
+        if (IsDupedEquipLayer())
+        {
             return;
         }
 
@@ -1864,7 +1911,7 @@ public partial class Item : IHued, IComparable<Item>, ISpawnable, IObjectPropert
         {
             list.Add(1049643); // cursed
         }
-        else if (Insured)
+        else if (ServerFeatureFlags.InsuranceEnabled && Insured)
         {
             list.Add(1061682); // <b>insured</b>
         }
@@ -2321,6 +2368,11 @@ public partial class Item : IHued, IComparable<Item>, ISpawnable, IObjectPropert
         }
 
         Amount += dropped.Amount;
+        if (PlayerConstructed != dropped.PlayerConstructed)
+        {
+            PlayerConstructed = false;
+        }
+
         dropped.Delete();
 
         if (playSound && from != null)
@@ -2409,9 +2461,19 @@ public partial class Item : IHued, IComparable<Item>, ISpawnable, IObjectPropert
 
     private ObjectPropertyList InitializePropertyList(ObjectPropertyList list)
     {
-        GetProperties(list);
-        AppendChildProperties(list);
-        list.Terminate();
+        list.IsBuilding = true;
+
+        try
+        {
+            GetProperties(list);
+            AppendChildProperties(list);
+            list.Terminate();
+        }
+        finally
+        {
+            list.IsBuilding = false;
+        }
+
         return list;
     }
 
@@ -2426,6 +2488,26 @@ public partial class Item : IHued, IComparable<Item>, ISpawnable, IObjectPropert
         if (!ObjectPropertyList.Enabled)
         {
             return;
+        }
+
+        // Always a bug in the property getter, and there is no correct recovery: refuse rather than
+        // hide it. RELEASE keeps a possibly stale tooltip, DEBUG throws.
+        // See dev-docs/property-lists.md "Never Invalidate From Inside GetProperties".
+        if (m_PropertyList?.IsBuilding == true)
+        {
+            logger.Error(
+                "{Entity} called InvalidateProperties() while its property list was being built. Remove the side effect from the property getter, or defer it with Timer.DelayCall.\n{StackTrace}",
+                this,
+                new StackTrace()
+            );
+
+#if DEBUG
+            throw new InvalidOperationException(
+                $"{this} invalidated its property list from inside GetProperties. Remove the side effect from the property getter."
+            );
+#else
+            return;
+#endif
         }
 
         if (m_Map != null && m_Map != Map.Internal && !World.Loading)
@@ -2585,7 +2667,9 @@ public partial class Item : IHued, IComparable<Item>, ISpawnable, IObjectPropert
     {
         var version = reader.ReadInt();
 
-        SetLastMoved();
+        // Default for versions without a saved value. Stamp only: map and parent are still unread,
+        // and PostDeserialize registers every item once its state is final.
+        LastMoved = Core.Now;
 
         switch (version)
         {
@@ -2785,6 +2869,8 @@ public partial class Item : IHued, IComparable<Item>, ISpawnable, IObjectPropert
                     {
                         AcquireCompactInfo().m_SavedFlags = reader.ReadEncodedInt();
                     }
+
+                    PlayerConstructed = GetSaveFlag(flags, SaveFlag.PlayerConstructed);
 
                     if (m_Map != null && m_Parent == null)
                     {
@@ -3257,6 +3343,12 @@ public partial class Item : IHued, IComparable<Item>, ISpawnable, IObjectPropert
         m_DeltaFlags &= ~flags;
     }
 
+    /// <summary>
+    /// True when deltas remain queued after a <see cref="ProcessDeltaQueue"/> pass, which is
+    /// bounded by the count it saw on entry. The event loop consults this before sleeping.
+    /// </summary>
+    public static bool HasQueuedDeltas => m_DeltaQueue.Count > 0;
+
     public static void ProcessDeltaQueue()
     {
         var limit = m_DeltaQueue.Count;
@@ -3363,7 +3455,7 @@ public partial class Item : IHued, IComparable<Item>, ISpawnable, IObjectPropert
         for (var i = 0; i < props.Length; i++)
         {
             var p = props[i];
-            if (p.GetCustomAttribute(typeof(IgnoreDupeAttribute), true) != null || !p.CanRead || !p.CanWrite)
+            if (p.GetCustomAttribute<IgnoreDupeAttribute>(true) != null || !p.CanRead || !p.CanWrite)
             {
                 continue;
             }
@@ -4194,12 +4286,12 @@ public partial class Item : IHued, IComparable<Item>, ISpawnable, IObjectPropert
     }
 
     public virtual bool CheckBlessed(Mobile m) =>
-        m_LootType == LootType.Blessed || Mobile.InsuranceEnabled && Insured || m != null && m == BlessedFor;
+        m_LootType == LootType.Blessed || ServerFeatureFlags.InsuranceEnabled && Insured || m != null && m == BlessedFor;
 
     public virtual bool CheckNewbied() => m_LootType == LootType.Newbied;
 
     public virtual bool IsStandardLoot() =>
-        (!Mobile.InsuranceEnabled || !Insured) && BlessedFor == null && m_LootType == LootType.Regular;
+        (!ServerFeatureFlags.InsuranceEnabled || !Insured) && BlessedFor == null && m_LootType == LootType.Regular;
 
     public override string ToString() => $"{Serial} \"{GetType().Name}\"";
 
@@ -4306,6 +4398,7 @@ public partial class Item : IHued, IComparable<Item>, ISpawnable, IObjectPropert
         HeldBy = 0x00800000,
         IntWeight = 0x01000000,
         SavedFlags = 0x02000000,
-        NullWeight = 0x04000000
+        NullWeight = 0x04000000,
+        PlayerConstructed = 0x08000000
     }
 }

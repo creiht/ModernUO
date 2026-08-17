@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using Server.Engines.Pathing.Cache;
 using Xunit;
@@ -17,15 +18,30 @@ public class StepCacheFileTests
     {
         var cache = StepCache.Instance;
         cache.Clear();
+        cache.MissPromotionThreshold = 1; // eager build to populate chunks for save
 
         var map = Map.Maps[1];
         Assert.NotNull(map);
 
-        // Populate three distinct chunks by querying different sectors.
+        // Populate three distinct chunks by querying different sectors. Query at each cell's
+        // real standable surface Z (where the cache anchors) so first-touch yields a clean
+        // hit rather than an off-surface fallthrough.
         var sourceQueries = new[] { (1500, 1600), (1516, 1600), (1500, 1616) };
-        foreach (var (x, y) in sourceQueries)
+        var standZ = new sbyte[sourceQueries.Length];
         {
-            cache.TryGetMask(map, x, y, sourceZ: 10);
+            Span<sbyte> surfZ = stackalloc sbyte[16];
+            for (var i = 0; i < sourceQueries.Length; i++)
+            {
+                var (qx, qy) = sourceQueries[i];
+                var n = StepProbe.ComputeStandableSurfaceZs(map, qx, qy, surfZ);
+                Assert.True(n > 0, $"({qx},{qy}) has no standable surface — bad test cell");
+                standZ[i] = surfZ[0];
+            }
+        }
+        for (var i = 0; i < sourceQueries.Length; i++)
+        {
+            var (x, y) = sourceQueries[i];
+            cache.TryGetMask(map, x, y, standZ[i]);
         }
 
         Assert.Equal(3, cache.GetStats().ResidentChunks);
@@ -36,10 +52,10 @@ public class StepCacheFileTests
         for (var i = 0; i < sourceQueries.Length; i++)
         {
             var (x, y) = sourceQueries[i];
-            expected[i] = cache.TryGetMask(map, x, y, sourceZ: 10);
+            expected[i] = cache.TryGetMask(map, x, y, standZ[i]);
         }
 
-        var path = Path.Combine(Path.GetTempPath(), $"step-cache-roundtrip-{System.Guid.NewGuid():N}.swb");
+        var path = Path.Combine(Path.GetTempPath(), $"step-cache-roundtrip-{Guid.NewGuid():N}.swb");
         try
         {
             var written = cache.SaveToFile(path, map.MapID);
@@ -66,7 +82,7 @@ public class StepCacheFileTests
             for (var i = 0; i < sourceQueries.Length; i++)
             {
                 var (x, y) = sourceQueries[i];
-                var lookup = cache.TryGetMask(map, x, y, sourceZ: 10);
+                var lookup = cache.TryGetMask(map, x, y, standZ[i]);
                 Assert.Equal(CacheHitKind.Miss_NotBuilt, lookup.HitKind);
                 Assert.Equal(expected[i].WalkMask, lookup.WalkMask);
                 Assert.Equal(expected[i].WetMask, lookup.WetMask);
@@ -93,9 +109,52 @@ public class StepCacheFileTests
         var cache = StepCache.Instance;
         cache.Clear();
 
-        var path = Path.Combine(Path.GetTempPath(), $"step-cache-missing-{System.Guid.NewGuid():N}.swb");
+        var path = Path.Combine(Path.GetTempPath(), $"step-cache-missing-{Guid.NewGuid():N}.swb");
         Assert.False(cache.TryOpenLazyReader(path, mapId: 1));
         Assert.Equal(0, cache.OpenLazyReaderCount);
+    }
+
+    /// <summary>
+    /// HasLazyReader is the boot prebake's skip predicate (PathCacheCommands.Initialize): a map
+    /// with an open, fingerprint-valid reader needs no bake. Lock the open/clear contract.
+    /// </summary>
+    [Fact]
+    public void HasLazyReader_TracksOpenAndClear()
+    {
+        var cache = StepCache.Instance;
+        cache.Clear();
+
+        var map = Map.Maps[1];
+        Assert.NotNull(map);
+        Assert.False(cache.HasLazyReader(map.MapID));
+
+        // Build + save a chunk so there's a valid .swb to open.
+        cache.MissPromotionThreshold = 1;
+        Span<sbyte> surfZ = stackalloc sbyte[16];
+        Assert.True(StepProbe.ComputeStandableSurfaceZs(map, 1500, 1600, surfZ) > 0);
+        cache.TryGetMask(map, 1500, 1600, surfZ[0]);
+
+        var path = Path.Combine(Path.GetTempPath(), $"step-cache-haslazy-{Guid.NewGuid():N}.swb");
+        try
+        {
+            Assert.True(cache.SaveToFile(path, map.MapID) > 0);
+            cache.Clear();
+            Assert.False(cache.HasLazyReader(map.MapID));
+
+            Assert.True(cache.TryOpenLazyReader(path, map.MapID));
+            Assert.True(cache.HasLazyReader(map.MapID)); // open → true
+
+            cache.Clear();
+            Assert.False(cache.HasLazyReader(map.MapID)); // clear closes the reader → false
+        }
+        finally
+        {
+            cache.Clear();
+            if (File.Exists(path))
+            {
+                File.Delete(path);
+            }
+        }
     }
 
     [Fact]
@@ -104,7 +163,7 @@ public class StepCacheFileTests
         var cache = StepCache.Instance;
         cache.Clear();
 
-        var path = Path.Combine(Path.GetTempPath(), $"step-cache-badmagic-{System.Guid.NewGuid():N}.swb");
+        var path = Path.Combine(Path.GetTempPath(), $"step-cache-badmagic-{Guid.NewGuid():N}.swb");
         try
         {
             File.WriteAllBytes(path, new byte[]
@@ -134,7 +193,7 @@ public class StepCacheFileTests
         var map = Map.Maps[1];
         cache.TryGetMask(map, 1500, 1600, sourceZ: 10);
 
-        var path = Path.Combine(Path.GetTempPath(), $"step-cache-stalehash-{System.Guid.NewGuid():N}.swb");
+        var path = Path.Combine(Path.GetTempPath(), $"step-cache-stalehash-{Guid.NewGuid():N}.swb");
         try
         {
             cache.SaveToFile(path, map.MapID);
@@ -171,12 +230,13 @@ public class StepCacheFileTests
     {
         var cache = StepCache.Instance;
         cache.Clear();
+        cache.MissPromotionThreshold = 1; // eager build to populate chunks for save
 
         var map = Map.Maps[1];
         Assert.NotNull(map);
 
         // Populate a handful of chunks.
-        var coords = new (int, int)[]
+        var coords = new[]
         {
             (1500, 1600), (1516, 1600), (1500, 1616), (1516, 1616), (1532, 1600)
         };
@@ -185,7 +245,7 @@ public class StepCacheFileTests
             cache.TryGetMask(map, x, y, sourceZ: 10);
         }
 
-        var path = Path.Combine(Path.GetTempPath(), $"step-cache-lazy-{System.Guid.NewGuid():N}.swb");
+        var path = Path.Combine(Path.GetTempPath(), $"step-cache-lazy-{Guid.NewGuid():N}.swb");
         try
         {
             Assert.Equal(coords.Length, cache.SaveToFile(path, map.MapID));
@@ -200,6 +260,174 @@ public class StepCacheFileTests
             cache.TryGetMask(map, coords[0].Item1, coords[0].Item2, sourceZ: 10);
             Assert.Equal(1, cache.GetStats().ResidentChunks);
             Assert.Equal(0L, cache.GetStats().BuildsTotal); // resolved from file, not baker
+        }
+        finally
+        {
+            cache.Clear();
+            if (File.Exists(path))
+            {
+                File.Delete(path);
+            }
+        }
+    }
+
+    /// <summary>
+    /// A chunk's swim layer must survive Save → Clear → LazyOpen → first-touch query. The layer is
+    /// an optional trailer, so a chunk that has one is the only thing that proves it is written and
+    /// read back rather than silently dropped.
+    /// </summary>
+    [Fact]
+    public void SwimLayer_RoundTrips_ThroughLazyReader()
+    {
+        var cache = StepCache.Instance;
+        cache.Clear();
+        cache.MissPromotionThreshold = 1;
+
+        var map = Map.Maps[1];
+        Assert.NotNull(map);
+
+        // Build a chunk and inject a synthetic swim layer onto one cell.
+        cache.TryGetMask(map, 1500, 1600, sourceZ: 10);
+
+        var chunk = cache.GetResidentChunk(map.MapID, 1500 >> 4, 1600 >> 4);
+        Assert.NotNull(chunk);
+
+        chunk.AllocateSwimLayer();
+        var cellIndex = PathingTestSupport.CellIndex(1500, 1600);
+        chunk.SwimSourceZ[cellIndex]   = -7;
+        chunk.SwimMask[cellIndex]      = 0b0000_1111;
+        chunk.SwimZN_Layer[cellIndex]  = -7;
+        chunk.SwimZNE_Layer[cellIndex] = -7;
+        chunk.SwimZE_Layer[cellIndex]  = -7;
+        chunk.SwimZSE_Layer[cellIndex] = -7;
+
+        var path = Path.Combine(Path.GetTempPath(), $"step-cache-swim-{Guid.NewGuid():N}.swb");
+        try
+        {
+            Assert.Equal(1, cache.SaveToFile(path, map.MapID));
+
+            cache.Clear();
+            cache.MissPromotionThreshold = 1;
+            Assert.True(cache.TryOpenLazyReader(path, map.MapID));
+
+            // Pull the chunk back via a query at swim Z; the layer must hit and serve our
+            // injected mask. Walk-Z query of the same cell should still hit the walk
+            // layer with whatever the bake produced.
+            var swim = cache.TryGetMask(map, 1500, 1600, sourceZ: -7);
+            Assert.True(swim.IsHit);
+            Assert.Equal((byte)0, swim.WalkMask);
+            Assert.Equal((byte)0b0000_1111, swim.WetMask);
+            Assert.Equal((sbyte)-7, swim.SwimZ_N);
+            Assert.Equal((sbyte)-7, swim.SwimZ_E);
+        }
+        finally
+        {
+            cache.Clear();
+            if (File.Exists(path))
+            {
+                File.Delete(path);
+            }
+        }
+    }
+
+    /// <summary>
+    /// PreloadOnLazyOpen=true must materialize every chunk in the .swb file into the
+    /// resident set immediately, eliminating first-touch file-read latency. Counterpart
+    /// to <see cref="LazyReader_DoesNotMaterializeUntilQueried"/> which proves the
+    /// default lazy behavior.
+    /// </summary>
+    [SkippableFact]
+    public void TryOpenLazyReader_WithPreloadFlag_MaterializesAllChunksImmediately()
+    {
+        TileDataRequirement.SkipIfMissing();
+        var cache = StepCache.Instance;
+        cache.Clear();
+        cache.MissPromotionThreshold = 1;
+
+        var map = Map.Maps[1];
+        Assert.NotNull(map);
+
+        var coords = new[]
+        {
+            (1500, 1600), (1516, 1600), (1500, 1616), (1516, 1616), (1532, 1600)
+        };
+        foreach (var (x, y) in coords)
+        {
+            cache.TryGetMask(map, x, y, sourceZ: 10);
+        }
+
+        var path = Path.Combine(Path.GetTempPath(), $"step-cache-preload-{Guid.NewGuid():N}.swb");
+        try
+        {
+            Assert.Equal(coords.Length, cache.SaveToFile(path, map.MapID));
+
+            cache.Clear();
+            cache.PreloadOnLazyOpen = true;
+            try
+            {
+                Assert.True(cache.TryOpenLazyReader(path, map.MapID));
+
+                // Every chunk should be resident — no further queries needed.
+                Assert.Equal(coords.Length, cache.GetStats().ResidentChunks);
+                Assert.Equal(0L, cache.GetStats().BuildsTotal); // came from file, not baker
+
+                // Subsequent query is a clean Hit, not a Miss_NotBuilt.
+                var lookup = cache.TryGetMask(map, coords[0].Item1, coords[0].Item2, sourceZ: 10);
+                Assert.Equal(CacheHitKind.Hit, lookup.HitKind);
+                Assert.Equal(coords.Length, cache.GetStats().ResidentChunks);
+            }
+            finally
+            {
+                cache.PreloadOnLazyOpen = false;
+            }
+        }
+        finally
+        {
+            cache.Clear();
+            if (File.Exists(path))
+            {
+                File.Delete(path);
+            }
+        }
+    }
+
+    /// <summary>
+    /// A chunk the .swb can satisfy must be served on first touch, without consulting the promotion
+    /// gate. This is the deployment shape where an admin ships baked files and expects the very
+    /// first pathfind through a region to use the cache rather than the slow path — the gate would
+    /// otherwise defer that first touch and defeat the whole point of shipping the bake.
+    /// </summary>
+    [SkippableFact]
+    public void LazyReaderHit_BypassesMissTrackerOnFirstTouch()
+    {
+        TileDataRequirement.SkipIfMissing();
+        var cache = StepCache.Instance;
+        cache.Clear();
+        cache.MissPromotionThreshold = 1; // eager build for save phase
+
+        var map = Map.Maps[1];
+
+        // Build + save one chunk.
+        cache.TryGetMask(map, 1500, 1600, sourceZ: 10);
+        var path = Path.Combine(Path.GetTempPath(), $"step-cache-bypass-{Guid.NewGuid():N}.swb");
+        try
+        {
+            Assert.Equal(1, cache.SaveToFile(path, map.MapID));
+
+            // Reset to a fresh state with the file open as a lazy reader and the deferred
+            // promotion threshold restored to 2.
+            cache.Clear();
+            cache.MissPromotionThreshold = 2;
+            Assert.True(cache.TryOpenLazyReader(path, map.MapID));
+
+            // First touch must NOT return Fallthrough_NotBuilt — the lazy reader has the
+            // chunk and serves it before the miss tracker is consulted.
+            var lookup = cache.TryGetMask(map, 1500, 1600, sourceZ: 10);
+            Assert.True(lookup.IsHit);
+            Assert.Equal(CacheHitKind.Miss_NotBuilt, lookup.HitKind);
+            Assert.Equal(1, cache.GetStats().ResidentChunks);
+            Assert.Equal(0L, cache.GetStats().FallthroughNotBuilt);
+            Assert.Equal(0L, cache.GetStats().BuildsTotal); // came from file, not baker
         }
         finally
         {

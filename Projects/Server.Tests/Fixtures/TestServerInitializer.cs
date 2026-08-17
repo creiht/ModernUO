@@ -1,3 +1,4 @@
+﻿using System;
 using System.IO;
 using System.Reflection;
 using System.Threading;
@@ -10,7 +11,7 @@ namespace Server.Tests;
 /// Shared server initialization logic for test fixtures.
 /// Ensures the server is only initialized once across all test collections.
 /// </summary>
-public static class TestServerInitializer
+internal static class TestServerInitializer
 {
     private const string DefaultDataDirectory = @"C:\Ultima Online Classic";
     private static bool _initialized;
@@ -78,6 +79,15 @@ public static class TestServerInitializer
             Core.LoopContext = new EventLoopContext();
             Core.Expansion = Expansion.EJ;
 
+            // Seed the loop clock as Main.cs does before the Configure sweep; otherwise Core.Now is
+            // DateTime.MinValue for the whole test host.
+            Core._now = DateTime.UtcNow;
+
+            // Timer wheel must exist before NetState.Configure(), which schedules a recurring
+            // sweep via Timer.DelayCall (matches production ordering in Main.cs: Timer.Init runs
+            // before AssemblyHandler.Invoke("Configure")).
+            Timer.Init(0);
+
             // Configure networking (initializes RingSocketManager for tests)
             Server.Network.NetState.Configure();
 
@@ -86,8 +96,6 @@ public static class TestServerInitializer
 
             // Configure the world
             World.Configure();
-
-            Timer.Init(0);
 
             // Load the world
             World.Load();

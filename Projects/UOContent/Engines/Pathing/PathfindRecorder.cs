@@ -7,42 +7,28 @@ using Server.Text;
 namespace Server.Engines.Pathing;
 
 /// <summary>
-/// Admin-toggled telemetry: appends a JSONL line per pathfind request to a file.
-/// One record per BitmapAStarAlgorithm.Find call, capturing the inputs (start, goal,
-/// map, capability flags) needed to replay the scenario in benchmarks. Output format
-/// matches the corpus the BDN harness consumes.
+/// Appends one JSONL record per pathfind, capturing the inputs — start, goal, map, capability
+/// flags — needed to replay it later in a benchmark. Toggled at runtime with [PathRecord;
+/// <see cref="Configure"/> only seeds the initial state from server.cfg.
 ///
-/// Hot-toggleable at runtime via the [PathRecord admin command — no restart needed.
-/// <see cref="Configure"/> only seeds the initial state from server.cfg
-/// (pathfinding.recorder.enable, default false).
-///
-/// Holds a single StreamWriter open while recording; its internal buffer absorbs
-/// per-record writes without per-call File.Open / File.Append. Each record is built
-/// in a stack-allocated ValueStringBuilder (zero per-int allocation for the field
-/// formatting), then handed to the writer as a ReadOnlySpan&lt;char&gt;.
-///
-/// <b>Workload note:</b> intended for short bursts of capture (turn on, walk a region
-/// or trigger a scenario, turn off). On a busy server with hundreds of pathfinds
-/// per second, sustained recording can saturate the StreamWriter's 4 KB buffer and
-/// block the game thread on disk writes. A backpressure-aware async sink is a
-/// future enhancement if 24/7 capture becomes a use case.
+/// Meant for short bursts: turn it on, walk the region or trigger the scenario, turn it off. The
+/// writes go through a StreamWriter's buffer on the game thread, so a busy shard doing hundreds of
+/// pathfinds a second can saturate that buffer and stall the loop on disk I/O. Sustained capture
+/// would need an async sink with backpressure.
 /// </summary>
 public static class PathfindRecorder
 {
     private static readonly ILogger logger = LogFactory.GetLogger(typeof(PathfindRecorder));
 
-    private static bool _enabled;
-    private static string _outputPath;
     private static StreamWriter _writer;
-    private static long _recordsWritten;
 
-    public static bool Enabled => _enabled;
-    public static string OutputPath => _outputPath;
-    public static long RecordsWritten => _recordsWritten;
+    public static bool Enabled { get; private set; }
+    public static string OutputPath { get; set; }
+    public static long RecordsWritten { get; private set; }
 
     public static void Configure()
     {
-        _outputPath = ServerConfiguration.GetOrUpdateSetting(
+        OutputPath = ServerConfiguration.GetOrUpdateSetting(
             "pathfinding.recorder.path",
             Path.Combine(Core.BaseDirectory, "Data", "Pathfinding", "recordings", "pathfinds.jsonl")
         );
@@ -55,13 +41,12 @@ public static class PathfindRecorder
     }
 
     /// <summary>
-    /// Toggle recording. When enabling, opens an append-mode StreamWriter; when
-    /// disabling, flushes + disposes it. Idempotent — calling twice with the same
-    /// state is a no-op.
+    /// Toggles recording, opening the file on enable and flushing and closing it on disable.
+    /// Idempotent.
     /// </summary>
     public static void SetEnabled(bool enabled)
     {
-        if (enabled == _enabled)
+        if (enabled == Enabled)
         {
             return;
         }
@@ -70,22 +55,22 @@ public static class PathfindRecorder
         {
             try
             {
-                Directory.CreateDirectory(Path.GetDirectoryName(_outputPath) ?? ".");
-                var stream = new FileStream(_outputPath, FileMode.Append, FileAccess.Write, FileShare.Read);
+                Directory.CreateDirectory(Path.GetDirectoryName(OutputPath) ?? ".");
+                var stream = new FileStream(OutputPath, FileMode.Append, FileAccess.Write, FileShare.Read);
                 _writer = new StreamWriter(stream, new UTF8Encoding(false));
-                _enabled = true;
-                logger.Information("PathfindRecorder enabled, writing to {Path}", _outputPath);
+                Enabled = true;
+                logger.Information("PathfindRecorder enabled, writing to {Path}", OutputPath);
             }
             catch (IOException ex)
             {
-                logger.Warning(ex, "PathfindRecorder: failed to open {Path} for write", _outputPath);
+                logger.Warning(ex, "PathfindRecorder: failed to open {Path} for write", OutputPath);
                 _writer = null;
-                _enabled = false;
+                Enabled = false;
             }
         }
         else
         {
-            _enabled = false;
+            Enabled = false;
             try
             {
                 _writer?.Flush();
@@ -93,17 +78,16 @@ public static class PathfindRecorder
             }
             catch (IOException ex)
             {
-                logger.Warning(ex, "PathfindRecorder: error closing {Path}", _outputPath);
+                logger.Warning(ex, "PathfindRecorder: error closing {Path}", OutputPath);
             }
             _writer = null;
-            logger.Information("PathfindRecorder disabled ({Count} records this session)", _recordsWritten);
+            logger.Information("PathfindRecorder disabled ({Count} records this session)", RecordsWritten);
         }
     }
 
     /// <summary>
-    /// Force a flush of the writer's internal buffer to disk. Safe to call when
-    /// disabled (no-op). Useful after a burst of recording when an admin wants to
-    /// inspect the file without waiting for buffer fill or disable.
+    /// Pushes the writer's buffer to disk, so a capture can be inspected without disabling first.
+    /// No-op when disabled.
     /// </summary>
     public static void Flush()
     {
@@ -113,18 +97,17 @@ public static class PathfindRecorder
         }
         catch (IOException ex)
         {
-            logger.Warning(ex, "PathfindRecorder: flush failed for {Path}", _outputPath);
+            logger.Warning(ex, "PathfindRecorder: flush failed for {Path}", OutputPath);
         }
     }
 
     /// <summary>
-    /// Capture one Find call. Hot path: cheap when disabled (single bool check).
-    /// When enabled, formats one JSONL line and writes it through the StreamWriter's
-    /// internal buffer — flush is amortized across many calls.
+    /// Records one Find. Sits on the pathfinding hot path, so it costs a single bool check when
+    /// disabled.
     /// </summary>
     public static void RecordIfEnabled(Mobile m, Map map, Point3D start, Point3D goal)
     {
-        if (!_enabled || _writer == null || m == null || map == null)
+        if (!Enabled || _writer == null || m == null || map == null)
         {
             return;
         }
@@ -143,9 +126,8 @@ public static class PathfindRecorder
 
         try
         {
-            // One interpolation handles every numeric field with no per-int ToString
-            // allocation; bool fields use explicit literal spans because JSON wants
-            // lowercase "true"/"false" and bool.ToString() yields "True"/"False".
+            // One interpolation covers every numeric field without a per-field ToString. The bools
+            // are appended as literals because JSON wants lowercase and bool.ToString() capitalizes.
             using var vsb = ValueStringBuilder.Create(192);
             vsb.Append(
                 $"{{\"Name\":\"recorded\",\"MapId\":{map.MapID},\"StartX\":{start.X},\"StartY\":{start.Y},\"StartZ\":{start.Z},\"GoalX\":{goal.X},\"GoalY\":{goal.Y},\"GoalZ\":{goal.Z},\"CanSwim\":"
@@ -159,7 +141,7 @@ public static class PathfindRecorder
             vsb.Append(canMoveOverObstacles ? "true" : "false");
             vsb.Append("}\n");
             _writer.Write(vsb.AsSpan());
-            _recordsWritten++;
+            RecordsWritten++;
         }
         catch (IOException ex)
         {

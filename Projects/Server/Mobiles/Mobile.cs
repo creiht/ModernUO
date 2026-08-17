@@ -26,6 +26,7 @@ using Server.Network;
 using Server.Prompts;
 using Server.Targeting;
 using System;
+using System.Diagnostics;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using Server.Buffers;
@@ -272,8 +273,9 @@ public partial class Mobile : IHued, IComparable<Mobile>, ISpawnable, IObjectPro
     private TimerExecutionToken _expireAggrTimerToken;
     private TimerExecutionToken _expireCombatantTimerToken;
     private TimerExecutionToken _expireCriminalTimerToken;
-    private VirtualHairInfo _facialHair;
-    public VirtualHairInfo FacialHair => _facialHair ??= new VirtualHairInfo(FacialHairItemID, FacialHairHue);
+    private int _facialHairItemId;
+    private int _facialHairHue;
+    private Serial _facialHairSerial;
 
     private int m_Fame, m_Karma;
     private bool m_Female, m_Warmode, m_Hidden, m_Blessed, m_Flying;
@@ -283,8 +285,9 @@ public partial class Mobile : IHued, IComparable<Mobile>, ISpawnable, IObjectPro
     private BaseGuild m_Guild;
     private string m_GuildTitle;
 
-    private VirtualHairInfo _hair;
-    public VirtualHairInfo Hair => _hair ??= new VirtualHairInfo(HairItemID, HairHue);
+    private int _hairItemId;
+    private int _hairHue;
+    private Serial _hairSerial;
 
     private int m_Hits, m_Stam, m_Mana;
 
@@ -950,8 +953,6 @@ public partial class Mobile : IHued, IComparable<Mobile>, ISpawnable, IObjectPro
     public static bool NoSpeechLOS { get; set; }
 
     public static TimeSpan AutoManifestTimeout { get; set; } = TimeSpan.FromSeconds(5.0);
-
-    public static bool InsuranceEnabled { get; set; }
 
     public static int ActionDelay { get; set; } = 500;
 
@@ -2181,20 +2182,16 @@ public partial class Mobile : IHued, IComparable<Mobile>, ISpawnable, IObjectPro
     [CommandProperty(AccessLevel.GameMaster)]
     public int HairItemID
     {
-        get => _hair?.ItemId ?? 0;
+        get => _hairItemId;
         set
         {
-            if (_hair == null && value > 0)
+            // An item id of 0 is the "no hair" state; clear the hue with it, but keep
+            // _hairSerial so a pending removal packet references the equipped serial.
+            _hairItemId = value < 0 ? 0 : value;
+
+            if (_hairItemId == 0)
             {
-                _hair = new VirtualHairInfo(value);
-            }
-            else if (value <= 0)
-            {
-                _hair = null;
-            }
-            else if (_hair != null)
-            {
-                _hair.ItemId = value;
+                _hairHue = 0;
             }
 
             Delta(MobileDelta.Hair);
@@ -2205,20 +2202,14 @@ public partial class Mobile : IHued, IComparable<Mobile>, ISpawnable, IObjectPro
     [CommandProperty(AccessLevel.GameMaster)]
     public int FacialHairItemID
     {
-        get => _facialHair?.ItemId ?? 0;
+        get => _facialHairItemId;
         set
         {
-            if (_facialHair == null && value > 0)
+            _facialHairItemId = value < 0 ? 0 : value;
+
+            if (_facialHairItemId == 0)
             {
-                _facialHair = new VirtualHairInfo(value);
-            }
-            else if (value <= 0)
-            {
-                _facialHair = null;
-            }
-            else if (_facialHair != null)
-            {
-                _facialHair.ItemId = value;
+                _facialHairHue = 0;
             }
 
             Delta(MobileDelta.FacialHair);
@@ -2229,12 +2220,12 @@ public partial class Mobile : IHued, IComparable<Mobile>, ISpawnable, IObjectPro
     [CommandProperty(AccessLevel.GameMaster)]
     public int HairHue
     {
-        get => _hair?.Hue ?? 0;
+        get => _hairHue;
         set
         {
-            if (_hair != null)
+            if (_hairItemId > 0)
             {
-                _hair.Hue = value;
+                _hairHue = value;
                 Delta(MobileDelta.Hair);
                 this.MarkDirty();
             }
@@ -2244,15 +2235,41 @@ public partial class Mobile : IHued, IComparable<Mobile>, ISpawnable, IObjectPro
     [CommandProperty(AccessLevel.GameMaster)]
     public int FacialHairHue
     {
-        get => _facialHair?.Hue ?? 0;
+        get => _facialHairHue;
         set
         {
-            if (_facialHair != null)
+            if (_facialHairItemId > 0)
             {
-                _facialHair.Hue = value;
+                _facialHairHue = value;
                 Delta(MobileDelta.FacialHair);
                 this.MarkDirty();
             }
+        }
+    }
+
+    public Serial HairSerial
+    {
+        get
+        {
+            if (_hairItemId > 0 && _hairSerial == Serial.Zero)
+            {
+                _hairSerial = World.NewVirtual;
+            }
+
+            return _hairSerial;
+        }
+    }
+
+    public Serial FacialHairSerial
+    {
+        get
+        {
+            if (_facialHairItemId > 0 && _facialHairSerial == Serial.Zero)
+            {
+                _facialHairSerial = World.NewVirtual;
+            }
+
+            return _facialHairSerial;
         }
     }
 
@@ -2275,7 +2292,22 @@ public partial class Mobile : IHued, IComparable<Mobile>, ISpawnable, IObjectPro
     public int CompareTo(Mobile other) => other == null ? -1 : Serial.CompareTo(other.Serial);
 
     public virtual int HuedItemID => m_Female ? 0x2107 : 0x2106;
-    public ObjectPropertyList PropertyList => m_PropertyList ??= InitializePropertyList(new ObjectPropertyList(this));
+    public ObjectPropertyList PropertyList
+    {
+        get
+        {
+            if (m_PropertyList == null)
+            {
+                // Publish the list before building it so a nested InvalidateProperties can see the
+                // build in progress and defer instead of recursing into a second throwaway list.
+                var list = new ObjectPropertyList(this);
+                m_PropertyList = list;
+                InitializePropertyList(list);
+            }
+
+            return m_PropertyList;
+        }
+    }
 
     public virtual void GetProperties(IPropertyList list)
     {
@@ -2290,13 +2322,9 @@ public partial class Mobile : IHued, IComparable<Mobile>, ISpawnable, IObjectPro
     [CommandProperty(AccessLevel.Counselor)]
     public Serial Serial { get; }
 
-    public byte SerializedThread { get; set; }
-    public int SerializedPosition { get; set; }
-    public int SerializedLength { get; set; }
-
     public virtual void Serialize(IGenericWriter writer)
     {
-        writer.Write(36); // version
+        writer.Write(37); // version
 
         writer.WriteDeltaTime(LastStrGain);
         writer.WriteDeltaTime(LastIntGain);
@@ -2304,12 +2332,12 @@ public partial class Mobile : IHued, IComparable<Mobile>, ISpawnable, IObjectPro
 
         byte hairflag = 0x00;
 
-        if (_hair != null)
+        if (_hairItemId > 0)
         {
             hairflag |= 0x01;
         }
 
-        if (_facialHair != null)
+        if (_facialHairItemId > 0)
         {
             hairflag |= 0x02;
         }
@@ -2318,12 +2346,14 @@ public partial class Mobile : IHued, IComparable<Mobile>, ISpawnable, IObjectPro
 
         if ((hairflag & 0x01) != 0)
         {
-            _hair?.Serialize(writer);
+            writer.Write(_hairItemId);
+            writer.Write(_hairHue);
         }
 
         if ((hairflag & 0x02) != 0)
         {
-            _facialHair?.Serialize(writer);
+            writer.Write(_facialHairItemId);
+            writer.Write(_facialHairHue);
         }
 
         writer.Write(Race);
@@ -2458,8 +2488,6 @@ public partial class Mobile : IHued, IComparable<Mobile>, ISpawnable, IObjectPro
         m_Map?.OnLeave(this);
         m_Map = null;
 
-        _hair = null;
-        _facialHair = null;
         m_MountItem = null;
 
         World.RemoveEntity(this);
@@ -2734,14 +2762,14 @@ public partial class Mobile : IHued, IComparable<Mobile>, ISpawnable, IObjectPro
             sendFacialHair = true;
         }
 
-        var hairSerial = Hair.VirtualSerial;
+        var hairSerial = HairSerial;
         var hairLength = removeHair
             ? OutgoingVirtualHairPackets.RemovePacketLength
             : OutgoingVirtualHairPackets.EquipUpdatePacketLength;
 
         var hairPacket = stackalloc byte[hairLength].InitializePacket();
 
-        var facialHairSerial = FacialHair.VirtualSerial;
+        var facialHairSerial = FacialHairSerial;
         var facialHairLength = removeFacialHair
             ? OutgoingVirtualHairPackets.RemovePacketLength
             : OutgoingVirtualHairPackets.EquipUpdatePacketLength;
@@ -5169,14 +5197,18 @@ public partial class Mobile : IHued, IComparable<Mobile>, ISpawnable, IObjectPro
             }
             else if (item.Parent is Mobile)
             {
-                state.SendEquipUpdate(item);
+                // Don't re-show a duped-layer item on its own (see Item.IsDupedEquipLayer).
+                if (!item.IsDupedEquipLayer())
+                {
+                    state.SendEquipUpdate(item);
+                }
             }
             else
             {
                 item.SendInfoTo(state);
             }
 
-            if (item.Parent != null)
+            if (item.Parent != null && !item.IsDupedEquipLayer())
             {
                 item.SendOPLPacketTo(state);
             }
@@ -5216,6 +5248,7 @@ public partial class Mobile : IHued, IComparable<Mobile>, ISpawnable, IObjectPro
         item.Name = oldItem.Name;
         item.Weight = oldItem.Weight;
 
+        item.PlayerConstructed = oldItem.PlayerConstructed;
         item.Amount = oldAmount - amount;
         item.Map = oldItem.Map;
 
@@ -6111,6 +6144,7 @@ public partial class Mobile : IHued, IComparable<Mobile>, ISpawnable, IObjectPro
 
         switch (version)
         {
+            case 37: // Decomposed hair into inline item id/hue (dropped the VirtualHairInfo object)
             case 36: // Moved virtues to VirtueSystem
             case 35: // Moved short term murders to PlayerMurderSystem
             case 34: // Moved Stabled to PlayerMobile
@@ -6126,18 +6160,30 @@ public partial class Mobile : IHued, IComparable<Mobile>, ISpawnable, IObjectPro
                 }
             case 30:
                 {
+                    // Before v37 each hair was a VirtualHairInfo whose Serialize wrote a
+                    // leading version int ahead of the item id and hue.
                     var hairflag = reader.ReadByte();
 
                     if ((hairflag & 0x01) != 0)
                     {
-                        _hair = new VirtualHairInfo();
-                        _hair.Deserialize(reader);
+                        if (version < 37)
+                        {
+                            reader.ReadInt(); // legacy VirtualHairInfo version
+                        }
+
+                        _hairItemId = reader.ReadInt();
+                        _hairHue = reader.ReadInt();
                     }
 
                     if ((hairflag & 0x02) != 0)
                     {
-                        _facialHair = new VirtualHairInfo();
-                        _facialHair.Deserialize(reader);
+                        if (version < 37)
+                        {
+                            reader.ReadInt(); // legacy VirtualHairInfo version
+                        }
+
+                        _facialHairItemId = reader.ReadInt();
+                        _facialHairHue = reader.ReadInt();
                     }
 
                     goto case 29;
@@ -7196,8 +7242,18 @@ public partial class Mobile : IHued, IComparable<Mobile>, ISpawnable, IObjectPro
 
     private ObjectPropertyList InitializePropertyList(ObjectPropertyList list)
     {
-        GetProperties(list);
-        list.Terminate();
+        list.IsBuilding = true;
+
+        try
+        {
+            GetProperties(list);
+            list.Terminate();
+        }
+        finally
+        {
+            list.IsBuilding = false;
+        }
+
         return list;
     }
 
@@ -7212,6 +7268,26 @@ public partial class Mobile : IHued, IComparable<Mobile>, ISpawnable, IObjectPro
         if (!ObjectPropertyList.Enabled)
         {
             return;
+        }
+
+        // Always a bug in the property getter, and there is no correct recovery: refuse rather than
+        // hide it. RELEASE keeps a possibly stale tooltip, DEBUG throws.
+        // See dev-docs/property-lists.md "Never Invalidate From Inside GetProperties".
+        if (m_PropertyList?.IsBuilding == true)
+        {
+            logger.Error(
+                "{Entity} called InvalidateProperties() while its property list was being built. Remove the side effect from the property getter, or defer it with Timer.DelayCall.\n{StackTrace}",
+                this,
+                new StackTrace()
+            );
+
+#if DEBUG
+            throw new InvalidOperationException(
+                $"{this} invalidated its property list from inside GetProperties. Remove the side effect from the property getter."
+            );
+#else
+            return;
+#endif
         }
 
         if (m_Map != null && m_Map != Map.Internal && !World.Loading)
@@ -7759,6 +7835,12 @@ public partial class Mobile : IHued, IComparable<Mobile>, ISpawnable, IObjectPro
         }
     }
 
+    /// <summary>
+    /// True when deltas remain queued after a <see cref="ProcessDeltaQueue"/> pass, which is
+    /// bounded by the count it saw on entry. The event loop consults this before sleeping.
+    /// </summary>
+    public static bool HasQueuedDeltas => m_DeltaQueue.Count > 0;
+
     public static void ProcessDeltaQueue()
     {
         var limit = m_DeltaQueue.Count;
@@ -8100,6 +8182,9 @@ public partial class Mobile : IHued, IComparable<Mobile>, ISpawnable, IObjectPro
 
     public void SayTo(Mobile to, int number, string args = "") =>
         to.NetState.SendMessageLocalized(Serial, Body, MessageType.Regular, SpeechHue, 3, number, Name, args);
+
+    public void SayTo(Mobile to, int number, int hue, string args = "") =>
+        to.NetState.SendMessageLocalized(Serial, Body, MessageType.Regular, hue, 3, number, Name, args);
 
     public bool SendHuePicker(HuePicker p)
     {

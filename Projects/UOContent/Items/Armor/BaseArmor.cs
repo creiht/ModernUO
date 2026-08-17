@@ -12,7 +12,7 @@ using AMT = Server.Items.ArmorMaterialType;
 
 namespace Server.Items
 {
-    [SerializationGenerator(9, false)]
+    [SerializationGenerator(10, false)]
     public abstract partial class BaseArmor
         : Item, IScissorable, IFactionItem, ICraftable, IWearableDurability, IAosItem, IIdentifiable
     {
@@ -143,13 +143,6 @@ namespace Server.Items
 
         [SerializableFieldDefault(23)]
         private AosSkillBonuses SkillBonusesDefaultValue() => new(this);
-
-        [SerializableField(24)]
-        [SerializedCommandProperty(AccessLevel.GameMaster)]
-        public bool _playerConstructed;
-
-        [SerializableFieldSaveFlag(24)]
-        private bool ShouldSerializePlayerConstructed() => _playerConstructed;
 
         private FactionItem m_FactionState;
 
@@ -570,7 +563,6 @@ namespace Server.Items
             var resourceType = typeRes ?? craftItem.Resources[0].ItemType;
 
             Resource = CraftResources.GetFromType(resourceType);
-            PlayerConstructed = true;
             Identified = true;
 
             var context = craftSystem.GetContext(from);
@@ -1026,8 +1018,6 @@ namespace Server.Items
             (Parent as Mobile)?.Delta(MobileDelta.Armor); // Tell them armor rating has changed
         }
 
-        private static bool GetSaveFlag(OldSaveFlag flags, OldSaveFlag toGet) => (flags & toGet) != 0;
-
         [AfterDeserialization]
         private void AfterDeserialization()
         {
@@ -1323,146 +1313,21 @@ namespace Server.Items
                 list.Add(1061078, prop); // artifact rarity ~1_val~
             }
 
-            if ((prop = Attributes.WeaponDamage) != 0)
-            {
-                list.Add(1060401, prop); // damage increase ~1_val~%
-            }
+            ArmorAttributes.GetProperties(list);
 
-            if ((prop = Attributes.DefendChance) != 0)
-            {
-                list.Add(1060408, prop); // defense chance increase ~1_val~%
-            }
-
-            if ((prop = Attributes.BonusDex) != 0)
-            {
-                list.Add(1060409, prop); // dexterity bonus ~1_val~
-            }
-
-            if ((prop = Attributes.EnhancePotions) != 0)
-            {
-                list.Add(1060411, prop); // enhance potions ~1_val~%
-            }
-
-            if ((prop = Attributes.CastRecovery) != 0)
-            {
-                list.Add(1060412, prop); // faster cast recovery ~1_val~
-            }
-
-            if ((prop = Attributes.CastSpeed) != 0)
-            {
-                list.Add(1060413, prop); // faster casting ~1_val~
-            }
-
-            if ((prop = Attributes.AttackChance) != 0)
-            {
-                list.Add(1060415, prop); // hit chance increase ~1_val~%
-            }
-
-            if ((prop = Attributes.BonusHits) != 0)
-            {
-                list.Add(1060431, prop); // hit point increase ~1_val~
-            }
-
-            if ((prop = Attributes.BonusInt) != 0)
-            {
-                list.Add(1060432, prop); // intelligence bonus ~1_val~
-            }
-
-            if ((prop = Attributes.LowerManaCost) != 0)
-            {
-                list.Add(1060433, prop); // lower mana cost ~1_val~%
-            }
-
-            if ((prop = Attributes.LowerRegCost) != 0)
-            {
-                list.Add(1060434, prop); // lower reagent cost ~1_val~%
-            }
-
-            if ((prop = GetLowerStatReq()) != 0)
-            {
-                list.Add(1060435, prop); // lower requirements ~1_val~%
-            }
-
-            if ((prop = GetLuckBonus() + Attributes.Luck) != 0)
-            {
-                list.Add(1060436, prop); // luck ~1_val~
-            }
-
-            if (ArmorAttributes.MageArmor != 0)
-            {
-                list.Add(1060437); // mage armor
-            }
-
-            if ((prop = Attributes.BonusMana) != 0)
-            {
-                list.Add(1060439, prop); // mana increase ~1_val~
-            }
-
-            if ((prop = Attributes.RegenMana) != 0)
-            {
-                list.Add(1060440, prop); // mana regeneration ~1_val~
-            }
-
-            if (Attributes.NightSight != 0)
-            {
-                list.Add(1060441); // night sight
-            }
-
-            if ((prop = Attributes.ReflectPhysical) != 0)
-            {
-                list.Add(1060442, prop); // reflect physical damage ~1_val~%
-            }
-
-            if ((prop = Attributes.RegenStam) != 0)
-            {
-                list.Add(1060443, prop); // stamina regeneration ~1_val~
-            }
-
-            if ((prop = Attributes.RegenHits) != 0)
-            {
-                list.Add(1060444, prop); // hit point regeneration ~1_val~
-            }
-
-            if ((prop = ArmorAttributes.SelfRepair) != 0)
-            {
-                list.Add(1060450, prop); // self repair ~1_val~
-            }
-
-            if (Attributes.SpellChanneling != 0)
-            {
-                list.Add(1060482); // spell channeling
-            }
-
-            if ((prop = Attributes.SpellDamage) != 0)
-            {
-                list.Add(1060483, prop); // spell damage increase ~1_val~%
-            }
-
-            if ((prop = Attributes.BonusStam) != 0)
-            {
-                list.Add(1060484, prop); // stamina increase ~1_val~
-            }
-
-            if ((prop = Attributes.BonusStr) != 0)
-            {
-                list.Add(1060485, prop); // strength bonus ~1_val~
-            }
-
-            if ((prop = Attributes.WeaponSpeed) != 0)
-            {
-                list.Add(1060486, prop); // swing speed increase ~1_val~%
-            }
-
-            if (Core.ML && (prop = Attributes.IncreasedKarmaLoss) != 0)
-            {
-                list.Add(1075210, prop); // Increased Karma Loss ~1val~%
-            }
+            Attributes.GetProperties(list, luckBonus: GetLuckBonus());
 
             AddResistanceProperties(list);
 
             if ((prop = GetDurabilityBonus()) > 0)
             {
                 list.Add(1060410, prop); // durability ~1_val~%
+            }
+
+            var lowerStatReq = GetLowerStatReq();
+            if (lowerStatReq != 0)
+            {
+                list.Add(1060435, lowerStatReq); // lower requirements ~1_val~%
             }
 
             if ((prop = ComputeStatReq(StatType.Str)) > 0)
@@ -1639,35 +1504,5 @@ namespace Server.Items
                 };
         }
 
-        [Flags]
-        private enum OldSaveFlag
-        {
-            None = 0x00000000,
-            Attributes = 0x00000001,
-            ArmorAttributes = 0x00000002,
-            PhysicalBonus = 0x00000004,
-            FireBonus = 0x00000008,
-            ColdBonus = 0x00000010,
-            PoisonBonus = 0x00000020,
-            EnergyBonus = 0x00000040,
-            Identified = 0x00000080,
-            MaxHitPoints = 0x00000100,
-            HitPoints = 0x00000200,
-            Crafter = 0x00000400,
-            Quality = 0x00000800,
-            Durability = 0x00001000,
-            Protection = 0x00002000,
-            Resource = 0x00004000,
-            BaseArmor = 0x00008000,
-            StrBonus = 0x00010000,
-            DexBonus = 0x00020000,
-            IntBonus = 0x00040000,
-            StrReq = 0x00080000,
-            DexReq = 0x00100000,
-            IntReq = 0x00200000,
-            MedAllowance = 0x00400000,
-            SkillBonuses = 0x00800000,
-            PlayerConstructed = 0x01000000
-        }
     }
 }

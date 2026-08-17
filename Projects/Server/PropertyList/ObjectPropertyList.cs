@@ -20,6 +20,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Runtime.CompilerServices;
 using Server.Buffers;
+using Server.Logging;
 using Server.Network;
 using Server.Text;
 
@@ -37,6 +38,14 @@ public sealed class ObjectPropertyList : IPropertyList, IDisposable
         1114779 // ~1_val~
     };
 
+    private static readonly ILogger logger = LogFactory.GetLogger(typeof(ObjectPropertyList));
+
+    // Max characters for a SINGLE OPL property argument. The legacy 2D client copies each
+    // property's text into a fixed ~512-char (1024-byte) buffer; exceeding it corrupts the heap
+    // (smashes an adjacent world object's vtable -> client crash). 504 = multiple of 8, safely
+    // under the empirically confirmed ~510-char ceiling. For multi-line content use AddChunked().
+    public const int MaxArgumentLength = 504;
+
     private int _hash;
     private int _stringNumbersIndex;
     private byte[] _buffer;
@@ -45,6 +54,12 @@ public sealed class ObjectPropertyList : IPropertyList, IDisposable
     // For string interpolation
     private int _pos;
     private char[]? _arrayToReturnToPool;
+
+    /// <summary>
+    /// True while GetProperties is populating this list. Set by the owning entity so a nested
+    /// InvalidateProperties can be refused instead of Reset()ing a build already in flight.
+    /// </summary>
+    internal bool IsBuilding { get; set; }
 
     public ObjectPropertyList(IEntity? e)
     {
@@ -148,10 +163,105 @@ public sealed class ObjectPropertyList : IPropertyList, IDisposable
     }
 
     public void Add(int number, string? arguments) => InternalAdd(number, $"{arguments}");
-    public void Add(string argument) => InternalAdd(GetStringNumber(), $"{argument}");
     public void Add(int number, int value) => InternalAdd(number, $"{value}");
     public void AddLocalized(int value) => InternalAdd(GetStringNumber(), $"{value:#}");
     public void AddLocalized(int number, int value) => InternalAdd(number, $"{value:#}");
+
+    public void Add(ReadOnlySpan<char> argument) => InternalAdd(GetStringNumber(), argument);
+    public void Add(int number, ReadOnlySpan<char> argument) => InternalAdd(number, argument);
+    public OplTextBlock TextBlock() => new(this);
+
+    // Emits newline-joined text across as many OPL properties as needed, breaking ONLY at '\n',
+    // so no single property exceeds MaxArgumentLength characters. Each chunk goes through the
+    // passthrough-cliloc rotation. Use for variable-length multi-line content instead of one
+    // Add(joined) call, which would overflow the legacy 2D-client per-property tooltip buffer.
+    public void AddChunked(ReadOnlySpan<char> text)
+    {
+        if (text.IsEmpty)
+        {
+            return;
+        }
+
+        var chunkStart = 0;
+        var searchFrom = 0;
+
+        while (true)
+        {
+            var nl = text[searchFrom..].IndexOf('\n');
+            var lineEnd = nl < 0 ? text.Length : searchFrom + nl;
+
+            // If appending this line would push the current chunk past the cap, flush the chunk
+            // up to the end of the previous line (excluding its '\n') first.
+            if (lineEnd - chunkStart > MaxArgumentLength && searchFrom > chunkStart)
+            {
+                Add(text[chunkStart..(searchFrom - 1)]);
+                chunkStart = searchFrom;
+                continue;
+            }
+
+            if (nl < 0)
+            {
+                Add(text[chunkStart..]); // remainder (a single over-cap line is clamped by Add)
+                return;
+            }
+
+            searchFrom = lineEnd + 1;
+        }
+    }
+
+    // Hard backstop: never let a single property exceed the legacy client's per-property buffer.
+    // Callers with multi-line content should use AddChunked(); this truncates anything that slips
+    // through and surfaces the offending entity/cliloc.
+    private ReadOnlySpan<char> ClampArgument(int number, ReadOnlySpan<char> chars)
+    {
+        if (chars.Length <= MaxArgumentLength)
+        {
+            return chars;
+        }
+
+        logger.Warning(
+            "OPL property on {Entity} (cliloc {Cliloc}) is {Length} chars; truncating to {Max} to avoid legacy 2D-client tooltip-buffer overflow. Use AddChunked for multi-line text.",
+            Entity,
+            number,
+            chars.Length,
+            MaxArgumentLength
+        );
+
+        return chars[..MaxArgumentLength];
+    }
+
+    private void InternalAdd(int number, ReadOnlySpan<char> chars)
+    {
+        if (number == 0)
+        {
+            return;
+        }
+
+        chars = ClampArgument(number, chars);
+
+        if (Header == 0)
+        {
+            Header = number;
+            HeaderArgs = chars.ToString();
+        }
+
+        AddHash(number);
+        AddHash(string.GetHashCode(chars, StringComparison.Ordinal));
+
+        var strLength = chars.Length * 2;
+        var length = _bufferPos + 6 + strLength;
+        while (length > _buffer.Length)
+        {
+            Flush();
+        }
+
+        var writer = new SpanWriter(_buffer.AsSpan(_bufferPos));
+        writer.Write(number);
+        writer.Write((ushort)strLength);
+        writer.Write(chars, TextEncoding.UnicodeLE);
+
+        _bufferPos += writer.BytesWritten;
+    }
 
     private int GetStringNumber() => _stringNumbers[_stringNumbersIndex++ % _stringNumbers.Length];
 
@@ -177,7 +287,7 @@ public sealed class ObjectPropertyList : IPropertyList, IDisposable
             return;
         }
 
-        var chars = _arrayToReturnToPool.AsSpan(0, _pos);
+        var chars = ClampArgument(number, _arrayToReturnToPool.AsSpan(0, _pos));
 
         if (Header == 0)
         {
@@ -215,8 +325,23 @@ public sealed class ObjectPropertyList : IPropertyList, IDisposable
     private static int GetDefaultLength(int literalLength, int formattedCount) =>
         Math.Max(256, literalLength + formattedCount * 11);
 
+    // Reset()/Dispose() return the scratch buffer to the pool. If either lands while a `$"..."`
+    // handler is still appending, re-rent rather than spanning a null array and throwing out of
+    // GetProperties. Mobile/Item hold the primary guard; this covers any other caller.
+    [MethodImpl(MethodImplOptions.AggressiveInlining)]
+    private void EnsureInterpolationBuffer()
+    {
+        if (_arrayToReturnToPool == null)
+        {
+            _arrayToReturnToPool = STArrayPool<char>.Shared.Rent(256);
+            _pos = 0;
+        }
+    }
+
     public void AppendLiteral(string value)
     {
+        EnsureInterpolationBuffer();
+
         if (value.Length == 1)
         {
             var chars = _arrayToReturnToPool.AsSpan();
@@ -250,6 +375,8 @@ public sealed class ObjectPropertyList : IPropertyList, IDisposable
 
     public void AppendFormatted<T>(T value)
     {
+        EnsureInterpolationBuffer();
+
         string? s;
         if (value is IFormattable)
         {
@@ -280,9 +407,11 @@ public sealed class ObjectPropertyList : IPropertyList, IDisposable
 
     public void AppendFormatted<T>(T value, string? format)
     {
-        // We support localization '#' cliloc formatter for custom property lists
-        // This allows someone to build an IPropertyList that creates HTML using the same syntax as LocalizationInterpolationHandler
-        if (format == "#")
+        EnsureInterpolationBuffer();
+
+        // '#' marks an integer argument as a cliloc ("#<value>"). Integers only -- a float/double/decimal
+        // '#' is the standard numeric format, not a cliloc marker.
+        if (format == "#" && value is int or uint or long or ulong or short or ushort or byte or sbyte)
         {
             AppendLiteral("#");
             format = null;
@@ -338,6 +467,8 @@ public sealed class ObjectPropertyList : IPropertyList, IDisposable
 
     public void AppendFormatted(ReadOnlySpan<char> value)
     {
+        EnsureInterpolationBuffer();
+
         if (value.TryCopyTo(_arrayToReturnToPool.AsSpan(_pos..)))
         {
             _pos += value.Length;
@@ -350,6 +481,8 @@ public sealed class ObjectPropertyList : IPropertyList, IDisposable
 
     public void AppendFormatted(ReadOnlySpan<char> value, int alignment = 0, string? format = null)
     {
+        EnsureInterpolationBuffer();
+
         var leftAlign = false;
         if (alignment < 0)
         {
@@ -384,6 +517,8 @@ public sealed class ObjectPropertyList : IPropertyList, IDisposable
 
     public void AppendFormatted(string? value)
     {
+        EnsureInterpolationBuffer();
+
         if (value?.TryCopyTo(_arrayToReturnToPool.AsSpan(_pos..)) == true)
         {
             _pos += value.Length;

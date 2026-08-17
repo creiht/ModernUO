@@ -27,7 +27,7 @@ public interface ISlayer
     SlayerName Slayer2 { get; set; }
 }
 
-[SerializationGenerator(10, false)]
+[SerializationGenerator(11, false)]
 public abstract partial class BaseWeapon
     : Item, IWeapon, IFactionItem, ICraftable, ISlayer, IDurability, IAosItem, IIdentifiable
 {
@@ -141,53 +141,45 @@ public abstract partial class BaseWeapon
     [SerializableFieldDefault(25)]
     private AosWeaponAttributes WeaponAttributesDefaultValue() => new(this);
 
-    [SerializableField(26)]
-    [SerializedCommandProperty(AccessLevel.GameMaster)]
-    private bool _playerConstructed;
-
-    [SerializableFieldSaveFlag(26)]
-    [MethodImpl(MethodImplOptions.AggressiveInlining)]
-    private bool ShouldSerializePlayerConstructed() => _playerConstructed;
-
     [SerializedIgnoreDupe]
-    [SerializableField(27, setter: "private")]
+    [SerializableField(26, setter: "private")]
     [SerializedCommandProperty(AccessLevel.GameMaster, canModify: true)]
     private AosSkillBonuses _skillBonuses;
 
-    [SerializableFieldSaveFlag(27)]
+    [SerializableFieldSaveFlag(26)]
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private bool ShouldSerializeSkillBonuses() => !_skillBonuses.IsEmpty;
 
-    [SerializableFieldDefault(27)]
+    [SerializableFieldDefault(26)]
     private AosSkillBonuses SkillBonusesDefaultValue() => new(this);
 
     [InvalidateProperties]
-    [SerializableField(28)]
+    [SerializableField(27)]
     [SerializedCommandProperty(AccessLevel.GameMaster)]
     private SlayerName _slayer2;
 
-    [SerializableFieldSaveFlag(28)]
+    [SerializableFieldSaveFlag(27)]
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private bool ShouldSerializeSlayer2() => _slayer2 != SlayerName.None;
 
     [SerializedIgnoreDupe]
-    [SerializableField(29, setter: "private")]
+    [SerializableField(28, setter: "private")]
     [SerializedCommandProperty(AccessLevel.GameMaster, canModify: true)]
     private AosElementAttributes _aosElementDamages;
 
-    [SerializableFieldSaveFlag(29)]
+    [SerializableFieldSaveFlag(28)]
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private bool ShouldSerializeElementAttributes() => !_aosElementDamages.IsEmpty;
 
-    [SerializableFieldDefault(29)]
+    [SerializableFieldDefault(28)]
     private AosElementAttributes AosElementAttributesDefaultValue() => new(this);
 
     [InvalidateProperties]
-    [SerializableField(30)]
+    [SerializableField(29)]
     [SerializedCommandProperty(AccessLevel.GameMaster)]
     private string _engravedText;
 
-    [SerializableFieldSaveFlag(30)]
+    [SerializableFieldSaveFlag(29)]
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     private bool ShouldSerializeEngravedText() => !string.IsNullOrEmpty(_engravedText);
 
@@ -674,7 +666,6 @@ public abstract partial class BaseWeapon
             Crafter = from.RawName;
         }
 
-        PlayerConstructed = true;
         Identified = true;
 
         var resourceType = typeRes ?? craftItem.Resources[0].ItemType;
@@ -1357,6 +1348,8 @@ public abstract partial class BaseWeapon
 
         var chance = ourValue / (theirValue * 2.0) * 1.0 + (double)bonus / 100;
 
+        chance = ModifyHitChance(attacker, defender, chance);
+
         if (Core.AOS && chance < 0.02)
         {
             chance = 0.02;
@@ -1364,6 +1357,19 @@ public abstract partial class BaseWeapon
 
         return attacker.CheckSkill(atkSkill.SkillName, chance);
     }
+
+    /// <summary>
+    ///     Allows subclasses to modify the final hit chance before the dice roll.
+    ///     Called after all standard AOS bonuses are applied but before the 2% floor.
+    ///     Supports both additive adjustments (chance -= 0.12) and multiplicative ones (chance *= scalar).
+    /// </summary>
+    protected virtual double ModifyHitChance(Mobile attacker, Mobile defender, double chance) => chance;
+
+    /// <summary>
+    ///     Allows subclasses to modify the final post-bonus damage (e.g. range-based penalties)
+    ///     before defender mitigation is applied. Mirrors <see cref="ModifyHitChance" />.
+    /// </summary>
+    protected virtual int ModifyDamage(Mobile attacker, Mobile defender, int damage) => damage;
 
     public virtual TimeSpan GetDelay(Mobile m)
     {
@@ -1874,6 +1880,7 @@ public abstract partial class BaseWeapon
         percentageBonus = Math.Min(percentageBonus, 300);
 
         damage = AOS.Scale(damage, 100 + percentageBonus);
+        damage = ModifyDamage(attacker, defender, damage);
 
         var defLoc = new WorldLocation(defender);
         var bcAtt = attacker as BaseCreature;
@@ -2998,115 +3005,7 @@ public abstract partial class BaseWeapon
             list.Add(1072792); // Balanced
         }
 
-        if (WeaponAttributes.UseBestSkill != 0)
-        {
-            list.Add(1060400); // use best weapon skill
-        }
-
-        if ((prop = GetDamageBonus() + Attributes.WeaponDamage) != 0)
-        {
-            list.Add(1060401, prop); // damage increase ~1_val~%
-        }
-
-        if ((prop = Attributes.DefendChance) != 0)
-        {
-            list.Add(1060408, prop); // defense chance increase ~1_val~%
-        }
-
-        if ((prop = Attributes.EnhancePotions) != 0)
-        {
-            list.Add(1060411, prop); // enhance potions ~1_val~%
-        }
-
-        if ((prop = Attributes.CastRecovery) != 0)
-        {
-            list.Add(1060412, prop); // faster cast recovery ~1_val~
-        }
-
-        if ((prop = Attributes.CastSpeed) != 0)
-        {
-            list.Add(1060413, prop); // faster casting ~1_val~
-        }
-
-        if ((prop = GetHitChanceBonus() + Attributes.AttackChance) != 0)
-        {
-            list.Add(1060415, prop); // hit chance increase ~1_val~%
-        }
-
-        if ((prop = WeaponAttributes.HitColdArea) != 0)
-        {
-            list.Add(1060416, prop); // hit cold area ~1_val~%
-        }
-
-        if ((prop = WeaponAttributes.HitDispel) != 0)
-        {
-            list.Add(1060417, prop); // hit dispel ~1_val~%
-        }
-
-        if ((prop = WeaponAttributes.HitEnergyArea) != 0)
-        {
-            list.Add(1060418, prop); // hit energy area ~1_val~%
-        }
-
-        if ((prop = WeaponAttributes.HitFireArea) != 0)
-        {
-            list.Add(1060419, prop); // hit fire area ~1_val~%
-        }
-
-        if ((prop = WeaponAttributes.HitFireball) != 0)
-        {
-            list.Add(1060420, prop); // hit fireball ~1_val~%
-        }
-
-        if ((prop = WeaponAttributes.HitHarm) != 0)
-        {
-            list.Add(1060421, prop); // hit harm ~1_val~%
-        }
-
-        if ((prop = WeaponAttributes.HitLeechHits) != 0)
-        {
-            list.Add(1060422, prop); // hit life leech ~1_val~%
-        }
-
-        if ((prop = WeaponAttributes.HitLightning) != 0)
-        {
-            list.Add(1060423, prop); // hit lightning ~1_val~%
-        }
-
-        if ((prop = WeaponAttributes.HitLowerAttack) != 0)
-        {
-            list.Add(1060424, prop); // hit lower attack ~1_val~%
-        }
-
-        if ((prop = WeaponAttributes.HitLowerDefend) != 0)
-        {
-            list.Add(1060425, prop); // hit lower defense ~1_val~%
-        }
-
-        if ((prop = WeaponAttributes.HitMagicArrow) != 0)
-        {
-            list.Add(1060426, prop); // hit magic arrow ~1_val~%
-        }
-
-        if ((prop = WeaponAttributes.HitLeechMana) != 0)
-        {
-            list.Add(1060427, prop); // hit mana leech ~1_val~%
-        }
-
-        if ((prop = WeaponAttributes.HitPhysicalArea) != 0)
-        {
-            list.Add(1060428, prop); // hit physical area ~1_val~%
-        }
-
-        if ((prop = WeaponAttributes.HitPoisonArea) != 0)
-        {
-            list.Add(1060429, prop); // hit poison area ~1_val~%
-        }
-
-        if ((prop = WeaponAttributes.HitLeechStam) != 0)
-        {
-            list.Add(1060430, prop); // hit stamina leech ~1_val~%
-        }
+        WeaponAttributes.GetProperties(list);
 
         if (ImmolatingWeaponSpell.IsImmolating(this))
         {
@@ -3118,109 +3017,17 @@ public abstract partial class BaseWeapon
             list.Add(1072793, prop); // Velocity ~1_val~%
         }
 
-        if ((prop = Attributes.BonusDex) != 0)
-        {
-            list.Add(1060409, prop); // dexterity bonus ~1_val~
-        }
+        Attributes.GetProperties(
+            list,
+            damageBonus: GetDamageBonus(),
+            hitChanceBonus: GetHitChanceBonus(),
+            luckBonus: GetLuckBonus()
+        );
 
-        if ((prop = Attributes.BonusHits) != 0)
+        var lowerStatReq = GetLowerStatReq();
+        if (lowerStatReq != 0)
         {
-            list.Add(1060431, prop); // hit point increase ~1_val~
-        }
-
-        if ((prop = Attributes.BonusInt) != 0)
-        {
-            list.Add(1060432, prop); // intelligence bonus ~1_val~
-        }
-
-        if ((prop = Attributes.LowerManaCost) != 0)
-        {
-            list.Add(1060433, prop); // lower mana cost ~1_val~%
-        }
-
-        if ((prop = Attributes.LowerRegCost) != 0)
-        {
-            list.Add(1060434, prop); // lower reagent cost ~1_val~%
-        }
-
-        if ((prop = GetLowerStatReq()) != 0)
-        {
-            list.Add(1060435, prop); // lower requirements ~1_val~%
-        }
-
-        if ((prop = GetLuckBonus() + Attributes.Luck) != 0)
-        {
-            list.Add(1060436, prop); // luck ~1_val~
-        }
-
-        if ((prop = WeaponAttributes.MageWeapon) != 0)
-        {
-            list.Add(1060438, 30 - prop); // mage weapon -~1_val~ skill
-        }
-
-        if ((prop = Attributes.BonusMana) != 0)
-        {
-            list.Add(1060439, prop); // mana increase ~1_val~
-        }
-
-        if ((prop = Attributes.RegenMana) != 0)
-        {
-            list.Add(1060440, prop); // mana regeneration ~1_val~
-        }
-
-        if (Attributes.NightSight != 0)
-        {
-            list.Add(1060441); // night sight
-        }
-
-        if ((prop = Attributes.ReflectPhysical) != 0)
-        {
-            list.Add(1060442, prop); // reflect physical damage ~1_val~%
-        }
-
-        if ((prop = Attributes.RegenStam) != 0)
-        {
-            list.Add(1060443, prop); // stamina regeneration ~1_val~
-        }
-
-        if ((prop = Attributes.RegenHits) != 0)
-        {
-            list.Add(1060444, prop); // hit point regeneration ~1_val~
-        }
-
-        if ((prop = WeaponAttributes.SelfRepair) != 0)
-        {
-            list.Add(1060450, prop); // self repair ~1_val~
-        }
-
-        if (Attributes.SpellChanneling != 0)
-        {
-            list.Add(1060482); // spell channeling
-        }
-
-        if ((prop = Attributes.SpellDamage) != 0)
-        {
-            list.Add(1060483, prop); // spell damage increase ~1_val~%
-        }
-
-        if ((prop = Attributes.BonusStam) != 0)
-        {
-            list.Add(1060484, prop); // stamina increase ~1_val~
-        }
-
-        if ((prop = Attributes.BonusStr) != 0)
-        {
-            list.Add(1060485, prop); // strength bonus ~1_val~
-        }
-
-        if ((prop = Attributes.WeaponSpeed) != 0)
-        {
-            list.Add(1060486, prop); // swing speed increase ~1_val~%
-        }
-
-        if (Core.ML && (prop = Attributes.IncreasedKarmaLoss) != 0)
-        {
-            list.Add(1075210, prop); // Increased Karma Loss ~1val~%
+            list.Add(1060435, lowerStatReq); // lower requirements ~1_val~%
         }
 
         GetDamageTypes(
@@ -3239,14 +3046,14 @@ public abstract partial class BaseWeapon
             list.Add(1060403, phys); // physical damage ~1_val~%
         }
 
-        if (fire != 0)
-        {
-            list.Add(1060405, fire); // fire damage ~1_val~%
-        }
-
         if (cold != 0)
         {
             list.Add(1060404, cold); // cold damage ~1_val~%
+        }
+
+        if (fire != 0)
+        {
+            list.Add(1060405, fire); // fire damage ~1_val~%
         }
 
         if (pois != 0)
@@ -3323,6 +3130,11 @@ public abstract partial class BaseWeapon
                 case SkillName.Archery:
                     {
                         list.Add(1061175); // skill required: archery
+                        break;
+                    }
+                case SkillName.Throwing:
+                    {
+                        list.Add(1112075); // skill required: throwing
                         break;
                     }
             }
@@ -3759,236 +3571,6 @@ public abstract partial class BaseWeapon
         }
     }
 
-    private static bool GetSaveFlag(OldSaveFlag flags, OldSaveFlag toGet) => (flags & toGet) != 0;
-
-    private void Deserialize(IGenericReader reader, int version)
-    {
-        var flags = (OldSaveFlag)reader.ReadInt();
-
-        if (GetSaveFlag(flags, OldSaveFlag.DamageLevel))
-        {
-            _damageLevel = (WeaponDamageLevel)reader.ReadInt();
-        }
-
-        if (GetSaveFlag(flags, OldSaveFlag.AccuracyLevel))
-        {
-            _accuracyLevel = (WeaponAccuracyLevel)reader.ReadInt();
-        }
-
-        if (GetSaveFlag(flags, OldSaveFlag.DurabilityLevel))
-        {
-            _durabilityLevel = (WeaponDurabilityLevel)reader.ReadInt();
-        }
-
-        if (GetSaveFlag(flags, OldSaveFlag.Quality))
-        {
-            _quality = (WeaponQuality)reader.ReadInt();
-        }
-        else
-        {
-            _quality = WeaponQuality.Regular;
-        }
-
-        if (GetSaveFlag(flags, OldSaveFlag.Hits))
-        {
-            _hitPoints = reader.ReadInt();
-        }
-
-        if (GetSaveFlag(flags, OldSaveFlag.MaxHits))
-        {
-            _maxHitPoints = reader.ReadInt();
-        }
-
-        if (GetSaveFlag(flags, OldSaveFlag.Slayer))
-        {
-            _slayer = (SlayerName)reader.ReadInt();
-        }
-
-        if (GetSaveFlag(flags, OldSaveFlag.Poison))
-        {
-            _poison = reader.ReadPoison();
-        }
-
-        if (GetSaveFlag(flags, OldSaveFlag.PoisonCharges))
-        {
-            _poisonCharges = reader.ReadInt();
-        }
-
-        if (GetSaveFlag(flags, OldSaveFlag.Crafter))
-        {
-            Timer.DelayCall(crafter => _crafter = crafter?.RawName, reader.ReadEntity<Mobile>());
-        }
-
-        if (GetSaveFlag(flags, OldSaveFlag.Identified))
-        {
-            _identified = version >= 6 || reader.ReadBool();
-        }
-
-        if (GetSaveFlag(flags, OldSaveFlag.StrReq))
-        {
-            _strRequirement = reader.ReadInt();
-        }
-        else
-        {
-            _strRequirement = -1;
-        }
-
-        if (GetSaveFlag(flags, OldSaveFlag.DexReq))
-        {
-            _dexRequirement = reader.ReadInt();
-        }
-        else
-        {
-            _dexRequirement = -1;
-        }
-
-        if (GetSaveFlag(flags, OldSaveFlag.IntReq))
-        {
-            _intRequirement = reader.ReadInt();
-        }
-        else
-        {
-            _intRequirement = -1;
-        }
-
-        if (GetSaveFlag(flags, OldSaveFlag.MinDamage))
-        {
-            _minDamage = reader.ReadInt();
-        }
-        else
-        {
-            _minDamage = -1;
-        }
-
-        if (GetSaveFlag(flags, OldSaveFlag.MaxDamage))
-        {
-            _maxDamage = reader.ReadInt();
-        }
-        else
-        {
-            _maxDamage = -1;
-        }
-
-        if (GetSaveFlag(flags, OldSaveFlag.HitSound))
-        {
-            _hitSound = reader.ReadInt();
-        }
-        else
-        {
-            _hitSound = -1;
-        }
-
-        if (GetSaveFlag(flags, OldSaveFlag.MissSound))
-        {
-            _missSound = reader.ReadInt();
-        }
-        else
-        {
-            _missSound = -1;
-        }
-
-        if (GetSaveFlag(flags, OldSaveFlag.Speed))
-        {
-            if (version < 9)
-            {
-                _speed = reader.ReadInt();
-            }
-            else
-            {
-                _speed = reader.ReadFloat();
-            }
-        }
-        else
-        {
-            _speed = -1;
-        }
-
-        if (GetSaveFlag(flags, OldSaveFlag.MaxRange))
-        {
-            _maxRange = reader.ReadInt();
-        }
-        else
-        {
-            _maxRange = -1;
-        }
-
-        if (GetSaveFlag(flags, OldSaveFlag.Skill))
-        {
-            _skill = (SkillName)reader.ReadInt();
-        }
-        else
-        {
-            _skill = (SkillName)(-1);
-        }
-
-        if (GetSaveFlag(flags, OldSaveFlag.Type))
-        {
-            _type = (WeaponType)reader.ReadInt();
-        }
-        else
-        {
-            _type = (WeaponType)(-1);
-        }
-
-        if (GetSaveFlag(flags, OldSaveFlag.Animation))
-        {
-            _animation = (WeaponAnimation)reader.ReadInt();
-        }
-        else
-        {
-            _animation = (WeaponAnimation)(-1);
-        }
-
-        if (GetSaveFlag(flags, OldSaveFlag.Resource))
-        {
-            _resource = (CraftResource)reader.ReadInt();
-        }
-        else
-        {
-            _resource = CraftResource.Iron;
-        }
-
-        Attributes = new AosAttributes(this);
-
-        if (GetSaveFlag(flags, OldSaveFlag.Attributes))
-        {
-            Attributes.Deserialize(reader);
-        }
-
-        WeaponAttributes = new AosWeaponAttributes(this);
-
-        if (GetSaveFlag(flags, OldSaveFlag.WeaponAttributes))
-        {
-            WeaponAttributes.Deserialize(reader);
-        }
-
-        PlayerConstructed = GetSaveFlag(flags, OldSaveFlag.PlayerConstructed);
-
-        SkillBonuses = new AosSkillBonuses(this);
-
-        if (GetSaveFlag(flags, OldSaveFlag.SkillBonuses))
-        {
-            SkillBonuses.Deserialize(reader);
-        }
-
-        if (GetSaveFlag(flags, OldSaveFlag.Slayer2))
-        {
-            _slayer2 = (SlayerName)reader.ReadInt();
-        }
-
-        AosElementDamages = new AosElementAttributes(this);
-
-        if (GetSaveFlag(flags, OldSaveFlag.ElementalDamages))
-        {
-            AosElementDamages.Deserialize(reader);
-        }
-
-        if (GetSaveFlag(flags, OldSaveFlag.EngravedText))
-        {
-            _engravedText = reader.ReadString();
-        }
-    }
-
     [AfterDeserialization]
     private void AfterDeserialization()
     {
@@ -4054,42 +3636,6 @@ public abstract partial class BaseWeapon
         }
     }
 
-    [Flags]
-    private enum OldSaveFlag
-    {
-        None = 0x00000000,
-        DamageLevel = 0x00000001,
-        AccuracyLevel = 0x00000002,
-        DurabilityLevel = 0x00000004,
-        Quality = 0x00000008,
-        Hits = 0x00000010,
-        MaxHits = 0x00000020,
-        Slayer = 0x00000040,
-        Poison = 0x00000080,
-        PoisonCharges = 0x00000100,
-        Crafter = 0x00000200,
-        Identified = 0x00000400,
-        StrReq = 0x00000800,
-        DexReq = 0x00001000,
-        IntReq = 0x00002000,
-        MinDamage = 0x00004000,
-        MaxDamage = 0x00008000,
-        HitSound = 0x00010000,
-        MissSound = 0x00020000,
-        Speed = 0x00040000,
-        MaxRange = 0x00080000,
-        Skill = 0x00100000,
-        Type = 0x00200000,
-        Animation = 0x00400000,
-        Resource = 0x00800000,
-        Attributes = 0x01000000,
-        WeaponAttributes = 0x02000000,
-        PlayerConstructed = 0x04000000,
-        SkillBonuses = 0x08000000,
-        Slayer2 = 0x10000000,
-        ElementalDamages = 0x20000000,
-        EngravedText = 0x40000000
-    }
 }
 
 public enum CheckSlayerResult

@@ -4,39 +4,138 @@ using CalcMoves = Server.Movement.Movement;
 namespace Server.Engines.Pathing.Cache;
 
 /// <summary>
-/// Computes static-only walkability for a single cell — the per-cell, per-direction
-/// "can step" mask and destination Z, based purely on land + statics + multis. Mirrors
-/// <see cref="MovementImpl"/>.Check minus the item and mobile collision phases.
+/// Computes the 8-direction "can step" mask and destination Zs for a single cell from land and
+/// statics alone. Mirrors <see cref="MovementImpl"/>.Check minus the item and mobile collision
+/// phases, which belong to the caller's dynamic-obstacle pass.
+///
+/// Multis (houses, boats) are excluded from the static bake because they are dynamic content;
+/// cells they cover route to the live movement path via <see cref="StepCache"/>'s multi halo.
+/// <see cref="ComputeMultiMaskAt"/> is the opt-in exception for those cells.
+///
+/// Each call bakes both rule sets: walker (canSwim=false, cantWalk=false) and swim-only
+/// (canSwim=true, cantWalk=true). Diagonal corner-cut is not applied — callers hold the partner
+/// bits in the same mask byte and combine them at query time.
 /// </summary>
-/// <remarks>
-/// Bakes two rule sets per cell: walker (canSwim=false, cantWalk=false) and swim-only
-/// (canSwim=true, cantWalk=true). Item / mobile collision phases are omitted (they're
-/// the dynamic-obstacle pass's job). Diagonal corner-cut is NOT applied here; callers
-/// must AND the partner-cell results at query time.
-/// </remarks>
 public static class StepProbe
 {
     private const int PersonHeight = 16;
     private const int StepHeight = 2;
 
-    public static StepMask ComputeMaskAt(Map map, int x, int y, sbyte sourceZ)
+    /// <summary>
+    /// Writes the surface Zs at (x, y) a default walker can actually stand on into
+    /// <paramref name="zs"/>, ascending, and returns the count. A candidate surface — the
+    /// walkable land centre, or any walkable static's top — qualifies only if a PersonHeight
+    /// envelope above it is clear of impassable statics.
+    ///
+    /// The clearance test is what makes this the exact set of standing Zs the slow path can
+    /// resolve to: it drops surfaces a creature cannot occupy, like the land beneath a sewer
+    /// walkway or a low bridge. That in turn means two surviving surfaces are always at least
+    /// PersonHeight apart (an upper surface any closer would have taken the lower one's
+    /// clearance away), so one ascending pass with a duplicate skip suffices.
+    ///
+    /// The baker anchors each cell here so static-over-land geometry — walkways, bridges, raised
+    /// foundations, upper floors — bakes at the Z a creature stands on rather than the land average.
+    /// </summary>
+    public static int ComputeStandableSurfaceZs(Map map, int x, int y, Span<sbyte> zs)
+    {
+        if (map == null || map == Map.Internal)
+        {
+            return 0;
+        }
+        if (x < 0 || y < 0 || x >= map.Width || y >= map.Height)
+        {
+            return 0;
+        }
+
+        Span<int> cand = stackalloc int[16];
+        var count = 0;
+
+        var landTile = map.Tiles.GetLandTile(x, y);
+        var landFlags = TileData.LandTable[landTile.ID & TileData.MaxLandValue].Flags;
+        if (!landTile.Ignored && (landFlags & TileFlag.Impassable) == 0)
+        {
+            map.GetAverageZ(x, y, out _, out var landCenter, out _);
+            cand[count++] = landCenter;
+        }
+
+        foreach (var tile in map.Tiles.GetStaticTiles(x, y))
+        {
+            if (count >= cand.Length)
+            {
+                break;
+            }
+            var data = TileData.ItemTable[tile.ID & TileData.MaxItemValue];
+            if (!data.Surface || data.Impassable)
+            {
+                continue;
+            }
+            cand[count++] = tile.Z + data.CalcHeight;
+        }
+
+        if (count == 0)
+        {
+            return 0;
+        }
+
+        cand[..count].Sort();
+
+        var n = 0;
+        for (var i = 0; i < count && n < zs.Length; i++)
+        {
+            var cz = (sbyte)Math.Clamp(cand[i], sbyte.MinValue + 1, sbyte.MaxValue);
+            if (n > 0 && zs[n - 1] == cz)
+            {
+                continue;
+            }
+            // Standable iff the creature's PersonHeight body envelope above this surface is
+            // free of impassable statics. The surface itself never blocks (its top == cz,
+            // which is the envelope floor, not inside it).
+            if (StaticsBlockAt(map, x, y, cz, cz + PersonHeight))
+            {
+                continue;
+            }
+            zs[n++] = cz;
+        }
+
+        return n;
+    }
+
+    public static StepMask ComputeMaskAt(Map map, int x, int y, sbyte sourceZ) =>
+        ComputeMaskCore(map, x, y, sourceZ, includeMultis: false);
+
+    /// <summary>
+    /// Multi-aware counterpart to <see cref="ComputeMaskAt"/>, for cells a multi covers or
+    /// neighbours: folds house/boat component tiles into the same surface/step logic. Builds the
+    /// whole 8-direction mask in one pass, where the slow path would run CheckMovement eight times.
+    /// </summary>
+    public static StepMask ComputeMultiMaskAt(Map map, int x, int y, sbyte sourceZ) =>
+        ComputeMaskCore(map, x, y, sourceZ, includeMultis: true);
+
+    /// <summary>
+    /// Shared 8-direction mask builder behind <see cref="ComputeMaskAt"/> and
+    /// <see cref="ComputeMultiMaskAt"/>. <paramref name="includeMultis"/> is the only difference:
+    /// it swaps the tile source to GetStaticAndMultiTiles so house and boat components participate.
+    /// </summary>
+    private static StepMask ComputeMaskCore(Map map, int x, int y, sbyte sourceZ, bool includeMultis)
     {
         if (map == null || map == Map.Internal)
         {
             return default;
         }
 
-        GetStaticStartZ(map, x, y, sourceZ, canSwim: false, cantWalk: false,
+        var srcTiles = includeMultis ? map.Tiles.GetStaticAndMultiTiles(x, y) : map.Tiles.GetStaticTiles(x, y);
+
+        GetStaticStartZ(map, x, y, sourceZ, srcTiles, canSwim: false, cantWalk: false,
             out var walkStartZ, out var walkStartTop, out _);
-        GetStaticStartZ(map, x, y, sourceZ, canSwim: true, cantWalk: true,
+        GetStaticStartZ(map, x, y, sourceZ, srcTiles, canSwim: true, cantWalk: true,
             out var swimStartZ, out var swimStartTop, out _);
 
         byte walkMask = 0;
         byte wetMask = 0;
         Span<sbyte> walkZs = stackalloc sbyte[8];
         Span<sbyte> swimZs = stackalloc sbyte[8];
-        // stackalloc is NOT zero-initialized — unwritten slots hold whatever was on the
-        // stack. Clear before use; the loop only writes slots where the step succeeds.
+        // stackalloc is not zero-initialized, and the loop below writes a slot only where the
+        // step succeeds, so blocked directions would otherwise carry stack garbage.
         walkZs.Clear();
         swimZs.Clear();
 
@@ -46,14 +145,16 @@ public static class StepProbe
             var dy = y;
             CalcMoves.Offset((Direction)d, ref dx, ref dy);
 
-            if (CheckStaticStep(map, dx, dy, walkStartZ, walkStartTop,
+            var dTiles = includeMultis ? map.Tiles.GetStaticAndMultiTiles(dx, dy) : map.Tiles.GetStaticTiles(dx, dy);
+
+            if (CheckStaticStep(map, dx, dy, dTiles, walkStartZ, walkStartTop,
                     canSwim: false, cantWalk: false, out var walkZ))
             {
                 walkMask |= (byte)(1 << d);
                 walkZs[d] = (sbyte)walkZ;
             }
 
-            if (CheckStaticStep(map, dx, dy, swimStartZ, swimStartTop,
+            if (CheckStaticStep(map, dx, dy, dTiles, swimStartZ, swimStartTop,
                     canSwim: true, cantWalk: true, out var swimZ))
             {
                 wetMask |= (byte)(1 << d);
@@ -71,24 +172,59 @@ public static class StepProbe
     }
 
     /// <summary>
-    /// Returns the slow path's standing-Z for a default walker at (x, y). Mirrors
-    /// MovementImpl.Check's surface-selection — paver Z+1 for paver-over-ground,
-    /// landCenter for bare land. Used by <see cref="StepCache"/> to bake SourceZ so
-    /// A*'s tracked-per-cell Z matches the cache's bake-time assumption.
+    /// The standing-Z a default walker at (x, y) resolves to under the slow path's
+    /// surface-selection rules: paver Z+1 over paver-on-ground, land centre on bare land.
+    /// The baker anchors cells with <see cref="ComputeStandableSurfaceZs"/> instead, which is
+    /// clearance-aware; this remains the direct MovementImpl equivalent for parity checks.
     /// </summary>
     public static int ComputeStandingZ(Map map, int x, int y, int locZ)
     {
-        GetStaticStartZ(map, x, y, locZ, canSwim: false, cantWalk: false,
-            out _, out _, out var zCenter);
+        GetStaticStartZ(map, x, y, locZ, map.Tiles.GetStaticTiles(x, y), canSwim: false, cantWalk: false, out _, out _, out var zCenter);
+
         return zCenter;
+    }
+
+    /// <summary>
+    /// Returns the water-surface standing Z at (x, y) — the Z a swim-only mob would stand
+    /// at on this cell — or <see cref="int.MinValue"/> if no water surface exists. Used
+    /// by <see cref="StepCache"/> to detect shore cells (cells with both walk and swim
+    /// surfaces separated by &gt; StepHeight) and bake their swim layer at swim-perspective Z.
+    /// </summary>
+    public static int ComputeSwimStandingZ(Map map, int x, int y)
+    {
+        if (map == null || map == Map.Internal || x < 0 || y < 0 || x >= map.Width || y >= map.Height)
+        {
+            return int.MinValue;
+        }
+
+        // Land tile flagged Wet — its center Z is the swim surface.
+        var landTile = map.Tiles.GetLandTile(x, y);
+        var landFlags = TileData.LandTable[landTile.ID & TileData.MaxLandValue].Flags;
+        if (!landTile.Ignored && (landFlags & TileFlag.Wet) != 0)
+        {
+            map.GetAverageZ(x, y, out _, out var landCenter, out _);
+            return landCenter;
+        }
+
+        // Otherwise scan statics for a wet surface.
+        foreach (var tile in map.Tiles.GetStaticTiles(x, y))
+        {
+            var data = TileData.ItemTable[tile.ID & TileData.MaxItemValue];
+            if (data.Wet)
+            {
+                return tile.Z + data.CalcHeight;
+            }
+        }
+
+        return int.MinValue;
     }
 
     /// <summary>
     /// Mirrors GetStartZ from MovementImpl, parameterized by canSwim / cantWalk.
     /// </summary>
     private static void GetStaticStartZ(
-        Map map, int x, int y, int locZ, bool canSwim, bool cantWalk,
-        out int zLow, out int zTop, out int zCenter
+        Map map, int x, int y, int locZ, Map.StaticTileEnumerable tiles,
+        bool canSwim, bool cantWalk, out int zLow, out int zTop, out int zCenter
     )
     {
         var landTile = map.Tiles.GetLandTile(x, y);
@@ -97,8 +233,7 @@ public static class StepProbe
 
         // Mirrors MovementImpl: impassable + swim on water is OK; otherwise block on
         // cantWalk or impassable.
-        var landBlocks = (cantWalk || impassable)
-            && !(impassable && canSwim && (flags & TileFlag.Wet) != 0);
+        var landBlocks = (cantWalk || impassable) && !(impassable && canSwim && (flags & TileFlag.Wet) != 0);
 
         map.GetAverageZ(x, y, out var landZ, out var landCenter, out var landTop);
 
@@ -115,7 +250,7 @@ public static class StepProbe
             isSet = true;
         }
 
-        foreach (var tile in map.Tiles.GetStaticAndMultiTiles(x, y))
+        foreach (var tile in tiles)
         {
             var id = TileData.ItemTable[tile.ID & TileData.MaxItemValue];
             var calcTop = tile.Z + id.CalcHeight;
@@ -153,8 +288,8 @@ public static class StepProbe
     /// Items and mobile collision phases are omitted.
     /// </summary>
     private static bool CheckStaticStep(
-        Map map, int x, int y, int startZ, int startTop, bool canSwim, bool cantWalk,
-        out int newZ
+        Map map, int x, int y, Map.StaticTileEnumerable tiles, int startZ, int startTop,
+        bool canSwim, bool cantWalk, out int newZ
     )
     {
         newZ = 0;
@@ -168,8 +303,7 @@ public static class StepProbe
         var flags = TileData.LandTable[landTile.ID & TileData.MaxLandValue].Flags;
         var impassable = (flags & TileFlag.Impassable) != 0;
 
-        var landBlocks = (cantWalk || impassable)
-            && !(impassable && canSwim && (flags & TileFlag.Wet) != 0);
+        var landBlocks = (cantWalk || impassable) && !(impassable && canSwim && (flags & TileFlag.Wet) != 0);
 
         var considerLand = !landTile.Ignored;
 
@@ -182,7 +316,7 @@ public static class StepProbe
 
         int testTop;
 
-        foreach (var tile in map.Tiles.GetStaticAndMultiTiles(x, y))
+        foreach (var tile in tiles)
         {
             var itemData = TileData.ItemTable[tile.ID & TileData.MaxItemValue];
             var notWater = !itemData.Wet;
