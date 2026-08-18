@@ -78,6 +78,13 @@ namespace Server.Engines.Harvest
             {
                 map.OnBeginDig(from);
             }
+            else if ( targeted == from )
+			{
+				if ( !m_System.TryStartNearbyHarvest( from, m_Tool ) )
+					m_System.OnNoNearbyHarvest( from, m_Tool );
+
+				return;
+			}
             else
             {
                 m_System.StartHarvesting(from, m_Tool, targeted);
