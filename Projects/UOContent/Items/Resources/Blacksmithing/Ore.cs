@@ -1,3 +1,4 @@
+using System;
 using ModernUO.Serialization;
 using Server.Engines.Craft;
 using Server.Mobiles;
@@ -8,7 +9,7 @@ namespace Server.Items;
 [SerializationGenerator(2, false)]
 public abstract partial class BaseOre : Item
 {
-    public BaseOre(CraftResource resource, int amount = 1) : base(RandomSize())
+    public BaseOre(CraftResource resource, int amount = 1) : base(0x19B9)
     {
         Stackable = true;
         Amount = amount;
@@ -173,6 +174,16 @@ public abstract partial class BaseOre : Item
 
             if (IsForge(targeted))
             {
+                if (targeted is Item i && !from.InRange(i.GetWorldLocation(), 2))
+                {
+                    OnTargetOutOfRange(from, targeted);
+                    return;
+                }
+                else if (!from.InLOS(targeted)){
+                    OnTargetOutOfLOS(from, targeted);
+                    return;
+                }
+
                 var difficulty = m_Ore._resource switch
                 {
                     CraftResource.DullCopper => 65.0,
@@ -204,64 +215,38 @@ public abstract partial class BaseOre : Item
 
                 if (from.CheckTargetSkill(SkillName.Mining, targeted, minSkill, maxSkill))
                 {
-                    var toConsume = m_Ore.Amount;
+                    var toConsume = 1;
 
-                    if (toConsume <= 0)
+                    if (m_Ore.Amount <= 0)
                     {
                         // There is not enough metal-bearing ore in this pile to make an ingot.
                         from.SendLocalizedMessage(501987);
                         return;
                     }
 
-                    if (toConsume > 30000)
-                    {
-                        toConsume = 30000;
-                    }
-
-                    int ingotAmount;
-
-                    if (m_Ore.ItemID == 0x19B7)
-                    {
-                        ingotAmount = toConsume / 2;
-
-                        if (toConsume % 2 != 0)
-                        {
-                            --toConsume;
-                        }
-                    }
-                    else if (m_Ore.ItemID == 0x19B9)
-                    {
-                        ingotAmount = toConsume * 2;
-                    }
-                    else
-                    {
-                        ingotAmount = toConsume;
-                    }
+                    int ingotAmount = 2;
 
                     var ingot = m_Ore.GetIngot();
                     ingot.Amount = ingotAmount;
 
                     m_Ore.Consume(toConsume);
                     from.AddToBackpack(ingot);
-                    // from.PlaySound( 0x57 );
+                    from.PlaySound( 0x57 );
 
                     // You smelt the ore removing the impurities and put the metal in your backpack.
                     from.SendLocalizedMessage(501988);
                 }
                 else
                 {
-                    if (m_Ore.Amount < 2)
-                    {
-                        m_Ore.ItemID = m_Ore.ItemID == 0x19B9 ? 0x19B8 : 0x19B7;
-                    }
-                    else
-                    {
-                        m_Ore.Amount /= 2;
-                    }
+                    m_Ore.Consume(1);
 
                     // You burn away the impurities but are left with less useable metal.
                     from.SendLocalizedMessage(501990);
                 }
+
+                if (m_Ore.Amount > 0)
+                    Timer.StartTimer(TimeSpan.FromMilliseconds(500), () => OnTarget(from, targeted));
+
             }
         }
 

@@ -72,7 +72,7 @@ namespace Server.Engines.Harvest
                 BankWidth = 8,
                 BankHeight = 8,
                 MinTotal = 5,
-                MaxTotal = 15,
+                MaxTotal = 10,
                 MinRespawn = TimeSpan.FromMinutes(10.0),
                 MaxRespawn = TimeSpan.FromMinutes(20.0),
                 Skill = SkillName.Fishing,

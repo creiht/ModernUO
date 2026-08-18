@@ -92,7 +92,7 @@ public partial class Log : Item, ICommodity, IAxe
         if (from.Skills.Carpentry.Value < skill &&
             from.Skills.Lumberjacking.Value < skill)
         {
-            item.Delete();
+            //item.Delete();
             from.SendLocalizedMessage(1072652); // You cannot work this strange and unusual wood.
             return false;
         }
