@@ -172,83 +172,104 @@ public abstract partial class BaseOre : Item
                 return;
             }
 
-            if (IsForge(targeted))
+            if (!IsForge(targeted))
             {
-                if (targeted is Item i && !from.InRange(i.GetWorldLocation(), 2))
-                {
-                    OnTargetOutOfRange(from, targeted);
-                    return;
-                }
-                else if (!from.InLOS(targeted)){
-                    OnTargetOutOfLOS(from, targeted);
-                    return;
-                }
-
-                var difficulty = m_Ore._resource switch
-                {
-                    CraftResource.DullCopper => 65.0,
-                    CraftResource.ShadowIron => 70.0,
-                    CraftResource.Copper     => 75.0,
-                    CraftResource.Bronze     => 80.0,
-                    CraftResource.Gold       => 85.0,
-                    CraftResource.Agapite    => 90.0,
-                    CraftResource.Verite     => 95.0,
-                    CraftResource.Valorite   => 99.0,
-                    _                        => 50.0
-                };
-
-                var minSkill = difficulty - 25.0;
-                var maxSkill = difficulty + 25.0;
-
-                if (difficulty > 50.0 && difficulty > from.Skills.Mining.Value)
-                {
-                    from.SendLocalizedMessage(501986); // You have no idea how to smelt this strange ore!
-                    return;
-                }
-
-                if (m_Ore.ItemID == 0x19B7 && m_Ore.Amount < 2)
-                {
-                    // There is not enough metal-bearing ore in this pile to make an ingot.
-                    from.SendLocalizedMessage(501987);
-                    return;
-                }
-
-                if (from.CheckTargetSkill(SkillName.Mining, targeted, minSkill, maxSkill))
-                {
-                    var toConsume = 1;
-
-                    if (m_Ore.Amount <= 0)
-                    {
-                        // There is not enough metal-bearing ore in this pile to make an ingot.
-                        from.SendLocalizedMessage(501987);
-                        return;
-                    }
-
-                    int ingotAmount = 2;
-
-                    var ingot = m_Ore.GetIngot();
-                    ingot.Amount = ingotAmount;
-
-                    m_Ore.Consume(toConsume);
-                    from.AddToBackpack(ingot);
-                    from.PlaySound( 0x57 );
-
-                    // You smelt the ore removing the impurities and put the metal in your backpack.
-                    from.SendLocalizedMessage(501988);
-                }
-                else
-                {
-                    m_Ore.Consume(1);
-
-                    // You burn away the impurities but are left with less useable metal.
-                    from.SendLocalizedMessage(501990);
-                }
-
-                if (m_Ore.Amount > 0)
-                    Timer.StartTimer(TimeSpan.FromMilliseconds(500), () => OnTarget(from, targeted));
-
+                return;
             }
+
+            var difficulty = m_Ore._resource switch
+            {
+                CraftResource.DullCopper => 65.0,
+                CraftResource.ShadowIron => 70.0,
+                CraftResource.Copper     => 75.0,
+                CraftResource.Bronze     => 80.0,
+                CraftResource.Gold       => 85.0,
+                CraftResource.Agapite    => 90.0,
+                CraftResource.Verite     => 95.0,
+                CraftResource.Valorite   => 99.0,
+                _                        => 50.0
+            };
+
+            if (difficulty > 50.0 && difficulty > from.Skills.Mining.Value)
+            {
+                from.SendLocalizedMessage(501986); // You have no idea how to smelt this strange ore!
+                return;
+            }
+
+            if (!from.BeginAction<BaseOre>())
+            {
+                from.SendLocalizedMessage(500119); // You must wait to perform another action
+                return;
+            }
+
+            SmeltTick(from, targeted, difficulty - 25.0, difficulty + 25.0);
         }
+
+        private void SmeltTick(Mobile from, object forge, double minSkill, double maxSkill)
+        {
+            bool canSmelt = true;
+
+            if (!from.InRange(m_Ore.GetWorldLocation(), 2))
+            {
+                canSmelt = false;
+                from.SendLocalizedMessage(501976); // The ore is too far away.
+            }
+
+            if (!from.InLOS(forge))
+            {
+                canSmelt = false;
+                OnTargetOutOfLOS(from, forge);
+            }
+
+            if (!from.InRange(GetLocation(forge), 2))
+            {
+                canSmelt = false;
+                OnTargetOutOfRange(from, forge);
+            }
+
+            if (!canSmelt || !from.Alive || from.NetState == null || m_Ore.Deleted || m_Ore.Amount <= 0)
+            {
+                from.EndAction<BaseOre>();
+                return;
+            }
+
+            if (from.CheckTargetSkill(SkillName.Mining, forge, minSkill, maxSkill))
+            {
+                var ingot = m_Ore.GetIngot();
+                ingot.Amount = 2;
+
+                m_Ore.Consume(1);
+                from.AddToBackpack(ingot);
+                from.PlaySound(0x57);
+
+                // You smelt the ore removing the impurities and put the metal in your backpack.
+                from.SendLocalizedMessage(501988);
+            }
+            else
+            {
+                m_Ore.Consume(1);
+
+                // You burn away the impurities but are left with less useable metal.
+                from.SendLocalizedMessage(501990);
+            }
+
+            if (m_Ore.Amount <= 0)
+            {
+                from.EndAction<BaseOre>();
+                return;
+            }
+
+            Timer.StartTimer(TimeSpan.FromMilliseconds(250), () => SmeltTick(from, forge, minSkill, maxSkill));
+        }
+
+        private static Point3D GetLocation(object obj) => obj switch
+        {
+            Item item            => item.GetWorldLocation(),
+            StaticTarget target  => target.Location,
+            LandTarget target    => target.Location,
+            Mobile mobile        => mobile.Location,
+            _                    => Point3D.Zero
+        };
 
         private void OnTargetOre(Mobile from, BaseOre ore)
         {
